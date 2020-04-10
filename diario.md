@@ -1,0 +1,42 @@
+# Diario
+
+**27/03/2020**  
+Seguindo as instrucións [deste tutorial](https://www.ionicanddjangotutorial.com/design-and-setup.html) se crea un novo cartafol chamado traballo, dentro deste creamos o cartafol backend no que se inclua o wikebackend que contén:  
+
+1. wikebackend: as settings e url do proxecto de django.
+1. requeriments: especificazón de librarias necesárias para o proxecto.
+1. manage.py: python comand to run the server.
+1. api: manage the data and serve it to the frontend.
+
+Se supón que a encriptación de Django por defecto é lenta para desencriptar en dispositivos móbis, poderia facer unha extensión de usuário para modificar isto.
+[Mais info sobre a extensión de usuário](https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#abstractbaseuser)
+
+**Cambio de idea mirar como crear unha api en django.**
+
+**30/03/2020**  
+Partindo da idea de onte te comprobar como facer unha api en django, [este tutorial](https://medium.com/@BennettGarner/build-your-first-rest-api-with-django-rest-framework-e394e39a482c) me serve para comprobar que a primeira parte de onte serve: Creación do proxecto, e unha app separada chamada api que é o que utilizarei para api.
+
+A api hai que introducilo nas settings do proxecto. Creamos o superusuario. E o próximo sería crear o modelo da base de datos no models.
+O tutorial está bastante ben explicado.
+
+[Quickstart tutorial](https://www.django-rest-framework.org/tutorial/quickstart/) "official" pra crear unha api con django rest framework.
+
+**31/03/2020**  
+Descuberto un proxecto similar o meu [raveberry](https://github.com/raveberry/raveberry/).  
+Creazón de Song no models.py é o primeiro modelo, funciona como a definición da base de datos.
+Tiven problemas para activar a api en installed apps xa que o cartafol non se atopaba na ruta axeitada.
+Para mañá estaría ben definir máis modelos e seguir o [Quickstart tutorial](https://www.django-rest-framework.org/tutorial/quickstart/) apoiandose no outro tamén.
+
+**01/04/2020**  
+Aprendizaxe do uso dos serializers, probas e tests.
+
+**03/04/2020**
+Creazón do modelo da canción que está a soar. Current song
+
+**04/04/2020**
+Uso dos serializers con *Hyperlinkedmodes* que fai que non sexa necesario reescribir os modelos nos serializers.
+Creación dos primeiros datos e se amosan na api, se poden comprobar dende o navegador, como se obteñen os datos e facer tanto get como post.
+O próximo sería: intentar que esto se vexa en Ionic, continuar creando modelos ou seguir co tutorial de djangoframework.
+
+**07/04/2020**  
+Xa que algunhas cousas non estaban claras de todo busquei mais tutos, [este](https://www.valentinog.com/blog/drf/) está bastante actualizado, ten algo de información de como facer os tests, e ben explicado. É o mais recomendable dos que vin agora xa que está actualizado.
