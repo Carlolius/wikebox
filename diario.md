@@ -40,3 +40,14 @@ O próximo sería: intentar que esto se vexa en Ionic, continuar creando modelos
 
 **07/04/2020**  
 Xa que algunhas cousas non estaban claras de todo busquei mais tutos, [este](https://www.valentinog.com/blog/drf/) está bastante actualizado, ten algo de información de como facer os tests, e ben explicado. É o mais recomendable dos que vin agora xa que está actualizado.
+
+**10/04/2020**  
+Cambiouse a organización de carpetas e se subiu o gitlab para manter mellor a xestión do proxecto.
+
+**11/04/2020**  
+Diferentes probas para ir conectando a aplicación coa api de Spotify así poder ir traballando un pouco coas cancións.
+
+**13/04/2020**  
+Se creou a aplicación de spotify en Spotify developers. Parece ser que o tekore funciona mellor para o que eu quero que o spotipy.  
+Libraría que uso para a conexión co Spotify [Tekore](https://tekore.readthedocs.io/) [Git Tekore](https://github.com/felix-hilden/tekore).  
+Creei o frontend e tamén creei a api de Ionic que se vai a utilizar pra facer as requests sobre http ao django.
