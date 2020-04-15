@@ -51,3 +51,6 @@ Diferentes probas para ir conectando a aplicación coa api de Spotify así poder
 Se creou a aplicación de spotify en Spotify developers. Parece ser que o tekore funciona mellor para o que eu quero que o spotipy.  
 Libraría que uso para a conexión co Spotify [Tekore](https://tekore.readthedocs.io/) [Git Tekore](https://github.com/felix-hilden/tekore).  
 Creei o frontend e tamén creei a api de Ionic que se vai a utilizar pra facer as requests sobre http ao django.
+
+**15/04/2020**  
+Intento de obter os datos con ionic facendo unha api (servicio) que se supon que obtén os datos da api de django sen moito problema. Non funciona ten pinta de que por culpa dos imports. Tal vez o mellor sería borrar o proxecto enteiro e comezar de novo con algo similar porque a verdade que é bastante complicado tocar tantos arquivos a vez.
