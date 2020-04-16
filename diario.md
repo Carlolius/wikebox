@@ -54,3 +54,6 @@ Creei o frontend e tamén creei a api de Ionic que se vai a utilizar pra facer a
 
 **15/04/2020**  
 Intento de obter os datos con ionic facendo unha api (servicio) que se supon que obtén os datos da api de django sen moito problema. Non funciona ten pinta de que por culpa dos imports. Tal vez o mellor sería borrar o proxecto enteiro e comezar de novo con algo similar porque a verdade que é bastante complicado tocar tantos arquivos a vez.
+
+**16/04/2020**  
+Se borrou o proxecto enteiro de Ionic para comezar de novo. Os erros que atopei onte se dan igual hoxe co proxecto novo Ionic non é capaz de facer o get, pero non di onde están os erros. Revisar isto mañá: [Facer peticións http en ionic](https://www.techiediaries.com/ionic-http-client/)
