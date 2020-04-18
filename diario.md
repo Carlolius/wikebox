@@ -57,3 +57,6 @@ Intento de obter os datos con ionic facendo unha api (servicio) que se supon que
 
 **16/04/2020**  
 Se borrou o proxecto enteiro de Ionic para comezar de novo. Os erros que atopei onte se dan igual hoxe co proxecto novo Ionic non é capaz de facer o get, pero non di onde están os erros. Revisar isto mañá: [Facer peticións http en ionic](https://www.techiediaries.com/ionic-http-client/)
+
+**18/04/2020**  
+Non consigo que se mostren os datos por html, entre varios tutos [este,](https://blog.ng-classroom.com/blog/ionic2/rest-api-with-ionic/) [este,](https://www.nigmacode.com/ionic/Conectar-api-con-ionic) [este,](https://www.freecodecamp.org/news/how-to-build-your-first-ionic-4-app-with-api-calls-f6ea747dc17a/) e [este](https://www.techiediaries.com/ionic-http-client/) creo que conseguin que se faga a petición dende Ionic pero non sei ben como podo comprobalo. O ideal sería imprimilo no html de algunha maneira pero non da xeito. Mañá debería seguir tentando facer isto, xa que unha vez que o teña pois podo xestionar todo dunha forma mais sinxela.

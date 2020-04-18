@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
 /* This import the service we created to make the requests */
-import { RestProvider } from  '../services/apiservice';
+import { ApiserviceService } from  './services/apiservice.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +22,8 @@ import { RestProvider } from  '../services/apiservice';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    ApiserviceService // The service that connects with Django
   ],
   bootstrap: [AppComponent]
 })

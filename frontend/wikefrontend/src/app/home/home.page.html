@@ -1,20 +1,50 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+     Demo 
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<!-- <ion-content [fullscreen]="true"> -->
+<!--   <ion-header collapse="condense"> -->
+<!--     <ion-toolbar> -->
+<!--       <ion-title size="large">Blank</ion-title> -->
+<!--     </ion-toolbar> -->
+<!--   </ion-header> -->
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<!--   <div id="container"> -->
+<!--     <strong>Ready to create an app?</strong> -->
+<!--     <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
+<!--   </div> -->
+<!-- </ion-content> -->
+
+<ion-content [fullscreen]="true">
+        <div id="container">
+                <h1>hey</h1>
+                <div class="song" *ngFor="let song of songs">
+                        <h2>yey{{song.title}}</h2>
+                        <p>{{song.artist}}</p>
+                </div>
+        </div>
 </ion-content>
+
+<!-- <ion-header> -->
+<!--   <ion-navbar color="primary"> -->
+<!--     <ion-title> -->
+<!--       Demo -->
+<!--     </ion-title> -->
+<!--   </ion-navbar> -->
+<!-- </ion-header> -->
+
+<!-- <ion-content> -->
+<!--   <ion-list> -->
+<!--     <ion-item *ngFor="let user of users"> -->
+<!--       <ion-avatar item-start> -->
+<!--         <img [src]="user.picture.medium"> -->
+<!--       </ion-avatar> -->
+<!--       <h2>{{ songs | uppercase }}</h2> -->
+<!--       <!-1- <p>{{ user.email }}</p> -1-> -->
+<!--     </ion-item> -->
+<!--   </ion-list> -->
+<!-- </ion-content> -->
