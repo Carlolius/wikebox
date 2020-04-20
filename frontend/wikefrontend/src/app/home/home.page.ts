@@ -52,20 +52,22 @@ export class HomePage {
 
   songs: any;
 
-  constructor(
-    public navCtrl: NavController,
-    public apiservice: ApiserviceService
-  ) {}
-
-  ionViewDidLoad(){
-    this.apiservice.getSongs()
-    .subscribe(
-      (data) => { // Success
-        this.songs = data['results'];
-      },
-      (error) =>{
-        console.error(error);
-      }
-    )
+  constructor(public navCtrl: NavController, public apiservice: ApiserviceService) {
+          console.log("MAGIC");
   }
+  ionViewDidLoad(){
+    this.apiservice.getSongs();
+  }
+  /* ionViewDidLoad(){                    // The things here are loaded only once */
+  /*   this.apiservice.getSongs() */
+  /*   .subscribe( */
+  /*     (data) => { // Success */
+  /*       this.songs = data['results']; */
+  /*     }, */
+  /*     (error) =>{ */
+  /*       console.error(error); */
+  /*     } */
+  /*   ) */
+  /* } */
+  
 }

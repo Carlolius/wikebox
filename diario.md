@@ -60,3 +60,7 @@ Se borrou o proxecto enteiro de Ionic para comezar de novo. Os erros que atopei 
 
 **18/04/2020**  
 Non consigo que se mostren os datos por html, entre varios tutos [este,](https://blog.ng-classroom.com/blog/ionic2/rest-api-with-ionic/) [este,](https://www.nigmacode.com/ionic/Conectar-api-con-ionic) [este,](https://www.freecodecamp.org/news/how-to-build-your-first-ionic-4-app-with-api-calls-f6ea747dc17a/) e [este](https://www.techiediaries.com/ionic-http-client/) creo que conseguin que se faga a petición dende Ionic pero non sei ben como podo comprobalo. O ideal sería imprimilo no html de algunha maneira pero non da xeito. Mañá debería seguir tentando facer isto, xa que unha vez que o teña pois podo xestionar todo dunha forma mais sinxela.
+
+**20/04/2020**  
+Parece ser que non estaba a funcionar ben xa que a páxina non se cargaba correctamente entón non funciona o `ionViewDidLoad()` non teño claro de todo por que non está a cargar a páxina, unha vez cargada parece que tampouco fai ben de todo o get. [Aquí](https://www.joshmorony.com/loading-remote-json-data-with-http-in-ionic-2/) está a info dunha forma mais sinxela que nos tutos do último día.  
+Para mañá buscar o erro que fai que a páxina non cargue ben e fai que `ionViewDidLoad` non funcione adecuadamente.

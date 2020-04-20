@@ -16,11 +16,14 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ApiserviceService {
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {
+        console.log("HelloWorld")
+  }
 
   getSongs() {
-    return this.http.get('http://127.0.0.1:8000/api');
+        console.log("Bye world");
+        console.log(this.http.get('https://www.reddit.com/r/gifs/top/.json?limit=105sort=hot'));
+        /* console.log(this.http.get('http://127.0.0.1:8000/api')); */
+        return this.http.get('http://127.0.0.1:8000/api');
   }
 }
