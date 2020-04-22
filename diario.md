@@ -67,3 +67,6 @@ Para mañá buscar o erro que fai que a páxina non cargue ben e fai que `ionVie
 
 **21/04/2020**  
 O problema de onte era de versións, `ionViewDidLoad` xa non funciona, hai que usar o ciclo de angular `ngOnInit` parece que a petición se fai, pero non devolve o que debería de devolver con outras webs sí que funciona así que o problema debe de ser porque os datos non proceden do mesmo sitio (host) pode ter que ver co bloqueo de `CORS`. [Nesta páxina](https://www.djamware.com/post/5b94bb1d80aca74669894415/ionic-4-angular-6-tutorial-call-multiple-services-at-once) hai información de como usar os observables e como facer peticións asíncronas é o que usei mais ou menos para arranxar os erros de hoxe.
+
+**22/04/2020**  
+Efectivamente a problematica do erro nas peticións ven dado polo bloqueo Cross-Origin Resource Sharing (CORS). Para mañá habería que mirar como mandar os headers para que non haxa problemas co CORS.

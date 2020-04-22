@@ -11,7 +11,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 
 import { Observable } from "rxjs";
 /* import { catch } from 'rxjs/operators'; */
@@ -34,8 +34,13 @@ export class ApiserviceService {
   /*         }); */
   /* } */
 
+  getRequest (): Observable<any> {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new HttpRequest({ headers: headers });
+  }
+
   getSongs() {
-          this.http.get('http://127.0.0.1:8000/api')
+          this.http.get("http://127.0.0.1:8000/api", options)
             .subscribe(res => {
                     console.log(res);
             }, err => {
