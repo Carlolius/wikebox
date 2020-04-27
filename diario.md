@@ -70,3 +70,9 @@ O problema de onte era de versións, `ionViewDidLoad` xa non funciona, hai que u
 
 **22/04/2020**  
 Efectivamente a problematica do erro nas peticións ven dado polo bloqueo Cross-Origin Resource Sharing (CORS). Para mañá habería que mirar como mandar os headers para que non haxa problemas co CORS.
+
+**23/04/2020**  
+Tiven que meter no django o middleware para que non dea problemas as peticións CORS ao mandar a información, pero no front en ionic tamén fai falta meter unhas cabeceiras para que se saiba que a petición devolve un json. O problema agora é coa promise, supoño que é que a consulta a api non é suficientemente rápida entón hai que meter un promise para que se tarda, non dea o erro. Para mañá sería ideal arranxar o do promise polo menos.
+
+**27/04/2020**  
+O problema era que na configuración dos middleware de Django o middleware de CORS se cargaba despois de outros middleware o que fai que estes bloqueen as peticións de CORS, simplemente cargandoo antes se arranxa o problema. Para mañá mostrar o json no frontend.
