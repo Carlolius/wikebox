@@ -1,3 +1,4 @@
+
 # Diario
 
 **27/03/2020**  
@@ -76,3 +77,6 @@ Tiven que meter no django o middleware para que non dea problemas as peticións 
 
 **27/04/2020**  
 O problema era que na configuración dos middleware de Django o middleware de CORS se cargaba despois de outros middleware o que fai que estes bloqueen as peticións de CORS, simplemente cargandoo antes se arranxa o problema. Para mañá mostrar o json no frontend.
+
+**29/04/2020**  
+Intento de facer o get dunha mellor maneira, consultando a documentación de [angular](https://angular.io/guide/http) e este [tutorial de get](https://angular.io/tutorial/toh-pt6) teño que mirar ben como funcionan os observables, xa que cambiaron recentemente e a sintaxis non a teño clara. Tecnicamente o que deixei hoxe funciona, pero non obteño os logs na consola do navegador.

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ApiserviceService } from '../services/apiservice.service';
+import { ApiserviceService } from '../services/apiservice.service';  // Import the service
 
 @Component({
   selector: 'page-home',
@@ -9,12 +9,13 @@ import { ApiserviceService } from '../services/apiservice.service';
 })
 export class HomePage {
 
-  songs: any;
-
   constructor(public navCtrl: NavController, public apiservice: ApiserviceService) {
   }
+
+  songs:any; // Array to hold the songs
+
   ngOnInit(){  // After load the site
-    this.apiservice.getSongs();
+   this.apiservice.getSongs();  // Call the api and get the songs
   }
   /* ionViewDidLoad(){                    // The things here are loaded only once */
   /*   this.apiservice.getSongs() */
