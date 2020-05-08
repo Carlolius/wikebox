@@ -80,3 +80,15 @@ O problema era que na configuración dos middleware de Django o middleware de CO
 
 **29/04/2020**  
 Intento de facer o get dunha mellor maneira, consultando a documentación de [angular](https://angular.io/guide/http) e este [tutorial de get](https://angular.io/tutorial/toh-pt6) teño que mirar ben como funcionan os observables, xa que cambiaron recentemente e a sintaxis non a teño clara. Tecnicamente o que deixei hoxe funciona, pero non obteño os logs na consola do navegador.
+
+**30/04/2020**  
+Lectura de tutoriais sobre programación reactiva para tentar como funciona RxJS e a sua vez aprender a usar o obvserver que ten pinta de ser o mellor que hai para o que eu quero facer. [Tutorial 1](https://medium.com/@osmancea/programaci%C3%B3n-reactiva-en-javascript-997478d45bfb) non está mal, pero non é demasiado doado de comprender. [Tutorial 2](http://blog.enriqueoriol.com/2019/03/aprende-rxjs-1.html) parece mais comprensible. Haberá que adicarlle mais tempo a isto, unha vez que controle mais debería de ir todo mais de corrido.
+
+**05/05/2020**  
+Os días anteriores estiven aprendendo a usar RxJS.
+
+**06/05/2020**  
+Limpeza das probas con RxJS e intento de facela mellor.
+
+**07/05/2020**  
+Definición do desenvolvemento dos próximos días. Xestión de usuarios.

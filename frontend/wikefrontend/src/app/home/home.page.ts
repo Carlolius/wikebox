@@ -9,24 +9,22 @@ import { ApiserviceService } from '../services/apiservice.service';  // Import t
 })
 export class HomePage {
 
+  songs:any; // Array to hold the songs
+
   constructor(public navCtrl: NavController, public apiservice: ApiserviceService) {
   }
 
-  songs:any; // Array to hold the songs
-
   ngOnInit(){  // After load the site
-   this.apiservice.getSongs();  // Call the api and get the songs
+		this.getLivePlaylist();
   }
-  /* ionViewDidLoad(){                    // The things here are loaded only once */
-  /*   this.apiservice.getSongs() */
-  /*   .subscribe( */
-  /*     (data) => { // Success */
-  /*       this.songs = data['results']; */
-  /*     }, */
-  /*     (error) =>{ */
-  /*       console.error(error); */
-  /*     } */
-  /*   ) */
-  /* } */
-  
+
+	getLivePlaylist(){
+		this.apiservice.get()  // Call the api and get the songs
+		.subscribe((songs) => console.log(songs));
+	}
+
+	getPlayingNow(){
+		/* this.apiservice.get() */
+	}
+
 }

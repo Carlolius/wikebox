@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/internal/Observable";
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
@@ -11,28 +11,32 @@ import { Observable } from "rxjs";
 
 export class ApiserviceService {
 
-  constructor(private http: HttpClient) { }
-
-  getSongs() {
-    return new Observable((observer) => {
-      console.log("Requesting to: " + apiUrl);
-      this.http.get(apiUrl)  // Make the request
-        //.pipe(retry(1)) // To retry the get
-        .subscribe(res => {
-          observer.next(res);
-	  observer.complete();
-          console.log(res);
-        }), error =>{
-	  observer.next();
-	  observer.complete();
-          console.error(error);
-       };
-    })
-  }
+  constructor(private http: HttpClient) {}
+	
+		get() {
+			return this.http.get(apiUrl);
+		}
 
 }
 
-/* export class ApiserviceService { */
+/* getSongs() { */
+/*   return new Observable((observer) => { */
+/*     console.log("Requesting to: " + apiUrl); */
+/*     this.http.get(apiUrl)  // Make the request */
+/*       //.pipe(retry(1)) // To retry the get */
+/*       .subscribe(res => { */
+/*         observer.next(res); */
+/*         observer.complete(); */
+/*         console.log(res); */
+/*       }), error =>{ */
+/*         observer.next(); */
+/*         observer.complete(); */
+/*         console.error(error); */
+/*      }; */
+/*   }) */
+/* } */
+
+/* export class apiserviceservice { */
 
 /*   constructor(private http: HttpClient) { } */
 
