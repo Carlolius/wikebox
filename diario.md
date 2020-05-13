@@ -90,5 +90,9 @@ Os días anteriores estiven aprendendo a usar RxJS.
 **06/05/2020**  
 Limpeza das probas con RxJS e intento de facela mellor.
 
-**07/05/2020**  
+**08/05/2020**  
 Definición do desenvolvemento dos próximos días. Xestión de usuarios.
+
+**09/05/2020**  
+Documentación sobre como xestionar os usuarios. As formas mais viables parecen ou por authentication token ou con session authentication baseada en cookies, parece a mais axeitada para o meu uso. A implementación sería: xestionar os usuarios con django e dende ionic facer o login e manter a sesión aberta con sessions. [Documentación de atenticación en Django](https://www.django-rest-framework.org/api-guide/authentication/), [Video sobre a atentificacion en django](https://www.youtube.com/watch?v=kh4YFQrvVyE)
+Mañá crear usuarios e probar o tema de sessions a ver como é.
