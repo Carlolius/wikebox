@@ -1,4 +1,4 @@
 django
-djangorestframework
+django-rest-framework
 tekore
 django-cors-headers

@@ -96,3 +96,15 @@ Definición do desenvolvemento dos próximos días. Xestión de usuarios.
 **09/05/2020**  
 Documentación sobre como xestionar os usuarios. As formas mais viables parecen ou por authentication token ou con session authentication baseada en cookies, parece a mais axeitada para o meu uso. A implementación sería: xestionar os usuarios con django e dende ionic facer o login e manter a sesión aberta con sessions. [Documentación de atenticación en Django](https://www.django-rest-framework.org/api-guide/authentication/), [Video sobre a atentificacion en django](https://www.youtube.com/watch?v=kh4YFQrvVyE)
 Mañá crear usuarios e probar o tema de sessions a ver como é.
+
+**29/05/2020**  
+Con [este vídeo](https://www.youtube.com/watch?v=_OhF6FEdIao&t=210s), [este](https://dev.to/nemecek_f/how-to-create-register-user-account-with-django-rest-framework-api-15pc), mais [este tutorial](https://wsvincent.com/django-rest-framework-user-authentication-tutorial/) crear os usuarios para Django.
+
+**01/06/2020**  
+Intento de cración dos usuarios de django, un pouco complicado debido a todos os diferentes sistemas que existen. [Token auth tutorial](https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html) neste tutorial explica como facer unha autentificación de token, probablemente sexa algo así o que fai falta.
+
+**07/06/2020**  
+Probar a crear usuarios con peticións post e conseguir así o manexo de usuarios.
+
+**08/06/2020**  
+Atopei [este tuto](https://spapas.github.io/2018/03/01/django-rest-auth/) no que parece que se explica como facer a autentificación con sessions ainda que é necesario tamén usar o token. De todas formas o sistema de drf parece que me serviría de todas formas, pero sería mellor modificalo xa que hai campos que non usaréi.
