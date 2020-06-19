@@ -108,3 +108,14 @@ Probar a crear usuarios con peticións post e conseguir así o manexo de usuario
 
 **08/06/2020**  
 Atopei [este tuto](https://spapas.github.io/2018/03/01/django-rest-auth/) no que parece que se explica como facer a autentificación con sessions ainda que é necesario tamén usar o token. De todas formas o sistema de drf parece que me serviría de todas formas, pero sería mellor modificalo xa que hai campos que non usaréi.
+
+**15/06/2020**  
+[Esta libraría](https://sunscrapers.com/blog/django-rest-framework-login-and-authentication/) e mais [este tuto](https://iheanyi.com/journal/user-registration-authentication-with-django-django-rest-framework-react-and-redux/) son os que estiven vendo hoxe, os que parece que poden axudar algo co tema de crear usuarios e así.
+
+**16/06/2020**  
+Probas co último tuto de onte.
+
+**19/06/2020**  
+Realización do [tutorial](https://iheanyi.com/journal/user-registration-authentication-with-django-django-rest-framework-react-and-redux/)
+Se crea a aplicación users para facer a xestión dos usuarios.
+Falta por ver como facer CRUD con usuarios, se crean e se pode obter o token, podería estar ben facer o login [así](https://docs.djangoproject.com/en/3.0/topics/auth/default/#django.contrib.auth.login). Aínda é necesario ver como tratalos ben.

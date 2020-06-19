@@ -37,14 +37,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 # Third part apps
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders', # CORS 
+
 # Local apps
     # 'api.apps.ApiConfig',
-    'api'
+    'api',
     'users',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CORS at the top prevent rejected connection by other middleware

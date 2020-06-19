@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from api import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
+    path('hello/', views.HelloView.as_view(), name='hello'), # for test auth stuff
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('users/', include('users.urls')),
