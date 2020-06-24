@@ -119,3 +119,6 @@ Probas co último tuto de onte.
 Realización do [tutorial](https://iheanyi.com/journal/user-registration-authentication-with-django-django-rest-framework-react-and-redux/)
 Se crea a aplicación users para facer a xestión dos usuarios.
 Falta por ver como facer CRUD con usuarios, se crean e se pode obter o token, podería estar ben facer o login [así](https://docs.djangoproject.com/en/3.0/topics/auth/default/#django.contrib.auth.login). Aínda é necesario ver como tratalos ben.
+
+**24/06/2020**  
+Creamos usuarios e crease o token automáticamente, podemos obter o token pasando usuario e contrasinal. Non sei borrar usuarios e tampouco teño moi claro que a forma de crearlos en views e en serializers sexa de todo a correcta. Supoño que o seguinte será facer o login co frontend.

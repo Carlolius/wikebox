@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'corsheaders', # CORS 
 
 # Local apps
-    # 'api.apps.ApiConfig',
     'api',
     'users',
 ]
