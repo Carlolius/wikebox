@@ -125,3 +125,18 @@ Creamos usuarios e crease o token automáticamente, podemos obter o token pasand
 
 **25/06/2020**  
 Se comeza a facer a páxina de login e rexistro en ionic. [Este](https://www.techiediaries.com/ionic/ionic-5-jwt-authentication-node-expressjs/), mais [este](https://www.techiediaries.com/ionic-http/) son tutoriais que enlazan outros, sendo estes os necesarios para crear as páxinas de rexistro coa funcionalidade de facer peticións http.
+
+**29/06/2020**  
+O primeiro desta [serie de tutoriais](https://www.techiediaries.com/ionic/ionic-5-jwt-authentication-node-expressjs/) permite facer a xestión de usuarios en ionic con unha api. Hai que crear un servizo e as páxinas de autentificación que no meu caso será unha soa co login e rexistro xunto. [Este outro](https://blog.flicher.net/ionic-4-user-registration-login-tutorial/) pode axudar tamén.
+Instálase @ionic/storage
+Creouse a páxina de rexistro seguindo o tutorial anteriormente indicado, pero hai algún problema co npm e non funciona o ionic serve.
+
+**30/06/2020**  
+Arreglouse o problema con npm, era un problema de versións.
+
+**01/07/2020**  
+Coma non entendo ben de todo como funcionan os usuarios, como se fan as peticións e demais creo que o mellor vais ser usar algo coma unha librería para xestionar todo e facelo mais doado, esta habería que instalala con pip para django e con npm para angular, serán diferentes librerías pero que traballan xuntas. [Este tutorial explica como facer a parte de django](https://simpleisbetterthancomplex.com/tutorial/2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html) e [este explica a parte de angular](https://www.techiediaries.com/angular/jwt-authentication-angular-9-example/).
+Cambiando os métodos tal vez se poida intentar facer sen usar librerías nin para ángular nin para django, pero se non é posible o mais lóxico parece usar jwt que hai bastante información e ten que ser algo mais doado.
+
+**02/07/2020**  
+[Engadimos este](https://medium.com/engineerbabu/angular-authentication-using-jwt-d846c5ce0ac6) a ver se así vale. Mañá se fai.

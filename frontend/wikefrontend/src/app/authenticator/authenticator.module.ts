@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
-
-import { AuthenticatorPageRoutingModule } from './authenticator-routing.module';
-
-import { AuthenticatorPage } from './authenticator.page';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
+  declarations: [],
   imports: [
     CommonModule,
-    FormsModule,
-    IonicModule,
-    AuthenticatorPageRoutingModule
-  ],
-  declarations: [AuthenticatorPage]
+		HttpClientModule,
+		FormsModule,
+		IonicStorageModule.forRoot()
+  ]
 })
-export class AuthenticatorPageModule {}
+export class AuthenticatorModule { }

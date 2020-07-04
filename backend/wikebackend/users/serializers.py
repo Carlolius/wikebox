@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        Token.objects.create(user=user)
+        Token.objects.create(user=user)  # Creates a token when the user is created
         return user
 
 

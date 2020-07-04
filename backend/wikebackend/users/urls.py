@@ -10,7 +10,7 @@ router.register('users', UserViewSet)
 
 urlpatterns = [
         path('', include(router.urls)),
-        path('auth/', obtain_auth_token) 
+        path('token/', obtain_auth_token) 
 ]
 
 # from django.conf.urls import url
