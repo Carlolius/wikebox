@@ -140,3 +140,9 @@ Cambiando os métodos tal vez se poida intentar facer sen usar librerías nin pa
 
 **02/07/2020**  
 [Engadimos este](https://medium.com/engineerbabu/angular-authentication-using-jwt-d846c5ce0ac6) a ver se así vale. Mañá se fai.
+
+**13/07/2020**  
+Usuarios usuarios usuarios
+
+**15/07/2020**  
+[Jwt Ionic](https://devdactic.com/jwt-authentication-ionic/), [este xa estaba](https://www.techiediaries.com/ionic/ionic-5-jwt-authentication-node-expressjs/) seguindo estes dous debería de avanzarse no tema dos usuarios, este último parece mais completo e mais complicado de entender, pero facendo unha mistura de ambos debería de chegar, hai que leelos ben e ir tirando.
