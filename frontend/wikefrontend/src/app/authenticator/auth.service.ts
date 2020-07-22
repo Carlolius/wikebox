@@ -63,14 +63,14 @@ export class AuthService {
 
 	//// IS LOGGED IN
 
-  isLoggedIn() {
-    return this.authSubject.asObservable();
-  }
+	isLoggedIn() {
+		return this.authSubject.asObservable();
+	}
 
-  get isLoggedIn3(): boolean {
-    let authToken = localStorage.getItem('access_token');
-    return (authToken !== null) ? true : false;
-  }
+	get isLoggedIn3(): boolean {
+		let authToken = localStorage.getItem('access_token');
+		return (authToken !== null) ? true : false;
+	}
 
 	//// LOGOUT
 
@@ -80,13 +80,6 @@ export class AuthService {
 		this.authSubject.next(false);
 	}
 
-	logout3() {
-		let removeToken = localStorage.removeItem('access_token');
-		if (removeToken == null) {
-			this.router.navigate(['log-in']);
-		}
-	}
-	
 	/* Function to delete users, not tested yet */
 	delete(id: User["id"]) {
 		return this.httpClient.delete(`${this.SERVER_ADDRESS}/users/${id}`);
@@ -106,14 +99,14 @@ export class AuthService {
 	}
 
 	//// Check if token is expired
-	checkToken() {
-		let isExpired = this.helper.isTokenExpired(token);
+	/* checkToken() { */
+	/* 	let isExpired = this.helper.isTokenExpired(token); */
 
-		if (!isExpired) {
-			this.authenticationState.next(true);
-		} else {
-			this.storage.remove(TOKEN_KEY);
-		}
-	}
-}
+	/* 	if (!isExpired) { */
+	/* 		this.authenticationState.next(true); */
+	/* 	} else { */
+	/* 		this.storage.remove(TOKEN_KEY); */
+	/* 	} */
+	/* } */
+
 }
