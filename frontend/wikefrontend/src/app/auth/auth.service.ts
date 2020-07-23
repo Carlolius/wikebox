@@ -19,7 +19,7 @@ export class AuthService {
 	//// REGISTER
 
 	register(user: User): Observable<AuthResponse> {
-		return this.httpClient.post<AuthResponse>(`${this.SERVER_ADDRESS}/users/users`, user).pipe(
+		return this.httpClient.post<AuthResponse>(`${this.SERVER_ADDRESS}/users/users/`, user).pipe(
 			tap(async (res: AuthResponse ) => {
 
 				if (res.user) {
@@ -43,7 +43,7 @@ export class AuthService {
 	//// LOGIN
 
 	login(user: User): Observable<AuthResponse> {
-		return this.httpClient.post(`${this.SERVER_ADDRESS}/users/users`, user).pipe(
+		return this.httpClient.post(`${this.SERVER_ADDRESS}/users/token/`, user).pipe( 						// When this post occurs you get back the token is the log in
 			tap(async (res: AuthResponse) => {
 				if (res.user) {
 					await this.storage.set("access_token", res.user.access_token);

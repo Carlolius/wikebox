@@ -8,7 +8,7 @@
 	<ion-grid>
 		<ion-row>
 			<ion-col align-self-center size="12" size-md>
-				<form  #form="ngForm" (ngSubmit)="login(form)">
+				<form  #loginform="ngForm" (ngSubmit)="login(loginform)">
 					<div text-center>
 						<h3>Log in!</h3>
 					</div>
@@ -21,13 +21,13 @@
 						</ion-item>
 					</div>
 					<div padding>
-						<ion-button  size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
+						<ion-button  size="large" type="submit" [disabled]="loginform.invalid" expand="block">Login</ion-button>
 					</div>
 				</form>
 			</ion-col>
 
 			<ion-col align-self-center size="12" size-md>
-				<form  #form="ngForm" (ngSubmit)="register(form)">
+				<form  #registerform="ngForm" (ngSubmit)="register(registerform)">
 					<div text-center>
 						<h3>Create your account!</h3>
 					</div>
@@ -43,7 +43,7 @@
 						</ion-item>
 					</div>
 					<div padding>
-						<ion-button  size="large" type="submit" [disabled]="form.invalid" expand="block">Register</ion-button>
+						<ion-button  size="large" type="submit" [disabled]="registerform.invalid" expand="block">Register</ion-button>
 					</div>
 				</form>
 			</ion-col>

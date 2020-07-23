@@ -14,4 +14,4 @@ import { IonicStorageModule } from '@ionic/storage';
 		IonicStorageModule.forRoot()
   ]
 })
-export class AuthenticatorModule { }
+export class AuthModule { }

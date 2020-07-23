@@ -1,11 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-     Demo 
+			Wikebox landing page
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-content padding>
+  Welcome to the members only area!
+ 
+  <p>{{ data }}</p>
+<!-- Estes botóns son só de proba, a ver se vai ben o tema do token cos usuarios --> 
+  <ion-button expand="full" (click)="isLoggedIn()">Load Special Info</ion-button>
+  <ion-button expand="full" (click)="logout()">Logout</ion-button>
+  <ion-button expand="full" (click)="clearToken()">Clear JWT</ion-button>
+ 
+</ion-content>
 <!-- <ion-content [fullscreen]="true"> -->
 <!--   <ion-header collapse="condense"> -->
 <!--     <ion-toolbar> -->
@@ -19,15 +29,17 @@
 <!--   </div> -->
 <!-- </ion-content> -->
 
-<ion-content [fullscreen]="true">
-        <div id="container">
-                <h1>hey</h1>
-                <div class="song" *ngFor="let song of songs">
-                        <h2>yey{{song.title}}</h2>
-                        <p>{{song.artist}}</p>
-                </div>
-        </div>
-</ion-content>
+<!-- The stuff that was working at the beggining -->
+
+<!-- <ion-content [fullscreen]="true"> -->
+<!--         <div id="container"> -->
+<!--                 <h1>hey</h1> -->
+<!--                 <div class="song" *ngFor="let song of songs"> -->
+<!--                         <h2>yey{{song.title}}</h2> -->
+<!--                         <p>{{song.artist}}</p> -->
+<!--                 </div> -->
+<!--         </div> -->
+<!-- </ion-content> -->
 
 <!-- <ion-header> -->
 <!--   <ion-navbar color="primary"> -->

@@ -149,3 +149,9 @@ Usuarios usuarios usuarios
 
 **17/07/2020**  
 Usando os tutoriais anteriores fixen un mix para a autentificación, queda probalo e pulilo ben.
+
+**22/07/2020**  
+Refactor do servizo de autentificación, non funciona ben de todo, a páxina de rexistro/login non ten ben os botóns.
+
+**23/07/2020**  
+Vai mais ou menos o tema dos usuarios, hai que comprobar ben o de isLoggedIn para imprima o token ou algo así e saber que tira guai, unha vez iso pois xa iría todo un pouco mais de corrido.

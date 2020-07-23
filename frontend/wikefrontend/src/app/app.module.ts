@@ -16,12 +16,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ApiserviceService } from  './services/apiservice.service';
 
 /* Import the authenticator module*/
-import { AuthenticatorModule } from './authenticator/authenticator.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), HttpClientModule, AuthenticatorModule, AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), HttpClientModule, AuthModule, AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,

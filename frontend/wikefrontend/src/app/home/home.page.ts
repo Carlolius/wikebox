@@ -1,30 +1,68 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ApiserviceService } from '../services/apiservice.service';  // Import the service
+import { ApiserviceService } from '../services/apiservice.service';  // Import the music service
+
+import { AuthService } from '../auth/auth.service';
+import { OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
 
-  songs:any; // Array to hold the songs
-
-  constructor(public navCtrl: NavController, public apiservice: ApiserviceService) {
+export class HomePage implements OnInit {
+ 
+  data = '';
+ 
+  constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController) { }
+ 
+  ngOnInit() {
   }
-
-  ngOnInit(){  // After load the site
-		this.getLivePlaylist();
+ 
+	// Esto o cambiei, está copiado do dos usuarios
+	isLoggedIn() {
+		this.authService.isLoggedIn();
+	}
+ 
+  logout() {
+    this.authService.logout();
   }
-
-	getLivePlaylist(){
-		this.apiservice.get()  // Call the api and get the songs
-		.subscribe((songs) => console.log(songs));
-	}
-
-	getPlayingNow(){
-		/* this.apiservice.get() */
-	}
-
+ 
+  clearToken() {
+    // ONLY FOR TESTING!
+    this.storage.remove('access_token');
+ 
+    let toast = this.toastController.create({
+      message: 'JWT removed',
+      duration: 3000
+    });
+    toast.then(toast => toast.present());
+  }
+ 
 }
+
+
+/* export class HomePage { */
+
+/*   songs:any; // Array to hold the songs */
+
+/*   constructor(public navCtrl: NavController, public apiservice: ApiserviceService) { */
+/*   } */
+
+/*   ngOnInit(){  // After load the site */
+/* 		this.getLivePlaylist(); */
+/*   } */
+
+/* 	getLivePlaylist(){ */
+/* 		this.apiservice.get()  // Call the api and get the songs */
+/* 		.subscribe((songs) => console.log(songs)); */
+/* 	} */
+
+/* 	getPlayingNow(){ */
+/* 		/1* this.apiservice.get() *1/ */
+/* 	} */
+
+/* } */
