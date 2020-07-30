@@ -155,3 +155,6 @@ Refactor do servizo de autentificación, non funciona ben de todo, a páxina de 
 
 **23/07/2020**  
 Vai mais ou menos o tema dos usuarios, hai que comprobar ben o de isLoggedIn para imprima o token ou algo así e saber que tira guai, unha vez iso pois xa iría todo un pouco mais de corrido.
+
+**30/07/2020**  
+Nova rama de traballo no que estou tentando probar outros métodos para facer a xestión de usuarios. Por ahora parece que hai problemas con algo da compilación do npm.

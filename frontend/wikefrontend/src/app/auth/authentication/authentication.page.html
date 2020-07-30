@@ -4,50 +4,69 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content>
-	<ion-grid>
-		<ion-row>
-			<ion-col align-self-center size="12" size-md>
-				<form  #loginform="ngForm" (ngSubmit)="login(loginform)">
-					<div text-center>
-						<h3>Log in!</h3>
-					</div>
-					<div padding>
-						<ion-item>
-							<ion-input  name="username" type="text" placeholder="Username" ngModel required></ion-input>
-						</ion-item>
-						<ion-item>
-							<ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
-						</ion-item>
-					</div>
-					<div padding>
-						<ion-button  size="large" type="submit" [disabled]="loginform.invalid" expand="block">Login</ion-button>
-					</div>
-				</form>
-			</ion-col>
-
-			<ion-col align-self-center size="12" size-md>
-				<form  #registerform="ngForm" (ngSubmit)="register(registerform)">
-					<div text-center>
-						<h3>Create your account!</h3>
-					</div>
-					<div padding>
-						<ion-item>
-							<ion-input  name="username" type="text" placeholder="Username" ngModel required></ion-input>
-						</ion-item>
-						<ion-item>
-							<ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
-						</ion-item>
-						<ion-item>
-							<ion-input name="confirm" type="password" placeholder="Repeat password" ngModel required></ion-input>
-						</ion-item>
-					</div>
-					<div padding>
-						<ion-button  size="large" type="submit" [disabled]="registerform.invalid" expand="block">Register</ion-button>
-					</div>
-				</form>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
-
+<ion-content padding>
+  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+ 
+    <ion-item>
+      <ion-label position="floating">User</ion-label>
+      <ion-input type="username" formControlName="username"></ion-input>
+    </ion-item>
+ 
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+ 
+    <ion-button expand="full" type="submit" [disabled]="!credentialsForm.valid">Login</ion-button>
+    <ion-button expand="full" type="button" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button>
+ 
+  </form>
 </ion-content>
+
+<!-- <ion-content> -->
+<!-- 	<ion-grid> -->
+<!-- 		<ion-row> -->
+<!-- 			<ion-col align-self-center size="12" size-md> -->
+<!-- 				<form  #loginform="ngForm" (ngSubmit)="login(loginform)"> -->
+<!-- 					<div text-center> -->
+<!-- 						<h3>Log in!</h3> -->
+<!-- 					</div> -->
+<!-- 					<div padding> -->
+<!-- 						<ion-item> -->
+<!-- 							<ion-input  name="username" type="text" placeholder="Username" ngModel required></ion-input> -->
+<!-- 						</ion-item> -->
+<!-- 						<ion-item> -->
+<!-- 							<ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input> -->
+<!-- 						</ion-item> -->
+<!-- 					</div> -->
+<!-- 					<div padding> -->
+<!-- 						<ion-button  size="large" type="submit" [disabled]="loginform.invalid" expand="block">Login</ion-button> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
+<!-- 			</ion-col> -->
+
+<!-- 			<ion-col align-self-center size="12" size-md> -->
+<!-- 				<form  #registerform="ngForm" (ngSubmit)="register(registerform)"> -->
+<!-- 					<div text-center> -->
+<!-- 						<h3>Create your account!</h3> -->
+<!-- 					</div> -->
+<!-- 					<div padding> -->
+<!-- 						<ion-item> -->
+<!-- 							<ion-input  name="username" type="text" placeholder="Username" ngModel required></ion-input> -->
+<!-- 						</ion-item> -->
+<!-- 						<ion-item> -->
+<!-- 							<ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input> -->
+<!-- 						</ion-item> -->
+<!-- 						<ion-item> -->
+<!-- 							<ion-input name="confirm" type="password" placeholder="Repeat password" ngModel required></ion-input> -->
+<!-- 						</ion-item> -->
+<!-- 					</div> -->
+<!-- 					<div padding> -->
+<!-- 						<ion-button  size="large" type="submit" [disabled]="registerform.invalid" expand="block">Register</ion-button> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
+<!-- 			</ion-col> -->
+<!-- 		</ion-row> -->
+<!-- 	</ion-grid> -->
+
+<!-- </ion-content> -->

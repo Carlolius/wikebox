@@ -54,26 +54,3 @@ export class HomePage implements OnInit {
 	}
 
 }
-
-
-/* export class HomePage { */
-
-/*   songs:any; // Array to hold the songs */
-
-/*   constructor(public navCtrl: NavController, public apiservice: ApiserviceService) { */
-/*   } */
-
-/*   ngOnInit(){  // After load the site */
-/* 		this.getLivePlaylist(); */
-/*   } */
-
-/* 	getLivePlaylist(){ */
-/* 		this.apiservice.get()  // Call the api and get the songs */
-/* 		.subscribe((songs) => console.log(songs)); */
-/* 	} */
-
-/* 	getPlayingNow(){ */
-/* 		/1* this.apiservice.get() *1/ */
-/* 	} */
-
-/* } */
