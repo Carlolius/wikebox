@@ -8,40 +8,51 @@ import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+	selector: 'page-home',
+	templateUrl: 'home.page.html',
+	styleUrls: ['home.page.scss'],
 })
 
 export class HomePage implements OnInit {
- 
-  data = '';
- 
-  constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController) { }
- 
-  ngOnInit() {
-  }
- 
-	// Esto o cambiei, está copiado do dos usuarios
-	isLoggedIn() {
-		this.authService.isLoggedIn();
+
+	data = '';
+
+	constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController, private NavController: NavController) { }
+
+	ngOnInit() {
+		console.log(this.authService.isLoggedIn)
 	}
- 
-  logout() {
-    this.authService.logout();
-  }
- 
-  clearToken() {
-    // ONLY FOR TESTING!
-    this.storage.remove('access_token');
- 
-    let toast = this.toastController.create({
-      message: 'JWT removed',
-      duration: 3000
-    });
-    toast.then(toast => toast.present());
-  }
- 
+
+	// Esto o cambiei, está copiado do dos usuarios
+
+	/* isLoggedIn() { */
+	/* 	this.authService.isLoggedIn(); */
+	/* } */
+
+	isLoggedIn() {
+		console.log(this.authService.isLoggedIn)
+	}	
+
+	logout() {
+		this.authService.logout();
+    this.NavController.navigateRoot('/authenticator');
+	}
+
+	getToken() {
+		console.log(this.getToken())
+	}
+
+	clearToken() {
+		// ONLY FOR TESTING!
+		this.storage.remove('access_token');
+
+		let toast = this.toastController.create({
+			message: 'JWT removed',
+			duration: 3000
+		});
+		toast.then(toast => toast.present());
+	}
+
 }
 
 

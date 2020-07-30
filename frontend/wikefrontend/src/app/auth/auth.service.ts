@@ -24,7 +24,7 @@ export class AuthService {
 
 				if (res.user) {
 					await this.storage.set("access_token", res.user.access_token);
-					await this.storage.set("expires_in", res.user.expires_in);
+					await this.storage.set("refresh_token", res.user.refresh_token);
 					this.authSubject.next(true);
 				}
 			}),
@@ -45,10 +45,12 @@ export class AuthService {
 	login(user: User): Observable<AuthResponse> {
 		return this.httpClient.post(`${this.SERVER_ADDRESS}/users/token/`, user).pipe( 						// When this post occurs you get back the token is the log in
 			tap(async (res: AuthResponse) => {
-				if (res.user) {
-					await this.storage.set("access_token", res.user.access_token);
-					await this.storage.set("expires_in", res.user.expires_in);
+				console.log(res)
+				if (res) {
+					await this.storage.set('access', res.user.access_token);
+					await this.storage.set('refresh', res.user.refresh_token);
 					this.authSubject.next(true);
+					console.log("Por allá")
 				}
 			}),
 			catchError(this.handleError)
@@ -63,11 +65,11 @@ export class AuthService {
 
 	//// IS LOGGED IN
 
-	isLoggedIn() {
+	isLoggedIn1() {
 		return this.authSubject.asObservable();
 	}
 
-	get isLoggedIn3(): boolean {
+	get isLoggedIn(): boolean {
 		let authToken = localStorage.getItem('access_token');
 		return (authToken !== null) ? true : false;
 	}
@@ -75,8 +77,8 @@ export class AuthService {
 	//// LOGOUT
 
 	async logout() {
-		await this.storage.remove("ACCESS_TOKEN");
-		await this.storage.remove("EXPIRES_IN");
+		await this.storage.remove('access_token');
+		await this.storage.remove('refresh_token');
 		this.authSubject.next(false);
 	}
 
