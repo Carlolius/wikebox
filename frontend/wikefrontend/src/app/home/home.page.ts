@@ -20,7 +20,7 @@ export class HomePage implements OnInit {
 	constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController, private NavController: NavController) { }
 
 	ngOnInit() {
-		console.log(this.authService.isLoggedIn)
+		console.log(this.authService.loggedIn)
 	}
 
 	// Esto o cambiei, está copiado do dos usuarios
@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
 	/* } */
 
 	isLoggedIn() {
-		console.log(this.authService.isLoggedIn)
+		console.log(this.authService.loggedIn)
 	}	
 
 	logout() {

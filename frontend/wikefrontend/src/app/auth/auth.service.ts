@@ -7,104 +7,104 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-const TOKEN_KEY = 'access_token';
+/* D */
+import { HttpHeaders } from '@angular/common/http';
+/* import { User } from '../models/user'; */
+import { NavController } from '@ionic/angular';
+/* import {DataService} from "./data.service" // not sure yet */
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
 
-	SERVER_ADDRESS: string = 'http://localhost:8000';
-	authState = new BehaviorSubject(false);
-	user = null;
+	SERVER_ADDRESS: string = 'http://localhost:8000/';
+	loggedIn = false;
+	token:any;
 
-	constructor(private httpClient: HttpClient, private helper: JwtHelperService, private storage: Storage, private plt: Platform) {
-		this.plt.ready().then(() => {
-			this.checkToken();
-		});
-	}
+	constructor(
+		private httpClient: HttpClient,
+		private storage: Storage,
+		private navCtrl: NavController,
+		) { }
 
-	//// CHECK TOKEN
+	//// LOGIN
 
-  checkToken() {
-    this.storage.get(TOKEN_KEY).then(token => {
-      if (token) {
-        let isExpired = this.helper.isTokenExpired(token);
- 
-        if (!isExpired) {
-          this.authState.next(true);
-        } else {
-          this.storage.remove(TOKEN_KEY);
-        }
+  login(name: String, password: String) {
+    //console.log("Name: "+  name)
+    return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',
+    {
+      "username": name, 
+      "password": password
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': this.SERVER_ADDRESS + 'users/users/',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
-    });
+    }).pipe(
+      tap(token => {
+        this.storage.set('token', token)
+        .then(
+          () => {
+            //console.log('Token Stored');
+          },
+          error => console.error('Error storing item', error)
+        );
+        this.token = token;
+        this.loggedIn = true;
+        return token;
+      }),
+    );
   }
 
 	//// REGISTER
 
-  register(credentials) {
-    return this.httpClient.post(`${this.SERVER_ADDRESS}/api/register`, credentials).pipe(
-      catchError(e => {
-        console.log(e.error.msg);
-        throw new Error(e);
-      })
-    );
-  }
-
-	register3(user) {
-		let api = `${this.SERVER_ADDRESS}/users/users`;
-		return this.httpClient.post(api, user)
-		.pipe(
-			catchError(this.handleError)
-		)
-	}
-
-	//// LOGIN
-
-  login(credentials) {
-    return this.httpClient.post(`${this.SERVER_ADDRESS}/api/login`, credentials)
-      .pipe(
-        tap(res => {
-          this.storage.set(TOKEN_KEY, res['token']);
-          this.user = this.helper.decodeToken(res['token']);
-          this.authState.next(true);
-        }),
-        catchError(e => {
-          console.log(e.error.msg);
-          throw new Error(e);
-        })
-      );
+  register(name: String, password: String) {
+    //console.log("HOLI: "+fName)
+    return this.httpClient.post(this.SERVER_ADDRESS + 'registration',
+    {
+      user: {
+        username: name,
+        password: password
+      },
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': this.SERVER_ADDRESS + 'session',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }
+    )
   }
 
 	//// GET TOKEN
 
-	getToken() {
-		return localStorage.getItem('access_token');
-	}
-
-	//// IS AUTHENTICATED
-
-	isAuthenticated() {
-		return this.authState.value;
-	}
-
-	//// IS LOGGED IN
-
-	isLoggedIn() {
-		return this.authState.asObservable();
-	}
-
-	get isLoggedIn3(): boolean {
-		let authToken = localStorage.getItem('access_token');
-		return (authToken !== null) ? true : false;
-	}
+  getToken() {
+    return this.storage.get('token').then(
+      data => {
+        this.token = data;
+        if(this.token != null) {
+          this.loggedIn=true;
+        } else {
+          this.loggedIn=false;
+        }
+      },
+      error => {
+        this.token = null;
+        this.loggedIn=false;
+      }
+    );
+  }
 
 	//// LOGOUT
 
-	 logout() {
-    this.storage.remove(TOKEN_KEY).then(() => {
-      this.authState.next(false);
-    });
+  async logout() {
+    this.storage.remove("token");
+    this.navCtrl.navigateRoot('/landing');
+    //this.data.resetData();
   }
 
 	//// Error handler, MAYBE DELETE

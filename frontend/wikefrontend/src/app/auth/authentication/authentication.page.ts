@@ -4,6 +4,11 @@ import { AuthService } from '../auth.service';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+/* D */
+import { ModalController, NavController } from '@ionic/angular';
+/* import { AlertService } from 'src/app/services/alert.service'; */
+import { NgForm } from '@angular/forms';
+
 @Component({
 	selector: 'app-authentication',
 	templateUrl: './authentication.page.html',
@@ -11,26 +16,51 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class AuthenticationPage implements OnInit {
 
-	credentialsForm: FormGroup;
+	constructor(
+		private formBuilder: FormBuilder,
+		private authService: AuthService,
+		private router: Router,
 
-	constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
+    private modalController: ModalController,
+    private navCtrl: NavController,
+    /* private alertService: AlertService, */
+	) { }
 
 	ngOnInit() {
-		this.credentialsForm = this.formBuilder.group({
-			username: ['', [Validators.required, Validators.requiredTrue]],
-			password: ['', [Validators.required, Validators.minLength(6)]]
-		});
 	}
-
-	onSubmit() {
-    this.authService.login(this.credentialsForm.value).subscribe();
+	// Dismiss Login Modal
+  dismissLogin() {
+    this.modalController.dismiss();
   }
 
-  register() {
-    this.authService.register(this.credentialsForm.value).subscribe(res => {
-      // Call Login to automatically login the new user
-      this.authService.login(this.credentialsForm.value).subscribe();
-    });
+
+	// On Register button tap, dismiss login modal and open register modal
+  registerModal() {
+    this.navCtrl.navigateRoot('/register');
   }
+
+
+
+  login(form: NgForm) {
+    this.authService.login(form.value.name, form.value.password).subscribe(
+      data => {
+        //this.alertService.presentToast("Logged In");
+      },
+      error => {
+        //console.log(error);
+      },
+      () => {
+        this.dismissLogin();
+        this.navCtrl.navigateRoot('/dashboard');
+      }
+    );
+  }
+
+  /* register() { */
+  /*   this.authService.register(this.credentialsForm.value).subscribe(res => { */
+  /*     // Call Login to automatically login the new user */
+  /*     this.authService.login(this.credentialsForm.value).subscribe(); */
+  /*   }); */
+  /* } */
 
 }
