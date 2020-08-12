@@ -31,8 +31,9 @@ export class AuthService {
 	//// LOGIN
 
 	login(name: String, password: String) {
-		//console.log("Name: "+  name)
-		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',
+		console.log("Name: "+  name)
+		console.log("Password: "+ password)
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/',
 																{
 																	"username": name, 
 																	"password": password

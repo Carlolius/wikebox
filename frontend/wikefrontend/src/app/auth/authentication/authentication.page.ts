@@ -44,7 +44,7 @@ export class AuthenticationPage implements OnInit {
 	}
 
 	login(form: NgForm) {
-		this.authService.login(form.value.name, form.value.password).subscribe(
+		this.authService.login(form.value.lname, form.value.lpassword).subscribe(
 			data => {
 				//this.alertService.presentToast("Logged In");
 			},
@@ -53,19 +53,21 @@ export class AuthenticationPage implements OnInit {
 			},
 			() => {
 				/* this.dismissLogin(); */
-				this.navCtrl.navigateRoot('/home');
+				// Debería de tirar a "HOME"
+				/* this.navCtrl.navigateRoot('/home'); */
 			}
 		);
 	}
 
 	register(form: NgForm) {
-		this.authService.register(form.value.name, form.value.password).subscribe(
+		console.log(form.value)
+		this.authService.register(form.value.rname, form.value.rpassword).subscribe(
 			data => {
-				this.authService.login(form.value.name, form.value.password).subscribe(
+				this.authService.login(form.value.rname, form.value.rpassword).subscribe(
 					data => {
 					},
 					error => {
-						//console.log(error);
+						console.log(error);
 					},
 					() => {
 						/* this.dismissRegister(); */
@@ -75,7 +77,7 @@ export class AuthenticationPage implements OnInit {
 				//this.alertService.presentToast(data['message']);
 			},
 			error => {
-				//console.log(error);
+				console.log(error);
 			},
 			() => {
 

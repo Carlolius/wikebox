@@ -159,5 +159,8 @@ Vai mais ou menos o tema dos usuarios, hai que comprobar ben o de isLoggedIn par
 **30/07/2020**  
 Nova rama de traballo no que estou tentando probar outros métodos para facer a xestión de usuarios. Por ahora parece que hai problemas con algo da compilación do npm.
 
-**07/08/2020** 
+**07/08/2020**  
 Na nova rama parece que se axeitou algo o tema dos usuarios e parece algo mais comprensible, queda que funcione de todo, co postman vai ben, pero parece que as peticións non se están a facer ben de todo. No rexitro ao menos.
+
+**10/08/2020**  
+Cambio de formularios a algo mais sinxelo.
