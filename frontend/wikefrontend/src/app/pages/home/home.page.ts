@@ -17,10 +17,15 @@ export class HomePage implements OnInit {
 
 	data = '';
 
-	constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController, private NavController: NavController) { }
+	constructor(
+		private authService: AuthService,
+		private storage: Storage,
+		private toastController: ToastController,
+		private NavController: NavController
+	){ }
 
 	ngOnInit() {
-		console.log(this.authService.loggedIn)
+		this.authService.isLoggedIn()
 	}
 
 	// Esto o cambiei, está copiado do dos usuarios
@@ -30,21 +35,17 @@ export class HomePage implements OnInit {
 	/* } */
 
 	isLoggedIn() {
-		console.log(this.authService.loggedIn)
+		this.authService.isLoggedIn()
 	}	
 
 	logout() {
 		this.authService.logout();
-    this.NavController.navigateRoot('/authenticator');
-	}
-
-	getToken() {
-		console.log(this.getToken())
+    this.NavController.navigateRoot('/login');
 	}
 
 	clearToken() {
 		// ONLY FOR TESTING!
-		this.storage.remove('access_token');
+		this.storage.remove('token');
 
 		let toast = this.toastController.create({
 			message: 'JWT removed',

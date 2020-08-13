@@ -165,7 +165,10 @@ Na nova rama parece que se axeitou algo o tema dos usuarios e parece algo mais c
 **10/08/2020**  
 Cambio de formularios a algo mais sinxelo.
 
-**13/08/2020**  
+**12/08/2020**  
 Se crean usuarios e ao facer login se obtéñen o token de refresco e o token de acceso, estes se almacenan no ionic storage.  
 Hay que [crear o token](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/creating_tokens_manually.html) tamén cando se fai login por se acaso non existe, comprobar que funciona o isloggedin, comprobar tamén as validacións dos formularios.
 
+**13/08/2020**  
+Is logged in funciona. E a xestión do token tamén. Non é necesario crear os tokens ao facer o login, xa se fai só, pero ao facer o rexistro os garda no admin de django.  
+[Validacións formularios](https://ionicthemes.com/tutorials/about/forms-and-validation-in-ionic)

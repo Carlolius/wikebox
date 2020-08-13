@@ -3,6 +3,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+  },
 	/* Por aquí hay que arreglar algo con el authenticator y el authentication #lidiña */
   /* { path: 'authenticator', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)}, */
   /* { */

@@ -19,7 +19,7 @@ import { NavController } from '@ionic/angular';
 export class AuthService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
-	loggedIn = false;
+	loggedIn = false; // not necessary
 	token:any;
 
 	constructor(
@@ -40,7 +40,7 @@ export class AuthService {
 		.pipe(
 			tap(token => {
 				console.log(token)
-				this.storage.set('token', token)
+				this.storage.set("token", token)
 				.then(
 					() => {
 						//console.log('Token Stored');
@@ -48,7 +48,6 @@ export class AuthService {
 					error => console.error('Error storing item', error)
 				);
 				this.token = token;
-				this.loggedIn = true;
 				return token;
 			}),
 		);
@@ -66,22 +65,22 @@ export class AuthService {
 
 	//// GET TOKEN
 
-	getToken() {
-		return this.storage.get('token').then(
-			data => {
-				this.token = data;
-				if(this.token != null) {
-					this.loggedIn=true;
-				} else {
-					this.loggedIn=false;
-				}
-			},
-			error => {
-				this.token = null;
-				this.loggedIn=false;
-			}
-		);
-	}
+	/* getToken() { */
+	/* 	return this.storage.get("token").then( */
+	/* 		data => { */
+	/* 			this.token = data; */
+	/* 			if(this.token != null) { */
+	/* 				this.loggedIn=true; */
+	/* 			} else { */
+	/* 				this.loggedIn=false; */
+	/* 			} */
+	/* 		}, */
+	/* 		error => { */
+	/* 			this.token = null; */
+	/* 			this.loggedIn=false; */
+	/* 		} */
+	/* 	); */
+	/* } */
 
 	//// USER
 	user() {
@@ -100,10 +99,25 @@ export class AuthService {
 
 	async logout() {
 		this.storage.remove("token");
-		this.navCtrl.navigateRoot('/landing');
-		//this.data.resetData();
+		this.navCtrl.navigateRoot('/home');
 	}
 
+	async isLoggedIn() {
+		return this.storage.get("token").then(
+			data => {
+				this.token = data;
+				if (this.token) {
+					console.log("Access: "+this.token.access)
+					console.log("Refresh: "+this.token.refresh)
+					return true
+				}
+				else {
+					console.log("Not logged in")
+					return false
+				}
+			})
+
+	}
 }
 
 
