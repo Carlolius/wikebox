@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ApiserviceService } from '../services/apiservice.service';  // Import the music service
+import { ApiserviceService } from '../../services/apiservice.service';  // Import the music service
 
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';

@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ApiserviceService } from  './services/apiservice.service';
 
 /* Import the authenticator module*/
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './services/auth.module';
 
 @NgModule({
   declarations: [AppComponent],

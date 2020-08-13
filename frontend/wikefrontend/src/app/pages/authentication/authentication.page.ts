@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -43,47 +43,47 @@ export class AuthenticationPage implements OnInit {
 		this.navCtrl.navigateRoot('/register');
 	}
 
-	login(form: NgForm) {
-		this.authService.login(form.value.lname, form.value.lpassword).subscribe(
-			data => {
-				//this.alertService.presentToast("Logged In");
-			},
-			error => {
-				//console.log(error);
-			},
-			() => {
-				/* this.dismissLogin(); */
-				// Debería de tirar a "HOME"
-				/* this.navCtrl.navigateRoot('/home'); */
-			}
-		);
-	}
+	/* login(form: NgForm) { */
+	/* 	this.authService.login(form.value.lname, form.value.lpassword).subscribe( */
+	/* 		data => { */
+	/* 			//this.alertService.presentToast("Logged In"); */
+	/* 		}, */
+	/* 		error => { */
+	/* 			//console.log(error); */
+	/* 		}, */
+	/* 		() => { */
+	/* 			/1* this.dismissLogin(); *1/ */
+	/* 			// Debería de tirar a "HOME" */
+	/* 			/1* this.navCtrl.navigateRoot('/home'); *1/ */
+	/* 		} */
+	/* 	); */
+	/* } */
 
-	register(form: NgForm) {
-		console.log(form.value)
-		this.authService.register(form.value.rname, form.value.rpassword).subscribe(
-			data => {
-				this.authService.login(form.value.rname, form.value.rpassword).subscribe(
-					data => {
-					},
-					error => {
-						console.log(error);
-					},
-					() => {
-						/* this.dismissRegister(); */
-						this.navCtrl.navigateRoot('/home');
-					}
-				);
-				//this.alertService.presentToast(data['message']);
-			},
-			error => {
-				console.log(error);
-			},
-			() => {
+	/* register(form: NgForm) { */
+	/* 	console.log(form.value) */
+	/* 	this.authService.register(form.value.rname, form.value.rpassword).subscribe( */
+	/* 		data => { */
+	/* 			this.authService.login(form.value.rname, form.value.rpassword).subscribe( */
+	/* 				data => { */
+	/* 				}, */
+	/* 				error => { */
+	/* 					console.log(error); */
+	/* 				}, */
+	/* 				() => { */
+	/* 					/1* this.dismissRegister(); *1/ */
+	/* 					this.navCtrl.navigateRoot('/home'); */
+	/* 				} */
+	/* 			); */
+	/* 			//this.alertService.presentToast(data['message']); */
+	/* 		}, */
+	/* 		error => { */
+	/* 			console.log(error); */
+	/* 		}, */
+	/* 		() => { */
 
-			}
-		);
-	}
+	/* 		} */
+	/* 	); */
+	/* } */
 
 	/* register() { */
 	/*   this.authService.register(this.credentialsForm.value).subscribe(res => { */

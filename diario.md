@@ -164,3 +164,8 @@ Na nova rama parece que se axeitou algo o tema dos usuarios e parece algo mais c
 
 **10/08/2020**  
 Cambio de formularios a algo mais sinxelo.
+
+**13/08/2020**  
+Se crean usuarios e ao facer login se obtéñen o token de refresco e o token de acceso, estes se almacenan no ionic storage.  
+Hay que [crear o token](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/creating_tokens_manually.html) tamén cando se fai login por se acaso non existe, comprobar que funciona o isloggedin, comprobar tamén as validacións dos formularios.
+

@@ -11,7 +11,15 @@ const routes: Routes = [
   /* }, */
   {
     path: 'authentication',
-    loadChildren: () => import('./auth/authentication/authentication.module').then( m => m.AuthenticationPageModule)
+    loadChildren: () => import('./pages/authentication/authentication.module').then( m => m.AuthenticationPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
 ];
 
