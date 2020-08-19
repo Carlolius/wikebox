@@ -172,3 +172,10 @@ Hay que [crear o token](https://django-rest-framework-simplejwt.readthedocs.io/e
 **13/08/2020**  
 Is logged in funciona. E a xestión do token tamén. Non é necesario crear os tokens ao facer o login, xa se fai só, pero ao facer o rexistro os garda no admin de django.  
 [Validacións formularios](https://ionicthemes.com/tutorials/about/forms-and-validation-in-ionic)
+
+**18/08/2020**  
+[Manexar usuarios en Django](https://medium.com/swlh/jwt-auth-with-djangorest-api-9fb32b99b33c)  
+No django xa non se permiten peticións non autentificadas, hai que pasar o token de autentificación, non está feito. Cando caduque segundo a resposta se tenta refrescar e voltar facer a petición, se tampouco vai xa o erro.
+
+**19/08/2020**  
+[Aquí](https://angular-academy.com/angular-jwt/) explicase como facer un interceptor para pasar o token en cada petición mais tamén xestiona o tema de facer o refresco do token. [Neste](https://medium.com/@insomniocode/angular-autenticaci%C3%B3n-usando-interceptors-a26c167270f4) explica onde vai cada cousa mais ou menos, explica o interceptor sen refresco.

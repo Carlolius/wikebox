@@ -42,6 +42,9 @@ export class HomePage implements OnInit {
 		this.authService.logout();
     this.NavController.navigateRoot('/login');
 	}
+	get_data() {
+		this.authService.getData()
+	}
 
 	clearToken() {
 		// ONLY FOR TESTING!
