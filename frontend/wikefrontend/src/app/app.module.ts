@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 /* This import allow us to make http requests */
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 /* This import the service we created to make the requests */
 import { ApiserviceService } from  './services/apiservice.service';
@@ -18,14 +18,31 @@ import { ApiserviceService } from  './services/apiservice.service';
 /* Import the authenticator module*/
 import { AuthModule } from './services/auth.module';
 
+/* Interceptor module */
+import { Interceptor } from './services/interceptor.service';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), HttpClientModule, AuthModule, AppRoutingModule],
+  imports: [
+		BrowserModule,
+		IonicModule.forRoot(),
+		HttpClientModule,
+		AuthModule,
+		AppRoutingModule,
+	],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+			provide: RouteReuseStrategy,
+			useClass: IonicRouteStrategy
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: Interceptor,
+			multi: true
+		},
     ApiserviceService // The service that connects with Django
   ],
   bootstrap: [AppComponent]
