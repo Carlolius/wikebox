@@ -12,7 +12,6 @@ import { HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 import { AuthResponse } from '../models/auth-response';
 import { NavController } from '@ionic/angular';
-/* import {DataService} from "./data.service" // not sure yet */
 
 
 @Injectable({
@@ -45,11 +44,12 @@ export class AuthService {
 		.pipe(
 			tap(token => {
 				this.token = token;
-				/* console.log(typeof token) */
-				localStorage.setItem("token", this.token.access)
+				localStorage.setItem("access", this.token.access)
+				localStorage.setItem("refresh", this.token.refresh)
 				this.storage.set("token", this.token)
-				this.storage.set("access", this.token.access)
-				this.storage.set("refresh", this.token.refresh)
+				/* localStorage.setItem("token", this.token) */
+				/* this.storage.set("access", this.token.access) */
+				/* this.storage.set("refresh", this.token.refresh) */
 				.then(
 					() => {
 						//console.log('Token Stored');
@@ -75,9 +75,14 @@ export class AuthService {
 
 	async logout() {
 		this.storage.remove("token");
+		/* localStorage.setItem("token", this.token); */
+		localStorage.setItem("access", this.token.access);
+		localStorage.setItem("refresh", this.token.refresh);
 		this.navCtrl.navigateRoot('/home');
 	}
 
+  //// IS LOGGED IN
+	
 	async isLoggedIn() {
 		return this.storage.get("token").then(
 			data => {
@@ -98,65 +103,38 @@ export class AuthService {
 	//// INTERCEPTOR
 
   getJwtToken() {
-		if (localStorage.getItem("token")) {
-			/* console.log(localStorage.getItem("token")) */
-			return localStorage.getItem("token");
-		}
-		else {
-			console.log("faaaaaake")
-		}
+		/* console.log(localStorage.getItem("token")) */
+		return localStorage.getItem("access");
   }
-  /* async getJwtToken() { */
-		/* return this.storage.get("access").then( */
-			/* res => { */
-				/* this.access = res; */
-				/* if (this.access) { */
-					/* console.log("este token: " + this.access) */
-				/* } */
-			/* }); */
-  /* } */
 
-  private async getRefreshToken() {
-    return this.storage.get("refresh").then(
-			res => {
-				this.refresh = res
-				/* console.log(this.refresh) */
-			});
+  private getRefreshToken() {
+    return localStorage.getItem("refresh")
   }
 	
   private storeJwtToken(access: string) {
-    localStorage.setItem("token", access);
-		this.access = access;
+    localStorage.setItem("access", access);
   }
 
   refreshToken() {
-		this.getRefreshToken()
-    return this.httpClient.post<any>(this.SERVER_ADDRESS + 'users/token/refresh/', {
+    return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
       'refresh': this.getRefreshToken()
     }).pipe(tap((tokens: AuthResponse) => {
       this.storeJwtToken(tokens.access);
     }));
   }
 
+	//// Get data function for testing
 
-	//// GET TOKEN
+	getData() {
+		const headers = new HttpHeaders({
+			'Authorization': "Bearer " + this.token.access
+		});
 
-	/* getToken() { */
-	/* 	return this.storage.get("token").then( */
-	/* 		data => { */
-	/* 			this.token = data; */
-	/* 			if(this.token != null) { */
-	/* 				this.loggedIn=true; */
-	/* 			} else { */
-	/* 				this.loggedIn=false; */
-	/* 			} */
-	/* 		}, */
-	/* 		error => { */
-	/* 			this.token = null; */
-	/* 			this.loggedIn=false; */
-	/* 		} */
-	/* 	); */
-	/* } */
+		console.log(headers)
+		this.httpClient.get(this.SERVER_ADDRESS + 'api/').subscribe((response)=> {
+			console.log(response);
+		});
+	}
 
 	//// USER not used
 	user() {
@@ -169,19 +147,5 @@ export class AuthService {
 				return user;
 			})
 		)
-	}
-
-
-	//// Get data for testing
-
-	getData() {
-		const headers = new HttpHeaders({
-			'Authorization': "Bearer " + this.token.access
-		});
-
-		console.log(headers)
-		this.httpClient.get(this.SERVER_ADDRESS + 'api/').subscribe((response)=> {
-			console.log(response);
-		});
 	}
 }
