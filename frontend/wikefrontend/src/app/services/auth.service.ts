@@ -45,7 +45,9 @@ export class AuthService {
 		.pipe(
 			tap(token => {
 				this.token = token;
-				this.storage.set("token", token)
+				/* console.log(typeof token) */
+				localStorage.setItem("token", this.token.access)
+				this.storage.set("token", this.token)
 				this.storage.set("access", this.token.access)
 				this.storage.set("refresh", this.token.refresh)
 				.then(
@@ -95,37 +97,47 @@ export class AuthService {
 
 	//// INTERCEPTOR
 
-  async getJwtToken() {
-		return this.storage.get("access").then(
-			res => {
-				this.access = res
-				if (this.access) {
-					console.log("este token: " + this.access)
-				}
-			});
+  getJwtToken() {
+		if (localStorage.getItem("token")) {
+			/* console.log(localStorage.getItem("token")) */
+			return localStorage.getItem("token");
+		}
+		else {
+			console.log("faaaaaake")
+		}
   }
+  /* async getJwtToken() { */
+		/* return this.storage.get("access").then( */
+			/* res => { */
+				/* this.access = res; */
+				/* if (this.access) { */
+					/* console.log("este token: " + this.access) */
+				/* } */
+			/* }); */
+  /* } */
 
   private async getRefreshToken() {
     return this.storage.get("refresh").then(
 			res => {
 				this.refresh = res
-				console.log(this.refresh)
+				/* console.log(this.refresh) */
 			});
   }
 	
   private storeJwtToken(access: string) {
-    this.storage.set(this.token.access, access);
+    localStorage.setItem("token", access);
 		this.access = access;
   }
 
   refreshToken() {
 		this.getRefreshToken()
     return this.httpClient.post<any>(this.SERVER_ADDRESS + 'users/token/refresh/', {
-      'refresh': this.refresh
+      'refresh': this.getRefreshToken()
     }).pipe(tap((tokens: AuthResponse) => {
-      this.storeJwtToken(tokens.refresh);
+      this.storeJwtToken(tokens.access);
     }));
   }
+
 
 	//// GET TOKEN
 

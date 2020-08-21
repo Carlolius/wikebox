@@ -15,16 +15,13 @@ export class Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     if (this.authService.getJwtToken()) {
-      /* request = this.addToken(request, this.authService.getJwtToken()); */
-			console.log("por eiqui")
-			console.log(this.authService.access)
-			// aquí abajo sigue llegando un promise, en el authService.access
-      request = this.addToken(request, this.authService.access);
+      request = this.addToken(request, this.authService.getJwtToken());
+			console.log(request)
     }
 
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        /* return this.handle401Error(request, next); */
+        return this.handle401Error(request, next);
       } else {
         return throwError(error);
       }
@@ -32,7 +29,6 @@ export class Interceptor implements HttpInterceptor {
   }
 
   private addToken(request: HttpRequest<any>, token: string) {
-		console.log("aaaaaaaaaa")
     return request.clone({
       setHeaders: {
         'Authorization': `Bearer ${token}`

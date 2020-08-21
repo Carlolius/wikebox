@@ -179,3 +179,6 @@ No django xa non se permiten peticións non autentificadas, hai que pasar o toke
 
 **19/08/2020**  
 [Aquí](https://angular-academy.com/angular-jwt/) explicase como facer un interceptor para pasar o token en cada petición mais tamén xestiona o tema de facer o refresco do token. [Neste](https://medium.com/@insomniocode/angular-autenticaci%C3%B3n-usando-interceptors-a26c167270f4) explica onde vai cada cousa mais ou menos, explica o interceptor sen refresco.
+
+**20/08/2020**  
+Cambiouse o storage de ionic por localstorage. Cambiar refresh a localstorage tamén para que funcione a función de refresh automáticamente.
