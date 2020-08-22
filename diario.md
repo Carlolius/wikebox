@@ -182,3 +182,10 @@ No django xa non se permiten peticións non autentificadas, hai que pasar o toke
 
 **20/08/2020**  
 Cambiouse o storage de ionic por localstorage. Cambiar refresh a localstorage tamén para que funcione a función de refresh automáticamente.
+
+**21/08/2020**  
+Funciona o refresh.
+
+**22/08/2020**  
+Non necesito modificar o modelo do usuario en django xa que só teño que gardar 1 token de spotify, se pode gardar nun arquivo.  
+Crear a captura do token de spotify [así](https://tekore.readthedocs.io/en/stable/examples/auth_server.html#auth-server) en spotify.py se se pode irán todas as funcións que teñen que ve rcon spotify. Se engadiu un botón para testar a captura do token, fará falla unha páxina de callback probablemente.

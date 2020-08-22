@@ -7,7 +7,6 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-/* D */
 import { HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 import { AuthResponse } from '../models/auth-response';
@@ -81,8 +80,8 @@ export class AuthService {
 		this.navCtrl.navigateRoot('/home');
 	}
 
-  //// IS LOGGED IN
-	
+	//// IS LOGGED IN
+
 	async isLoggedIn() {
 		return this.storage.get("token").then(
 			data => {
@@ -102,26 +101,26 @@ export class AuthService {
 
 	//// INTERCEPTOR
 
-  getJwtToken() {
+	getJwtToken() {
 		/* console.log(localStorage.getItem("token")) */
 		return localStorage.getItem("access");
-  }
+	}
 
-  private getRefreshToken() {
-    return localStorage.getItem("refresh")
-  }
-	
-  private storeJwtToken(access: string) {
-    localStorage.setItem("access", access);
-  }
+	private getRefreshToken() {
+		return localStorage.getItem("refresh")
+	}
 
-  refreshToken() {
-    return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
-      'refresh': this.getRefreshToken()
-    }).pipe(tap((tokens: AuthResponse) => {
-      this.storeJwtToken(tokens.access);
-    }));
-  }
+	private storeJwtToken(access: string) {
+		localStorage.setItem("access", access);
+	}
+
+	refreshToken() {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
+			'refresh': this.getRefreshToken()
+		}).pipe(tap((tokens: AuthResponse) => {
+			this.storeJwtToken(tokens.access);
+		}));
+	}
 
 	//// Get data function for testing
 

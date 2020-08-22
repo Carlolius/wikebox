@@ -5,18 +5,22 @@ import { Observable } from "rxjs/internal/Observable";
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
-  var apiUrl= "http://127.0.0.1:8000/api";  
 
 @Injectable()
 
-export class ApiserviceService {
+export class ApiService {
 
-  constructor(private http: HttpClient) {}
+	SERVER_ADDRESS: string = 'http://localhost:8000/';
+
+  constructor(private httpClient: HttpClient) {}
 	
 		get() {
-			return this.http.get(apiUrl);
+			return this.httpClient.get(this.SERVER_ADDRESS);
 		}
 
+		getSpotifyToken() {
+			return this.httpClient.get(this.SERVER_ADDRESS + 'api/token/')
+		}
 }
 
 /* getSongs() { */

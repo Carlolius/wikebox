@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ApiserviceService } from '../../services/apiservice.service';  // Import the music service
+import { ApiService } from '../../services/api.service';  // Import the music service
 
 import { AuthService } from '../../services/auth.service';
 import { OnInit } from '@angular/core';
@@ -19,6 +19,7 @@ export class HomePage implements OnInit {
 
 	constructor(
 		private authService: AuthService,
+		private apiService: ApiService,
 		private storage: Storage,
 		private toastController: ToastController,
 		private NavController: NavController
@@ -42,9 +43,14 @@ export class HomePage implements OnInit {
 		this.authService.logout();
     this.NavController.navigateRoot('/login');
 	}
-	get_data() {
+	getData() {
 		this.authService.getData()
 	}
+	
+	getSpotifyToken() {
+		this.apiService.getSpotifyToken()
+	}
+
 
 	clearToken() {
 		// ONLY FOR TESTING!
