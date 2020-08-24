@@ -1,25 +1,32 @@
-# Tekore api test for Wikebox
+import spotipy
+# from spotipy.oauth2 import SpotifyOAuth
+import getpass
 
-#######################################
-# BORRAR isto é a proba de autentificación con tekore.
-# Parece ser que para servidores hai que facelo en duas fases, o pon na web dos docs.
-# Pode ser que no estea a capturar o token ben por algún tema do servidor, cando estea mais avanzado se verá.
-#######################################
-import tekore as tk
-
-client_id = "your_spotify_client_id"
-client_secret = "REMOVED"
-
-
-# app_token = request_client_token(client_id, client_secret)
-
+client_id = 'your_spotify_client_id'
+client_secret = 'REMOVED'
 redirect_uri = 'http://localhost:8100/api/callback'
 
-# prompt_for_user_token provides a convenient way of retrieving an access token that refreshes automatically 
+scope = 'user-library-read'
 
-user_token = tk.prompt_for_user_token(
-    client_id,
-    client_secret,
-    redirect_uri,
-    scope=tk.scope.every
-)
+username = getpass.getuser()
+
+# https://github.com/plamere/spotipy/blob/master/examples/app.py
+
+auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".cache-" + username)
+
+auth_url = auth_manager.get_authorize_url() # Mandar isto o frontend
+
+auth_manager.get_access_token("code") # Paresear dende o front o "code" que é o token da redirect uri
+# me da que esta función está deprecated que use get_cached_token
+
+spotify = spotipy.Spotify(auth_manager=auth_manager) # Traballar coas funcións de spotify directamente
+
+# Check if token is expired https://stackoverflow.com/questions/49239516/spotipy-refreshing-a-token-with-authorization-code-flow
+
+def refresh():
+    global token_info, sp
+
+    if sp_oauth.is_token_expired(token_info):
+        token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+        token = token_info['access_token']
+        sp = spotipy.Spotify(auth=token)

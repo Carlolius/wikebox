@@ -189,3 +189,7 @@ Funciona o refresh.
 **22/08/2020**  
 Non necesito modificar o modelo do usuario en django xa que só teño que gardar 1 token de spotify, se pode gardar nun arquivo.  
 Crear a captura do token de spotify [así](https://tekore.readthedocs.io/en/stable/examples/auth_server.html#auth-server) en spotify.py se se pode irán todas as funcións que teñen que ve rcon spotify. Se engadiu un botón para testar a captura do token, fará falla unha páxina de callback probablemente.
+
+**23/08/2020**  
+Cambiase a librería de spotify de tekore a spotipy.  
+Mais ou menos teño a lóxica de como obter o token de spotify pero a documentación é un pouco escasa, pódese [ver aquí](https://spotipy.readthedocs.io/en/2.13.0/#)
