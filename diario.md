@@ -193,3 +193,8 @@ Crear a captura do token de spotify [así](https://tekore.readthedocs.io/en/stab
 **23/08/2020**  
 Cambiase a librería de spotify de tekore a spotipy.  
 Mais ou menos teño a lóxica de como obter o token de spotify pero a documentación é un pouco escasa, pódese [ver aquí](https://spotipy.readthedocs.io/en/2.13.0/#)
+
+**24/08/2020**  
+Crease a lóxica para obter o cliente de spotify, a idea é que dende o front se fai unha petición ao facer click no botón "conectar con spotify" na que se manda o parámetro url_response a None entón a función do back devolve unha url que haberá que comprobar no front e se comeza por http abrir unha ventá que é a de acceso a spotify. Igual o de abrir a ventá se pode facer dende back, pero parece menos doado.  
+Unha vez logeado en spotify e aceptado os scopes este te devolve a unha url de callback, dende esa url facer unha chamada a mesma función pero pasando a url de callback, entón se obtén o token.  
+Igual funciona, igual non.  

@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 /* This import the service we created to make the requests */
-import { ApiserviceService } from  './services/apiservice.service';
+import { ApiService } from  './services/api.service';
 
 /* Import the authenticator module*/
 import { AuthModule } from './services/auth.module';
@@ -43,7 +43,7 @@ import { Interceptor } from './services/interceptor.service';
 			useClass: Interceptor,
 			multi: true
 		},
-    ApiserviceService // The service that connects with Django
+    ApiService // The service that connects with Django
   ],
   bootstrap: [AppComponent]
 })

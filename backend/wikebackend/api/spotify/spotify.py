@@ -1,32 +1,39 @@
+# El flow es:
+# Implementar el code flow que pilla los datos de la aplicación para autenticarse contra eso
+# Comprobar si hay un token por ahí ya
+# Obtener url de acceso, pasar esto al front, allí abrir la url hacer login
+# Recibir la url de callback desde el front y cropear el código de la url
+# Obtener el token pasando el código
+# Pasar el token al cliente 
+# Si el token no está fresco, refrescarlo
+
+import os
 import spotipy
-# from spotipy.oauth2 import SpotifyOAuth
-import getpass
+import getpass # to get the system username
 
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
 redirect_uri = 'http://localhost:8100/api/callback'
-
 scope = 'user-library-read'
+username = getpass.getuser() # get system username
 
-username = getpass.getuser()
-
-# https://github.com/plamere/spotipy/blob/master/examples/app.py
-
-auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".cache-" + username)
-
-auth_url = auth_manager.get_authorize_url() # Mandar isto o frontend
-
-auth_manager.get_access_token("code") # Paresear dende o front o "code" que é o token da redirect uri
-# me da que esta función está deprecated que use get_cached_token
-
-spotify = spotipy.Spotify(auth_manager=auth_manager) # Traballar coas funcións de spotify directamente
-
-# Check if token is expired https://stackoverflow.com/questions/49239516/spotipy-refreshing-a-token-with-authorization-code-flow
-
-def refresh():
-    global token_info, sp
-
-    if sp_oauth.is_token_expired(token_info):
-        token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
-        token = token_info['access_token']
-        sp = spotipy.Spotify(auth=token)
+# En front comprobar la respuesta, si es http abrir ventana para login, si no se supone que ya tienes el client
+def getClient(response_url):
+    # Authorization Code Flow for Spotify’s OAuth implementation
+    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_cache_" + username)
+    if auth_manager.get_cached_token() != None:
+        # If there are a token get it
+        token = auth_manager.get_cached_token()
+        return spotipy.Spotify(auth_manager=token)
+    else:
+        if response_url != None:
+            # Crop the response url to get the code
+            authCode = auth_manager.parse_response_code("response_url")
+            # Get token
+            token = auth_manager.get_access_token(code=authCode,as_dict=False)
+            # Create api client
+            return spotipy.Spotify(auth_manager=token)
+        else:
+            # Get authentification url, open it and authentificate user
+            auth_url = auth_manager.get_authorize_url()
+            return auth_url

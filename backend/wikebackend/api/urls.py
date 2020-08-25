@@ -10,6 +10,6 @@ router.register(r'playing', views.SongPlayingNowViewSet)
 urlpatterns = [
         # path('', views.HelloView.as_view() ),
         path('', views.SongPlayingNowViewSet.as_view() ),
-        path('token/', views.SpotifyToken.as_view() ),
-        path('token/', spotify.spotify, name='token' ), # Like this I can execute a function
+        # path('token/', views.SpotifyToken.as_view() ),
+        path('token/', views.SpotifyGet.as_view(response_url), name='token' ),
 ]

@@ -19,7 +19,13 @@ export class ApiService {
 		}
 
 		getSpotifyToken() {
-			return this.httpClient.get(this.SERVER_ADDRESS + 'api/token/')
+			// Manda un post con none hai que comprobar a resposta e se é algo que comeza por http abrir unha vetá nova para facer login no spotify
+			return this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {"response_url": "None"})
+		}
+
+		spotifyCallback(response_url: string) {
+			// Fai unha petición a mesma función anterior pero pasando a url que o back xa xestiona para obter o token
+			return this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {"response_url": response_url})
 		}
 }
 

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-import tekore as tk
+from .spotify import spotify
 
 # Create your views here.
 
@@ -27,3 +27,7 @@ class SongPlayingNowViewSet(generics.ListCreateAPIView):
 #     code = ...  # Redirect user to login and retrieve code
 #     user_token = cred.request_user_token(code)
 #     cred = tk.Credentials(client_id, client_secret, redirect_uri)
+
+
+class SpotifyGet(APIView):
+    spotify.getClient(response_url)
