@@ -200,4 +200,4 @@ Unha vez logeado en spotify e aceptado os scopes este te devolve a unha url de c
 Igual funciona, igual non.  
 
 **25/08/2020**  
-Dende o front se pode abrir a url de autentificacion de spotify. Creouse a páxina no front de callback a que devolve a api de spotify, falta capturar a resposta e pasala ao backend [aquí explica](https://www.valentinog.com/blog/drf-request/)
+Dende o front se pode abrir a url de autentificacion de spotify. Creouse a páxina no front de callback a que devolve a api de spotify, falta capturar a resposta e pasala ao backend [aquí explica](https://www.valentinog.com/blog/drf-request/) tamén pode que se poda capturar a url completa directamente dende django.
