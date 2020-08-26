@@ -6,7 +6,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .spotify import spotify
+from django.http import HttpResponse
+
+from .music import spotify
 
 # Create your views here.
 
@@ -29,5 +31,14 @@ class SongPlayingNowViewSet(generics.ListCreateAPIView):
 #     cred = tk.Credentials(client_id, client_secret, redirect_uri)
 
 
-class SpotifyGet(APIView):
-    spotify.getClient(response_url)
+def SpotifyGet(self):
+    url = spotify.getUrl()
+    resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
+    return HttpResponse(resp)
+
+def callBack(self):
+    print("Por callback")
+    authCode = 'responsefromfront'
+    spotify.callBackUrl(authCode)
+    resp = "[{\"cosa\":" + "\"" + "mascosa" + "\"" + "}]"
+    return HttpResponse(resp)

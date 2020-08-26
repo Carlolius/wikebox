@@ -1,6 +1,7 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework import routers
-from . import views, spotify
+from .music import spotify
+from api import views
 
 router = routers.DefaultRouter()
 router.register(r'playing', views.SongPlayingNowViewSet)
@@ -10,6 +11,7 @@ router.register(r'playing', views.SongPlayingNowViewSet)
 urlpatterns = [
         # path('', views.HelloView.as_view() ),
         path('', views.SongPlayingNowViewSet.as_view() ),
-        # path('token/', views.SpotifyToken.as_view() ),
-        path('token/', views.SpotifyGet.as_view(response_url), name='token' ),
+        path('token/', views.SpotifyGet, name='token' ),
+        # path('callback/', views.callBack())
+        path('callback/', views.callBack),
 ]

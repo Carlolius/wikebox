@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+  {
+    path: 'callback',
+    loadChildren: () => import('./pages/callback/callback.module').then( m => m.CallbackPageModule)
+  },
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { Observable } from "rxjs/internal/Observable";
 /* import { catch } from 'rxjs/operators'; */
@@ -12,20 +13,26 @@ export class ApiService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+		private httpClient: HttpClient,
+		private router: Router
+	) {}
 	
 		get() {
 			return this.httpClient.get(this.SERVER_ADDRESS);
 		}
 
-		getSpotifyToken() {
-			// Manda un post con none hai que comprobar a resposta e se é algo que comeza por http abrir unha vetá nova para facer login no spotify
-			return this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {"response_url": "None"})
+		getSpotifyUrl() {
+			this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
+				window.open(response[0].url, '_self');
+			})
 		}
 
-		spotifyCallback(response_url: string) {
+		/* spotifyCallback(response_url: string) { */
+		spotifyCallback() {
 			// Fai unha petición a mesma función anterior pero pasando a url que o back xa xestiona para obter o token
-			return this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {"response_url": response_url})
+			console.log(this.router.url)
+			return this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'responseUrl': this.router.url})
 		}
 }
 

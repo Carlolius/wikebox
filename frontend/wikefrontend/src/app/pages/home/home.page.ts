@@ -48,7 +48,7 @@ export class HomePage implements OnInit {
 	}
 	
 	getSpotifyToken() {
-		this.apiService.getSpotifyToken()
+		this.apiService.getSpotifyUrl()
 	}
 
 
