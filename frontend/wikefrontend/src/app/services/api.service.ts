@@ -31,8 +31,9 @@ export class ApiService {
 		/* spotifyCallback(response_url: string) { */
 		spotifyCallback() {
 			// Fai unha petición a mesma función anterior pero pasando a url que o back xa xestiona para obter o token
-			console.log(this.router.url)
-			return this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'responseUrl': this.router.url})
+			this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href }).subscribe((response) => {
+				console.log(response)
+			})
 		}
 }
 

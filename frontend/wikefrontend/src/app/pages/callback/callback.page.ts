@@ -16,4 +16,7 @@ export class CallbackPage implements OnInit {
 		this.apiService.spotifyCallback();
   }
 
+	getSpotifyToken() {
+		this.apiService.spotifyCallback()
+	}
 }

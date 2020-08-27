@@ -1,12 +1,3 @@
-# El flow es:
-# Implementar el code flow que pilla los datos de la aplicación para autenticarse contra eso
-# Comprobar si hay un token por ahí ya
-# Obtener url de acceso, pasar esto al front, allí abrir la url hacer login
-# Recibir la url de callback desde el front y cropear el código de la url
-# Obtener el token pasando el código
-# Pasar el token al cliente 
-# Si el token no está fresco, refrescarlo
-
 import os
 import spotipy
 import getpass # to get the system username
@@ -39,6 +30,11 @@ def getClient(response_url):
             auth_url = auth_manager.get_authorize_url()
             return auth_url
 
+# Get client obtiene el cliente que necesita → token
+# Token se obtiene del cache o de callbackurl que necesita → authCode
+# AuthCode se obtiene del front que necesita → auth url
+# Authurl necesita el auth_manager que se crea  al principio con las variables asignadas
+
 def cache():
     if auth_manager.get_cached_token() != None:
         # If there are a token get it
@@ -46,12 +42,23 @@ def cache():
         return spotipy.Spotify(auth_manager=auth_manager)
 
 def callBackUrl(authCode):
-    authCode = auth_manager.parse_response_code("response_url")
+    authCode = auth_manager.parse_response_code(authCode)
     # Get token
-    # auth_manager.get_access_token(code=authCode,as_dict=False)
+    token = auth_manager.get_access_token(code=authCode,as_dict=False)
     # Create api client
-    return spotipy.Spotify(auth_manager=auth_manager)
+    return token
 
 def getUrl():
-    auth_url = auth_manager.get_authorize_url()
-    return auth_url
+    authUrl = auth_manager.get_authorize_url()
+    return authUrl
+
+def getClient2():
+    client = spotipy.Spotify(auth_manager=auth_manager)
+    return client
+
+def userinfo():
+    client = getClient2()
+    info = client.current_user()
+    print(info)
+    return info['display_name']
+

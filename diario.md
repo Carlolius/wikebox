@@ -201,3 +201,6 @@ Igual funciona, igual non.
 
 **25/08/2020**  
 Dende o front se pode abrir a url de autentificacion de spotify. Creouse a páxina no front de callback a que devolve a api de spotify, falta capturar a resposta e pasala ao backend [aquí explica](https://www.valentinog.com/blog/drf-request/) tamén pode que se poda capturar a url completa directamente dende django.
+
+**26/08/2020**  
+Obtense o token de acceso a api de spotify. O funcionamento final é que dende o front se fai un click que obtén a url para autenticarse contra a api de spotify, esa api redirixe a /callbak e dende ahí chamase o backend que captura a uri completa de callback, a cropea, e obtén o token. Hai que mirar que se está o token en cache non faga todo isto.

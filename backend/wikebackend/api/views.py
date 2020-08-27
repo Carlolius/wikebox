@@ -1,12 +1,12 @@
 from rest_framework import generics
-from .serializers import SongPlayingNowSerializer
-from .models import SongPlayingNow
 # Auth imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
+from .serializers import SongPlayingNowSerializer
+from .models import SongPlayingNow
 
 from .music import spotify
 
@@ -24,21 +24,15 @@ class SongPlayingNowViewSet(generics.ListCreateAPIView):
     queryset = SongPlayingNow.objects.all()
     serializer_class = SongPlayingNowSerializer
 
-# class SpotifyToken(generics.ListCreateAPIView):
-#     url = cred.user_authorisation_url()
-#     code = ...  # Redirect user to login and retrieve code
-#     user_token = cred.request_user_token(code)
-#     cred = tk.Credentials(client_id, client_secret, redirect_uri)
-
-
 def SpotifyGet(self):
     url = spotify.getUrl()
     resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
     return HttpResponse(resp)
 
-def callBack(self):
-    print("Por callback")
-    authCode = 'responsefromfront'
+@api_view(['POST'])
+def callBack(request):
+    authCode = request.data['url']
     spotify.callBackUrl(authCode)
-    resp = "[{\"cosa\":" + "\"" + "mascosa" + "\"" + "}]"
+    info = spotify.userinfo()
+    resp = "[{\"url\":" + "\"" + info + "\"" + "}]"
     return HttpResponse(resp)
