@@ -206,4 +206,4 @@ Dende o front se pode abrir a url de autentificacion de spotify. Creouse a páxi
 Obtense o token de acceso a api de spotify. O funcionamento final é que dende o front se fai un click que obtén a url para autenticarse contra a api de spotify, esa api redirixe a /callbak e dende ahí chamase o backend que captura a uri completa de callback, a cropea, e obtén o token. Hai que mirar que se está o token en cache non faga todo isto.
 
 **27/08/2020**  
-[Con isto](https://www.freecodecamp.org/news/how-to-build-your-first-ionic-4-app-with-api-calls-f6ea747dc17a/) creei a parte de que cando se fai unha búsqueda se faga a petición directamente ó backend e esta devolve un diccionario con os 10 resultados que da Spotify por defecto. Falta amosalos mentras se fai a busqueda, o problema está na request do ApiService.
+[Con isto](https://www.freecodecamp.org/news/how-to-build-your-first-ionic-4-app-with-api-calls-f6ea747dc17a/) creei a parte de que cando se fai unha búsqueda se faga a petición directamente ó backend e a busqueda no backend. Falta que se mostren os resultados da busqueda debaixo da barra de busqueda. O problema debe de estar en ApiService.
