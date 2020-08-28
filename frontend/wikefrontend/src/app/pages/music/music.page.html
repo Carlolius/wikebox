@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>music</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<!-- <ion-searchbar showCancelButton="focus" placeholder='Search a song'></ion-searchbar> -->
+	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="1000" (ionChange)="searchChanged($event)"></ion-searchbar>
+
+	<ion-list>
+ 
+    <!-- <ion-item button *ngFor="let item of (results | async)" [routerLink]="['/', 'movies', item.imdbID]"> -->
+		<ion-item button *ngFor="let item of (results | async)">
+ 
+      <ion-label text-wrap>
+        <h3>{{ item.Title }}</h3>
+        {{ item.Year }}
+      </ion-label>
+ 
+    </ion-item>
+ 
+	</ion-list>
+
+</ion-content>

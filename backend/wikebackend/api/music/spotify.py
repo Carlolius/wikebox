@@ -2,6 +2,8 @@ import os
 import spotipy
 import getpass # to get the system username
 
+import json
+
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
 redirect_uri = 'http://localhost:8100/callback/'
@@ -61,11 +63,16 @@ def getClient2():
     return client
 
 # Search for a song
-def search():
+def search(search):
     client = getClient2()
-    songlist = client.search('sweet child', limit=1) # This retuns a 'dict'
-    print(songlist)
-    return songlist
+    searchResponse = client.search(search, limit=10) # Retuns a 'dict' of songs
+    cleanlist = searchResponse['tracks']['items'] # Gets the important part of the response
+    # Creates a dictionary and populates it with the responses
+    songList = {}
+    for i in range(len(cleanlist)):
+        songList[i] = {cleanlist[i]['name']: cleanlist[i]['artists'][0]['name']}
+    songJson = json.dumps(songList) # Convert the dictionary to a json
+    return songJson
 
 # Get user info, testing porpouse
 def userinfo():

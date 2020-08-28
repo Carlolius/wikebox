@@ -36,3 +36,14 @@ def callBack(request):
     info = spotify.userinfo()
     resp = "[{\"url\":" + "\"" + info + "\"" + "}]"
     return HttpResponse(resp)
+
+@api_view(['POST'])
+def search(request):
+    search = request.data['search']
+    # Necessary for when you delete all the chars in the search bar, avoids empty request
+    if search != '':
+        songs = spotify.search(request.data['search'])
+        # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
+        return HttpResponse(songs)
+    else:
+        return Response(data="empty search", status=200)

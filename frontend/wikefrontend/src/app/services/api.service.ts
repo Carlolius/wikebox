@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { Observable } from "rxjs/internal/Observable";
+import {map} from 'rxjs/operators';
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
@@ -22,18 +23,28 @@ export class ApiService {
 			return this.httpClient.get(this.SERVER_ADDRESS);
 		}
 
-		getSpotifyUrl() {
+		// Gets the Spotify api login url and open it in the same window
+		spotifyLoginUrl() {
 			this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
 				window.open(response[0].url, '_self');
 			})
 		}
 
-		/* spotifyCallback(response_url: string) { */
+		// Makes a request giving the url that contains the token info
 		spotifyCallback() {
-			// Fai unha petición a mesma función anterior pero pasando a url que o back xa xestiona para obter o token
 			this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href }).subscribe((response) => {
 				console.log(response)
 			})
+		}
+
+		// Search for songs in the spotify api
+		spotifySearch(searchTerm:string): Observable<any> {
+			/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).subscribe((response) => { */
+			/* 	console.log(response) */
+			/* }); */
+			return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
+				map(results => results['Search'])
+			);
 		}
 }
 

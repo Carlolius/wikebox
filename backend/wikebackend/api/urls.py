@@ -14,4 +14,5 @@ urlpatterns = [
         path('token/', views.SpotifyGet, name='token' ),
         # path('callback/', views.callBack())
         path('callback/', views.callBack),
+        path('search/', views.search),
 ]

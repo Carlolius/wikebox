@@ -29,6 +29,10 @@ const routes: Routes = [
     path: 'callback',
     loadChildren: () => import('./pages/callback/callback.module').then( m => m.CallbackPageModule)
   },
+  {
+    path: 'music',
+    loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule)
+  },
 ];
 
 @NgModule({
