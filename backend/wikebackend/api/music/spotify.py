@@ -35,12 +35,14 @@ def getClient(response_url):
 # AuthCode se obtiene del front que necesita → auth url
 # Authurl necesita el auth_manager que se crea  al principio con las variables asignadas
 
+# If there are a cached token (.spotify_cache_username) gets it
 def cache():
     if auth_manager.get_cached_token() != None:
         # If there are a token get it
         auth_manager.get_cached_token()
         return spotipy.Spotify(auth_manager=auth_manager)
 
+# Crops the callback url given by the Spotify api and obtains the token
 def callBackUrl(authCode):
     authCode = auth_manager.parse_response_code(authCode)
     # Get token
@@ -48,14 +50,24 @@ def callBackUrl(authCode):
     # Create api client
     return token
 
+# Get the url to make the login in the Spotify api
 def getUrl():
     authUrl = auth_manager.get_authorize_url()
     return authUrl
 
+# Get the Spotify client, to interact with the Spotify api
 def getClient2():
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
 
+# Search for a song
+def search():
+    client = getClient2()
+    songlist = client.search('sweet child', limit=1) # This retuns a 'dict'
+    print(songlist)
+    return songlist
+
+# Get user info, testing porpouse
 def userinfo():
     client = getClient2()
     info = client.current_user()

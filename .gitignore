@@ -1,5 +1,8 @@
 # Ignore unnecessary files
 
+# Wikebox related
+.spotify_cache_*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
