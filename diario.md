@@ -207,3 +207,6 @@ Obtense o token de acceso a api de spotify. O funcionamento final é que dende o
 
 **27/08/2020**  
 [Con isto](https://www.freecodecamp.org/news/how-to-build-your-first-ionic-4-app-with-api-calls-f6ea747dc17a/) creei a parte de que cando se fai unha búsqueda se faga a petición directamente ó backend e a busqueda no backend que devolve un diccionario con os 10 resultados que da por defecto Spotify. Falta que se mostren os resultados da busqueda debaixo da barra de busqueda mentres se fai a búsqueda. O problema está en ApiService.
+
+**28/08/2020**  
+Ainda non conseguín que se mostren os resultados despois de buscar.

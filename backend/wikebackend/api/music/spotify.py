@@ -70,7 +70,8 @@ def search(search):
     # Creates a dictionary and populates it with the responses
     songList = {}
     for i in range(len(cleanlist)):
-        songList[i] = {cleanlist[i]['name']: cleanlist[i]['artists'][0]['name']}
+        songList[i] = {'song': cleanlist[i]['name']}, {'artists': cleanlist[i]['artists'][0]['name']}
+    print(songList)
     songJson = json.dumps(songList) # Convert the dictionary to a json
     return songJson
 

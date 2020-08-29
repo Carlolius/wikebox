@@ -9,14 +9,14 @@
 	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="1000" (ionChange)="searchChanged($event)"></ion-searchbar>
 
 	<ion-list>
- 
+
     <!-- <ion-item button *ngFor="let item of (results | async)" [routerLink]="['/', 'movies', item.imdbID]"> -->
 		<ion-item button *ngFor="let item of (results | async)">
+			{{item.value}}
  
-      <ion-label text-wrap>
-        <h3>{{ item.Title }}</h3>
-        {{ item.Year }}
-      </ion-label>
+      <!-- <ion-label text-wrap> -->
+      <!--   <h3>{{ item }}</h3> -->
+      <!-- </ion-label> -->
  
     </ion-item>
  

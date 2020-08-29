@@ -14,38 +14,45 @@ export class ApiService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
 
-  constructor(
+	constructor(
 		private httpClient: HttpClient,
 		private router: Router
 	) {}
-	
-		get() {
-			return this.httpClient.get(this.SERVER_ADDRESS);
-		}
 
-		// Gets the Spotify api login url and open it in the same window
-		spotifyLoginUrl() {
-			this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
-				window.open(response[0].url, '_self');
+	get() {
+		return this.httpClient.get(this.SERVER_ADDRESS);
+	}
+
+	// Gets the Spotify api login url and open it in the same window
+	spotifyLoginUrl() {
+		this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
+			window.open(response[0].url, '_self');
+		})
+	}
+
+	// Makes a request giving the url that contains the token info
+	spotifyCallback() {
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href }).subscribe((response) => {
+			console.log(response)
+		})
+	}
+
+	// Search for songs in the spotify api
+	spotifySearch(searchTerm:string): Observable<any> {
+		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).subscribe((response) => { */
+		/* 	console.log(response) */
+		/* }); */
+		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe( */
+		/* 	map(results => Object.keys(results).map(key => ({value: results[key]}))) */
+		/* ); */
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
+			map(results => {
+				const mapped = Object.keys(results).map(key => ({value: results[key]}));
+				map(mapped => mapped['value'])
+				console.log(mapped['0']['value']['0']['song'])
 			})
-		}
-
-		// Makes a request giving the url that contains the token info
-		spotifyCallback() {
-			this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href }).subscribe((response) => {
-				console.log(response)
-			})
-		}
-
-		// Search for songs in the spotify api
-		spotifySearch(searchTerm:string): Observable<any> {
-			/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).subscribe((response) => { */
-			/* 	console.log(response) */
-			/* }); */
-			return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
-				map(results => results['Search'])
-			);
-		}
+		);
+	}
 }
 
 /* getSongs() { */
