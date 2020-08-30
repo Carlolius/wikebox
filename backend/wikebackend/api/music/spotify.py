@@ -70,10 +70,30 @@ def search(search):
     # Creates a dictionary and populates it with the responses
     songList = {}
     for i in range(len(cleanlist)):
-        songList[i] = {'song': cleanlist[i]['name']}, {'artists': cleanlist[i]['artists'][0]['name']}
-    print(songList)
+        songList[i] = {
+                'song': cleanlist[i]['name'],
+                'artists': cleanlist[i]['artists'][0]['name'],
+                'uri': cleanlist[i]['uri']
+                }
     songJson = json.dumps(songList) # Convert the dictionary to a json
     return songJson
+
+# Generate a new session playlist
+def generateSession(name):
+    client = getClient2()
+
+# Get the user playlists
+# Functionality similar to search fuction
+def getPlaylists():
+    client = getClient2()
+    user = client.current_user()
+    dictPlaylists = client.user_playlists(user['id'])
+    dictPlaylists = dictPlaylists['items']
+    playlists = {}
+    for i in range(len(dictPlaylists)):
+        playlists[i] = {'playlist': dictPlaylists[i]['name']}
+    playlistsJson = json.dumps(playlists)
+    return playlistsJson
 
 # Get user info, testing porpouse
 def userinfo():

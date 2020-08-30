@@ -15,4 +15,5 @@ urlpatterns = [
         # path('callback/', views.callBack())
         path('callback/', views.callBack),
         path('search/', views.search),
+        path('playlists/', views.getPlaylists),
 ]

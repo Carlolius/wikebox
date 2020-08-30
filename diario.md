@@ -210,3 +210,7 @@ Obtense o token de acceso a api de spotify. O funcionamento final é que dende o
 
 **28/08/2020**  
 Ainda non conseguín que se mostren os resultados despois de buscar.
+
+**29/08/2020**  
+Xa se mostran os resultados despois de buscar e é clickable.  
+Lóxica para funcionar, se escolle ou xenera unha nova playlist se lle chama session, a esta playlist é a onde se van a engadir as cancións que se busquen.

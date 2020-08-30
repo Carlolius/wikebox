@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { Observable } from "rxjs/internal/Observable";
-import {map} from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
@@ -37,21 +37,34 @@ export class ApiService {
 		})
 	}
 
-	// Search for songs in the spotify api
-	spotifySearch(searchTerm:string): Observable<any> {
-		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).subscribe((response) => { */
-		/* 	console.log(response) */
-		/* }); */
-		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe( */
-		/* 	map(results => Object.keys(results).map(key => ({value: results[key]}))) */
-		/* ); */
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
-			map(results => {
-				const mapped = Object.keys(results).map(key => ({value: results[key]}));
-				map(mapped => mapped['value'])
-				console.log(mapped['0']['value']['0']['song'])
-			})
+	// Get the playlists of the user
+	spotifyGetPlaylists(){
+		return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe(
+			map(results => Object.keys(results).map(key => ({value: results[key]}))
+				 ),
 		);
+	}
+
+	// Search for songs in the spotify api
+	// Get the results and map it to value result so it's printable in the html if empty search catches the error
+	spotifySearch(searchTerm:string): Observable<any> {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
+			map(results => Object.keys(results).map(key => ({value: results[key]}))
+				 ),
+				 catchError(err => ([]))
+		);
+		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe( */
+		/* 	map(results => { */
+		/* 		if (results) { */
+		/* 			const mapped = Object.keys(results).map(key => ({value: results[key]})); */
+		/* 			map(mapped => mapped['value']) */
+		/* 			console.log(mapped) */
+		/* 		} */
+		/* 		else { */
+		/* 			console.log('Empty result') */
+		/* 		} */
+		/* 	}), */
+		/* ); */
 	}
 }
 

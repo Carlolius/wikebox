@@ -24,11 +24,16 @@ class SongPlayingNowViewSet(generics.ListCreateAPIView):
     queryset = SongPlayingNow.objects.all()
     serializer_class = SongPlayingNowSerializer
 
+
+## Spotify ##
+
+# Get the url to make the login in the Spotify api
 def SpotifyGet(self):
     url = spotify.getUrl()
     resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
     return HttpResponse(resp)
 
+# Crops the callback url given by the Spotify api and obtains the token
 @api_view(['POST'])
 def callBack(request):
     authCode = request.data['url']
@@ -37,6 +42,12 @@ def callBack(request):
     resp = "[{\"url\":" + "\"" + info + "\"" + "}]"
     return HttpResponse(resp)
 
+# Get user playlists
+def getPlaylists(self):
+    playlists = spotify.getPlaylists()
+    return HttpResponse(playlists)
+
+# Search for a song
 @api_view(['POST'])
 def search(request):
     search = request.data['search']
@@ -46,4 +57,4 @@ def search(request):
         # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
         return HttpResponse(songs)
     else:
-        return Response(data="empty search", status=200)
+        return Response(data=None, status=200)
