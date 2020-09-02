@@ -4,7 +4,7 @@
 .spotify_cache_*
 
 ## Nvim Session ##
-Session.vim
+*.vim
 
 ## Django stuff ##
 # Byte-compiled / optimized / DLL files
