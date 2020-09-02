@@ -16,4 +16,5 @@ urlpatterns = [
         path('callback/', views.callBack),
         path('search/', views.search),
         path('playlists/', views.getPlaylists),
+        path('playlistSongs/', views.getPlaylistSongs),
 ]

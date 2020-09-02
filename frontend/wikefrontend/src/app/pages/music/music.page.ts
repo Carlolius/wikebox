@@ -12,6 +12,7 @@ export class MusicPage implements OnInit {
 
 	results: Observable<any>
 	playlists: any
+	playlistSongs: any
 	searchTerm: string
 
 	constructor(
@@ -29,6 +30,12 @@ export class MusicPage implements OnInit {
 		// Crear unha lista, despois meter as cancións de algún modo
 	}
 
+	// Load the songs from a selected playlist
+	getPlaylistSongs(playlistId:string) {
+		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId)
+		console.log(playlistId)
+		console.log(this.playlistSongs)
+	}
 
 	// Get the user playlists
 	getPlaylists() {

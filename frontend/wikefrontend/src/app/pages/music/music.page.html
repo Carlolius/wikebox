@@ -5,12 +5,21 @@
 </ion-header>
 
 <ion-content>
-	<ion-label>Playlists</ion-label>
-	<ion-list>
-		<ion-item *ngFor="let playlist of (playlists | async)">
-			<ion-label>{{playlist.value.playlist}}</ion-label>
-		</ion-item>
-	</ion-list>
+	<!-- <ion-label>Playlists</ion-label> -->
+	<!-- <ion-list> -->
+	<!-- 	<ion-item *ngFor="let playlist of (playlists | async)"> -->
+	<!-- 		<ion-label>{{playlist.value.playlist}}</ion-label> -->
+	<!-- 	</ion-item> -->
+	<!-- </ion-list> -->
+
+
+  <ion-item>
+    <ion-label>Playlists</ion-label>
+    <ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)">
+			<ion-select-option value="New">New playlist</ion-select-option>
+			<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}} >{{playlist.value.playlist}}</ion-select-option>
+    </ion-select>
+  </ion-item>
 
 	<!-- Search bar and show results -->
 	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="1000" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>

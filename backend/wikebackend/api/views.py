@@ -47,6 +47,13 @@ def getPlaylists(self):
     playlists = spotify.getPlaylists()
     return HttpResponse(playlists)
 
+# Load the songs of a playlist given the playlist uri
+@api_view(['POST'])
+def getPlaylistSongs(request):
+    playlistId = request.data['playlistId']
+    playlistSongs = spotify.getPlaylistSongs(playlistId)
+    return HttpResponse(playlistSongs)
+
 # Search for a song
 @api_view(['POST'])
 def search(request):

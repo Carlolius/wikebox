@@ -91,9 +91,25 @@ def getPlaylists():
     dictPlaylists = dictPlaylists['items']
     playlists = {}
     for i in range(len(dictPlaylists)):
-        playlists[i] = {'playlist': dictPlaylists[i]['name']}
+        playlists[i] = {
+                'playlist': dictPlaylists[i]['name'],
+                'playlistId': dictPlaylists[i]['id']
+                }
     playlistsJson = json.dumps(playlists)
     return playlistsJson
+
+# Get the songs of a playlist given the uri
+def getPlaylistSongs(playlistId):
+    client = getClient2()
+    dictsongs = client.playlist_tracks(playlistId)
+    dictsongs = dictsongs['items']
+    songs = {}
+    for i in range(len(dictsongs)):
+        songs[i] = {
+                'song': dictsongs[i]['track']['name'],
+                'artists': dictsongs[i]['track']['artists'][0]['name']
+                }
+    return json.dumps(songs)
 
 # Get user info, testing porpouse
 def userinfo():
