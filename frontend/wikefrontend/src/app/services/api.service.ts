@@ -67,10 +67,11 @@ export class ApiService {
 		/* ); */
 	}
 
-	spotifyGetPlaylistSongs(playlistId:string){
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlistSongs/', {'playlistId': playlistId}).subscribe((response) => {
-			console.log(response)
-		})
+	spotifyGetPlaylistSongs(playlistId:string): Observable<any> {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlistSongs/', {'playlistId': playlistId}).pipe(
+			map(results => Object.keys(results).map(key => ({value: results[key]}))
+				 ),
+		);
 	}
 }
 

@@ -13,28 +13,53 @@
 	<!-- </ion-list> -->
 
 
-  <ion-item>
-    <ion-label>Playlists</ion-label>
-    <ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)">
+	<ion-item>
+		<ion-label>Playlists</ion-label>
+		<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)">
 			<ion-select-option value="New">New playlist</ion-select-option>
 			<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}} >{{playlist.value.playlist}}</ion-select-option>
-    </ion-select>
-  </ion-item>
+		</ion-select>
+	</ion-item>
 
 	<!-- Search bar and show results -->
-	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="1000" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
+	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="500" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
 
 	<ion-list>
-
 		<ion-item button (click)="clickSearchSong(item.value.uri)" *ngFor="let item of (results | async)">
-
 			<ion-label text-wrap>
 				<h2>{{ item.value.song }}</h2>
 				<h6>{{ item.value.artists }}</h6>
 			</ion-label>
-
 		</ion-item>
-
 	</ion-list>
 
+	<ion-list *ngFor="let song of ( playlistSongs | async)">
+		<ion-item>
+			<ion-grid>
+				<ion-row >
+					<ion-col>
+						<ion-label text-wrap>
+							<h2>{{ song.value.song }}</h2>
+							<h6>{{ song.value.artists }}</h6>
+						</ion-label>
+					</ion-col>
+					<ion-col size=1 >
+						<ion-button color="light" >
+							-
+						</ion-button>
+					</ion-col>
+					<ion-col size=1 >
+						<ion-label>
+							<h2>00</h2>
+						</ion-label>
+					</ion-col>
+					<ion-col size=1 >
+						<ion-button color="light" >
+							+
+						</ion-button>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-item>
+	</ion-list>
 </ion-content>
