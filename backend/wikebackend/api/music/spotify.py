@@ -84,10 +84,13 @@ def generateSession(name):
 
 # Get the user playlists
 # Functionality similar to search fuction
+# Pasar tamén o offset e o limit para poder ver todas as listas
 def getPlaylists():
     client = getClient2()
     user = client.current_user()
+    # dictPlaylists = client.user_playlists(user['id'], limit=limite, offset=offset)
     dictPlaylists = client.user_playlists(user['id'])
+    nextresult = dictPlaylists['next']
     dictPlaylists = dictPlaylists['items']
     playlists = {}
     for i in range(len(dictPlaylists)):
@@ -95,10 +98,19 @@ def getPlaylists():
                 'playlist': dictPlaylists[i]['name'],
                 'playlistId': dictPlaylists[i]['id']
                 }
+
+
+    # El rollo este de next no vale porque tendría que meter la petición por aquí de alguna forma, voy a tener que hacerlo con numeritos o algo así
+    # El next me valdría para saber si hay que cargar más, pero tampoco le paso el dato de donde tiene que empezar a cargar, así que la verdad ni idea de que cosa puede funcionar mejor
+    # de todas formas con lo que llevo hecho creo que calculando numeritos pues casi mejor
+
+
+    playlists['nextresult'] = nextresult # Adds the next page results to try to use "next"
     playlistsJson = json.dumps(playlists)
     return playlistsJson
 
 # Get the songs of a playlist given the uri
+# Pasar tamén o offset e o limit para poder ver todas as cancións
 def getPlaylistSongs(playlistId):
     client = getClient2()
     dictsongs = client.playlist_tracks(playlistId)

@@ -13,14 +13,6 @@
 	<!-- </ion-list> -->
 
 
-	<ion-item>
-		<ion-label>Playlists</ion-label>
-		<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)">
-			<ion-select-option value="New">New playlist</ion-select-option>
-			<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}} >{{playlist.value.playlist}}</ion-select-option>
-		</ion-select>
-	</ion-item>
-
 	<!-- Search bar and show results -->
 	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="500" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
 
@@ -33,6 +25,17 @@
 		</ion-item>
 	</ion-list>
 
+	<!-- Select playlists -->
+	<ion-item>
+		<ion-label>Playlists</ion-label>
+		<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)" (ionFocus)="getPlaylists()">
+			<!-- Probablemente non necesite isto vvv -->
+			<!-- <ion-select-option value="New">New playlist</ion-select-option> -->
+			<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}} >{{playlist.value.playlist}}</ion-select-option>
+		</ion-select>
+	</ion-item>
+
+	<!-- Show playlists -->
 	<ion-list *ngFor="let song of ( playlistSongs | async)">
 		<ion-item>
 			<ion-grid>
@@ -48,18 +51,26 @@
 							-
 						</ion-button>
 					</ion-col>
-					<ion-col size=1 >
-						<ion-label>
-							<h2>00</h2>
-						</ion-label>
-					</ion-col>
-					<ion-col size=1 >
-						<ion-button color="light" >
-							+
-						</ion-button>
-					</ion-col>
+						<ion-col size=1 >
+							<ion-label>
+								<h2>00</h2>
+							</ion-label>
+						</ion-col>
+						<ion-col size=1 >
+							<ion-button color="light" >
+								+
+							</ion-button>
+						</ion-col>
 				</ion-row>
 			</ion-grid>
 		</ion-item>
 	</ion-list>
+
+	<ion-infinite-scroll threshold="100px" (ionInfinite)="infinitesongs($event)">
+		<ion-infinite-scroll-content
+			loadingSpinner="crescent"
+			loadingText="Loading more data...">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
 </ion-content>

@@ -43,11 +43,13 @@ def callBack(request):
     return HttpResponse(resp)
 
 # Get user playlists
+# Aquí habería que meter tamén o limit e o offset para poder ver todas as listas
 def getPlaylists(self):
     playlists = spotify.getPlaylists()
     return HttpResponse(playlists)
 
 # Load the songs of a playlist given the playlist uri
+# Aquí habería que meter tamén o limit e o offset para poder ver todas as cancións
 @api_view(['POST'])
 def getPlaylistSongs(request):
     playlistId = request.data['playlistId']

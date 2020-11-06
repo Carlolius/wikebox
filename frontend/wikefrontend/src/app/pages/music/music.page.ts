@@ -14,30 +14,41 @@ export class MusicPage implements OnInit {
 	playlists: any
 	playlistSongs: any
 	searchTerm: string
+	/* Meter por aquí variables del tipo */
+	/* limit_search: 50 */
+	/* offset_search: 0 */
+	/* limit_playlists: 50 */
+	/* offset_playlists: 0 */
 
 	constructor(
 		private apiService: ApiService,
 	) { }
 
 	ngOnInit() {
-		this.getPlaylists()
 	}
 
 	// When click in a search result
 	clickSearchSong(item) {
 		console.log(item)
-		// Cola playlist?¿
-		// Crear unha lista, despois meter as cancións de algún modo
+		/* Cola playlist?¿ */
+		/* Crear unha lista, despois meter as cancións de algún modo */
 	}
 
 	// Load the songs from a selected playlist
+	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	getPlaylistSongs(playlistId:string) {
 		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId)
 		console.log(playlistId)
 		console.log(this.playlistSongs)
 	}
 
+	// Infinite scroll of songs
+	infinitesongs(event){
+		console.log("Cargando siguientes...")
+	}
+
 	// Get the user playlists
+	/* Hay que pasar el limit y el offset para poder recibir todas las listas */
 	getPlaylists() {
 		this.playlists = this.apiService.spotifyGetPlaylists();
 	}
