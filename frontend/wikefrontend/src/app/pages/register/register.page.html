@@ -1,24 +1,27 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-  </ion-toolbar>
-</ion-header>
 <ion-content>
-	<div style="text-align:center;background-color:var(--ion-color-tertiary);color:white;padding-left:5%;padding-top:0.5%;padding-bottom:0.5%;border-bottom: 1px solid rgb(220,220,220);">
-		<p style="font-size:120%;">R E G I S T E R</p>
+	<div style="text-align:center;background-color:black;color:var(--ion-color-app);padding-top:0.5%;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
+		<p style="font-size:200%;">Welcome to Wikebox</p>
 	</div>
-	<form #form="ngForm" (ngSubmit)="register(form)" method="post">
-		<ion-item style="margin-top:5%">
-			<ion-label position="floating">Username</ion-label>
-			<ion-input style=" text-align:center" ngModel name="username"></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Password</ion-label>
-			<ion-input style=" text-align:center" type="password" ngModel name="password" required></ion-input>
-		</ion-item>
-		<ion-item style="margin-bottom:10%">
-			<ion-label position="floating">Repeat password</ion-label>
-			<ion-input style=" text-align:center" type="password" ngModel name="confirm" required></ion-input>
-		</ion-item>
-		<ion-button style="margin-left:10%;margin-right:10%" type="submit" expand="full" (click)="register(form)" color="tertiary">Register</ion-button>
-	</form>
+	<div>
+		<ion-row class="ion-justify-content-center">
+			<ion-col size="5">
+				<form #form="ngForm" (ngSubmit)="register(form)" method="post">
+					<ion-item style="margin-top:10%">
+            <ion-input name="username" type="text" placeholder="Username" ngModel required></ion-input>
+					</ion-item>
+					<ion-item>
+            <ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
+          </ion-item>
+					<ion-item style="margin-bottom:5%">
+            <ion-input name="confirm" type="password" placeholder="Repeat password" ngModel required></ion-input>
+					</ion-item>
+				</form>
+				<ion-row>
+					<ion-col>
+						<ion-button style="margin-left:10%;margin-right:10%" type="submit" [disabled]="form.invalid" (click)="register(form)" expand="block" size="default" color="app">Register</ion-button>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	</div>
 </ion-content>

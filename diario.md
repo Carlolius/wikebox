@@ -218,3 +218,5 @@ Lóxica para funcionar, se escolle ou xenera unha nova playlist se lle chama ses
 **01/09/2020**  
 [Aquí](https://como-programar.net/ionic/ion-select/) explica como facer a selección das playlist para cargala debaixo, ainda falta facer que cargue mais listas cando chegue abaixo.  Cando se fai click nunha lista das que se amosa co que explico antes, se recibe un json coas cancións e o primeiro artista(little bug) da lista.
 
+**28/11/2020**  
+Estes últimos días estiven facendo a páxina de login e rexistro, funciona aparentemente ben, con detalles por pulir. Non se validan os campos nin se valida que o contrasinal sexa o mesmo introducido duas veces. [Aquí explica como se fan ambas cousas](https://ionicthemes.com/tutorials/about/forms-and-validation-in-ionic). Tamén engadín a cor por defecto da APP é a cor de Spotify.
