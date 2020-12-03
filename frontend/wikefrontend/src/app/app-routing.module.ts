@@ -33,6 +33,10 @@ const routes: Routes = [
     path: 'music',
     loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule)
   },
+  {
+    path: 'admin',
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+  },
 ];
 
 @NgModule({
