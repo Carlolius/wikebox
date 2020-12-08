@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '../../services/api.service';  // Import the music service
+import { PopoverController } from '@ionic/angular';
+import { SearchresultpopComponent } from 'src/app/components/searchresultpop/searchresultpop.component';
 
 @Component({
 	selector: 'app-admin',
@@ -21,6 +23,7 @@ export class AdminPage implements OnInit {
 
 	constructor(
 		private apiService: ApiService,
+		private searchPopover: PopoverController,
 	) { }
 
 	ngOnInit() {
@@ -39,6 +42,22 @@ export class AdminPage implements OnInit {
 		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId)
 		console.log(playlistId)
 		console.log(this.playlistSongs)
+	}
+
+	// Popover that shows results of search
+	async showpop( event ) {
+		const popover = await this.searchPopover.create({
+			component: SearchresultpopComponent, 
+			event: event,
+			componentProps: {
+				results: this.results,
+			},
+		});
+		await popover.present();
+
+		const { data } = await popover.onWillDismiss();
+		console.log('Padre: ', data);
+
 	}
 
 	// Infinite scroll of songs
