@@ -1,0 +1,14 @@
+<p>
+  searchresultpop works!
+	<ion-item *ngFor="let item of (results | async)">
+		<ion-label>
+			{{item.value.song}}
+		</ion-label>
+	</ion-item>
+	<!-- <ion-item button (click)="clickSearchSong(item.value.uri)" *ngFor="let item of (results | async)"> -->
+	<!-- 	<ion-label> -->
+	<!-- 		<h2>{{ item.value.song }}</h2> -->
+	<!-- 		<h6>{{ item.value.artists }}</h6> -->
+	<!-- 	</ion-label> -->
+	<!-- </ion-item> -->
+</p>
