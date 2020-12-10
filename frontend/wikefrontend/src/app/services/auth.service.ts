@@ -12,14 +12,17 @@ import { User } from '../models/user';
 import { AuthResponse } from '../models/auth-response';
 import { NavController } from '@ionic/angular';
 
+import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 
 @Injectable({
 	providedIn: 'root'
 })
+
+
 export class AuthService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
-	loggedIn = false; // not necessary
+	/* loggedIn = false; // not necessary */
 	token:any;
 	access:any;
 	refresh:any;
@@ -29,9 +32,22 @@ export class AuthService {
 		private httpClient: HttpClient,
 		private storage: Storage,
 		private navCtrl: NavController,
+		private router: Router,
 	) { }
 
-	//// LOGIN
+	// Can activate
+	// Test with isLoggedIn and if the token is not empty can activate
+	canActivate (route: ActivatedRouteSnapshot): boolean {
+		console.log("route: ", route)
+		this.isLoggedIn().then((token) => {
+			if (!token) {
+				this.router.navigate(["login"]);
+				return false;
+			}})
+			return true;
+		}
+
+	// Login
 
 	login(username: String, password: String) {
 		console.log("Name: "+  username)
@@ -60,7 +76,7 @@ export class AuthService {
 		);
 	}
 
-	//// REGISTER
+	// Register
 
 	register(username: String, password: String) {
 		console.log("HOLI: "+username)
@@ -70,7 +86,7 @@ export class AuthService {
 		})
 	}
 
-	//// LOGOUT
+	// Logout
 
 	async logout() {
 		this.storage.remove("token");
@@ -80,7 +96,7 @@ export class AuthService {
 		this.navCtrl.navigateRoot('/home');
 	}
 
-	//// IS LOGGED IN
+	// Is logged in
 
 	async isLoggedIn() {
 		return this.storage.get("token").then(
@@ -96,10 +112,9 @@ export class AuthService {
 					return false
 				}
 			})
-
 	}
 
-	//// INTERCEPTOR
+	// Interceptor
 
 	getJwtToken() {
 		/* console.log(localStorage.getItem("token")) */
@@ -122,7 +137,7 @@ export class AuthService {
 		}));
 	}
 
-	//// Get data function for testing
+	// Get data function for testing
 
 	getData() {
 		const headers = new HttpHeaders({
@@ -135,7 +150,7 @@ export class AuthService {
 		});
 	}
 
-	//// USER not used
+	//// User not used
 	user() {
 		const headers = new HttpHeaders({
 			'Authorization': this.token["token_type"]+" "+this.token["access_token"]

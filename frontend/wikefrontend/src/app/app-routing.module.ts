@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {AuthService} from './services/auth.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+			canActivate: [AuthService]
   },
 	/* Por aquí hay que arreglar algo con el authenticator y el authentication #lidiña */
   /* { path: 'authenticator', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)}, */
@@ -31,11 +33,13 @@ const routes: Routes = [
   },
   {
     path: 'music',
-    loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule)
+    loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule),
+			canActivate: [AuthService]
   },
   {
     path: 'admin',
-    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule)
+    loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule),
+			canActivate: [AuthService]
   },
 ];
 

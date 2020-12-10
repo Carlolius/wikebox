@@ -26,7 +26,8 @@ export class HomePage implements OnInit {
 	){ }
 
 	ngOnInit() {
-		this.authService.isLoggedIn()
+		// Xa comprobamos se está logueado nas rutas
+		/* this.authService.isLoggedIn() */
 	}
 
 	// Esto o cambiei, está copiado do dos usuarios

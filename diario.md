@@ -229,3 +229,6 @@ Creación e deseño da páxina principal do administrador, creando un popover pr
 
 **09/12/2020**  
 O popover de busqueda funciona como debería, baseime nos vídeos de onte. Pra facer unha búsqueda nova hai que facer click de novo na barra de búsqueda, non vai perfecto.
+
+**10/12/2020**  
+Creado o sistema para comprobar se o usuario está logeado nas páxinas restrinxidas, se non o está se vai ata a páxina de login. CanActivate executa isLoggedIn e espera a resposta nun promise. CanActivate é unha función do servizo de autentificación e no routing-module é onde se limita as páxinas as que se pode acceder.
