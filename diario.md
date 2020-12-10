@@ -225,4 +225,7 @@ Estes últimos días estiven facendo a páxina de login e rexistro, funciona apa
 Creación e deseño da páxina principal do administrador, creando un popover pra que os resultados da busqueda se amosen enriba do resto da páxina.
 
 **08/12/2020**  
-[Popover vídeo 1](https://www.youtube.com/watch?v=5FN2_m2gQB8) [Popover video 2](https://www.youtube.com/watch?v=_roU5wAyaug) nestes videos explica como facer o tema de montar o popover. Mostra os resultados no popover, pero ainda fai falla que se poida clickar nel e que responda.
+[Popover vídeo 1](https://www.youtube.com/watch?v=5FN2_m2gQB8) [Popover video 2](https://www.youtube.com/watch?v=_roU5wAyaug) nestes videos explica como facer o tema de montar o popover, hai que ter ollo ao crear o compoñente e ir engadindo nos modulos correspondentes, facendo os imports tamén. Mostra os resultados no popover, pero ainda fai falla que se poida clickar nel e que responda.
+
+**09/12/2020**  
+O popover de busqueda funciona como debería, baseime nos vídeos de onte. Pra facer unha búsqueda nova hai que facer click de novo na barra de búsqueda, non vai perfecto.

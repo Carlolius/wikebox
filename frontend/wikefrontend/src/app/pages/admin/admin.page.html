@@ -9,18 +9,15 @@
 			</ion-col>
 			<ion-col offset="2" size="5" class="ion-align-self-center">
 
-				<!-- Search bar and show results -->
-				<ion-searchbar [(ngModel)]="searchTerm" [debounce]="500" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
-				<ion-list>
-					<ion-item button (click)="showpop( $event )">
-					</ion-item>
-					<!-- <ion-item button (click)="clickSearchSong(item.value.uri)" *ngFor="let item of (results | async)"> -->
-					<!-- 	<ion-label> -->
-					<!-- 		<h2>{{ item.value.song }}</h2> -->
-					<!-- 		<h6>{{ item.value.artists }}</h6> -->
-					<!-- 	</ion-label> -->
-					<!-- </ion-item> -->
-				</ion-list>
+				<!-- Search bar and show results on popover -->
+				<ion-searchbar
+					[(ngModel)]="searchTerm"
+					[debounce]="600"
+					(ionChange)="searchChanged($event)"
+					(ionChange)="showpop($event)"
+					placeholder="Search a song"
+					showCancelButton="focus">
+				</ion-searchbar>
 
 			</ion-col>
 		</ion-row>

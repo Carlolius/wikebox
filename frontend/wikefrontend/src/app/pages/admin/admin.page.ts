@@ -30,18 +30,18 @@ export class AdminPage implements OnInit {
 	}
 
 	// When click in a search result
-	clickSearchSong(item) {
-		console.log(item)
+	clickSearchSong( item ) {
+		console.log( item )
 		/* Cola playlist?¿ */
 		/* Crear unha lista, despois meter as cancións de algún modo */
 	}
 
 	// Load the songs from a selected playlist
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
-	getPlaylistSongs(playlistId:string) {
-		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId)
-		console.log(playlistId)
-		console.log(this.playlistSongs)
+	getPlaylistSongs( playlistId:string ) {
+		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs( playlistId )
+		console.log( playlistId )
+		console.log( this.playlistSongs )
 	}
 
 	// Popover that shows results of search
@@ -53,16 +53,22 @@ export class AdminPage implements OnInit {
 				results: this.results,
 			},
 		});
-		await popover.present();
+
+		// If the search field it's empty don't show the popover
+		if (this.searchTerm != "") {
+			await popover.present();
+		}
 
 		const { data } = await popover.onWillDismiss();
-		console.log('Padre: ', data);
-
+		// Check if there are data
+		if (data) {
+			this.clickSearchSong( data.item )
+		}
 	}
 
 	// Infinite scroll of songs
-	infinitesongs(event){
-		console.log("Cargando siguientes...")
+	infinitesongs( event ){
+		console.log( "Cargando siguientes..." )
 	}
 
 	// Get the user playlists
@@ -76,7 +82,7 @@ export class AdminPage implements OnInit {
 
 	// When something is written in search bar
 	searchChanged() {
-		this.results = this.apiService.spotifySearch(this.searchTerm);
+		this.results = this.apiService.spotifySearch( this.searchTerm );
 	}
 
 }

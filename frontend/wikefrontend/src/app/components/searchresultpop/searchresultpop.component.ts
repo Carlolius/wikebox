@@ -1,17 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import {PopoverController} from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-searchresultpop',
-  templateUrl: './searchresultpop.component.html',
-  styleUrls: ['./searchresultpop.component.scss'],
+	selector: 'app-searchresultpop',
+	templateUrl: './searchresultpop.component.html',
+	styleUrls: ['./searchresultpop.component.scss'],
 })
 export class SearchresultpopComponent implements OnInit {
 
-  constructor(
-		private popoverController: PopoverController
+	results: Observable<any>
+
+	constructor(
+		private popoverController: PopoverController,
 	) { }
 
-  ngOnInit() {}
+	ngOnInit() {}
+
+	onClick (songUri: string) {
+
+		this.popoverController.dismiss({
+			item: songUri
+		});
+	}
 
 }
