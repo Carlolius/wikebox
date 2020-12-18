@@ -231,4 +231,16 @@ Creación e deseño da páxina principal do administrador, creando un popover pr
 O popover de busqueda funciona como debería, baseime nos vídeos de onte. Pra facer unha búsqueda nova hai que facer click de novo na barra de búsqueda, non vai perfecto.
 
 **10/12/2020**  
-Creado o sistema para comprobar se o usuario está logeado nas páxinas restrinxidas, se non o está se vai ata a páxina de login. CanActivate executa isLoggedIn e espera a resposta nun promise. CanActivate é unha función do servizo de autentificación e no routing-module é onde se limita as páxinas as que se pode acceder.
+Creado o sistema para comprobar se o usuario está logeado nas páxinas restrinxidas, se non o está se vai ata a páxina de login. CanActivate executa isLoggedIn e espera a resposta nun promise. CanActivate é unha función do servizo de autentificación e no routing-module é onde se limita as páxinas as que se pode acceder. Isto é o que usei pra facelo: [ionic route gurads](https://www.joshmorony.com/prevent-access-to-pages-in-ionic-with-angular-route-guards/)
+
+**14/12/2020**  
+Leve colocación do selector de playlists e como se amosan.
+
+**15/12/2020**  
+Cando se solicita o refresh token, o backend non autoriza o acceso a usuarios non identificados a /token/refresh polo tanto non se pode obter o token co de refresco.  
+O problema é que cando se fai a petición de refresco o user non está autenticado e polo tanto o backend devolve erro de autentificación. Unha posible solución é que cando se detecte o erro de autentificación marcar o loggedin como false ou ao comprobar o logged in comprobar se devolve un erro de autentificación.  
+Cando chega o token o interceptor non é nulo porque a response é "token inválido".  
+Despois de mirar bastante opto por probar [diferentes interceptors](https://jasonwatmore.com/post/2020/07/25/angular-10-jwt-authentication-with-refresh-tokens).
+
+**18/12/2020**  
+Agora cando se fai o login tamén se garda a data de caducidade do refresh token +1 día. Pra comprobar isLoggedIn primeiro se comproba se a data de caducidade é anterior ao timestamp. Cando se fai o refresh token tamén se almacena o novo refresh token e se actualiza a data de caducidade, a priori funciona todo ben.

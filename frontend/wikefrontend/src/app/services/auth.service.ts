@@ -59,8 +59,12 @@ export class AuthService {
 		.pipe(
 			tap(token => {
 				this.token = token;
-				localStorage.setItem("access", this.token.access)
-				localStorage.setItem("refresh", this.token.refresh)
+				this.storeJwtToken(this.access)
+				this.storeRefreshToken(this.refresh)
+				this.storeExpiration()
+				/* localStorage.setItem("access", this.token.access) */
+				/* localStorage.setItem("refresh", this.token.refresh) */
+				/* localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000)) */
 				this.storage.set("token", this.token)
 				/* localStorage.setItem("token", this.token) */
 				/* this.storage.set("access", this.token.access) */
@@ -91,27 +95,35 @@ export class AuthService {
 	async logout() {
 		this.storage.remove("token");
 		/* localStorage.setItem("token", this.token); */
-		localStorage.setItem("access", this.token.access);
-		localStorage.setItem("refresh", this.token.refresh);
+		/* Revocar access token */
+		localStorage.removeItem("access");
+		localStorage.removeItem("refresh");
+		localStorage.removeItem("expiration");
 		this.navCtrl.navigateRoot('/home');
 	}
 
 	// Is logged in
-
+	// Check if the token has expired and if not check if the token is saved
 	async isLoggedIn() {
-		return this.storage.get("token").then(
-			data => {
-				this.token = data;
-				if (this.token) {
-					console.log("Access: "+this.token.access)
-					console.log("Refresh: "+this.token.refresh)
-					return true
-				}
-				else {
-					console.log("Not logged in")
-					return false
-				}
-			})
+		var now = JSON.stringify(Date.now())
+		var exp = localStorage.getItem("expiration");
+		if (now > exp) {
+			this.logout()
+		} else {
+			return this.storage.get("token").then(
+				data => {
+					this.token = data;
+					if (this.token) {
+						console.log("Access: "+this.token.access)
+						console.log("Refresh: "+this.token.refresh)
+						return true
+					}
+					else {
+						console.log("Not logged in")
+						return false
+					}
+				})
+		}
 	}
 
 	// Interceptor
@@ -129,11 +141,21 @@ export class AuthService {
 		localStorage.setItem("access", access);
 	}
 
+	private storeRefreshToken(refresh: string) {
+		localStorage.setItem("refresh", refresh);
+	}
+
+	private storeExpiration() {
+		localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000))
+	}
+
 	refreshToken() {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
 			'refresh': this.getRefreshToken()
 		}).pipe(tap((tokens: AuthResponse) => {
 			this.storeJwtToken(tokens.access);
+			this.storeRefreshToken(tokens.refresh);
+			this.storeExpiration();
 		}));
 	}
 
