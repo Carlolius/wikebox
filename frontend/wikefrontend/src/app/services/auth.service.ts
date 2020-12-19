@@ -59,8 +59,8 @@ export class AuthService {
 		.pipe(
 			tap(token => {
 				this.token = token;
-				this.storeJwtToken(this.access)
-				this.storeRefreshToken(this.refresh)
+				this.storeJwtToken(this.token.access)
+				this.storeRefreshToken(this.token.refresh)
 				this.storeExpiration()
 				/* localStorage.setItem("access", this.token.access) */
 				/* localStorage.setItem("refresh", this.token.refresh) */
