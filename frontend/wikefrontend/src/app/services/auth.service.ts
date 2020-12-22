@@ -153,7 +153,6 @@ export class AuthService {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
 			'refresh': this.getRefreshToken()
 		}).pipe(tap((tokens: AuthResponse) => {
-			console.log("tokensSSS", tokens)
 			this.storeJwtToken(tokens.access);
 			/* This is not necessary I'm not sure how it solves to update the refreshToken */
 			/* this.storeRefreshToken(tokens.refresh); */
