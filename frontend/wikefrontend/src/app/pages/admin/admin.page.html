@@ -20,6 +20,9 @@
 				</ion-searchbar>
 
 			</ion-col>
+			<ion-col offset="2" class="ion-align-self-center">
+				username
+			</ion-col>
 		</ion-row>
 	</div>
 	<!-- <ion-label>Playlists</ion-label> -->
@@ -30,52 +33,62 @@
 	<!-- </ion-list> -->
 
 
-	<!-- Select playlists -->
-	<ion-item>
-		<ion-label>Playlists</ion-label>
-		<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)" (ionFocus)="getPlaylists()">
-			<!-- Probablemente non necesite isto vvv -->
-			<!-- <ion-select-option value="New">New playlist</ion-select-option> -->
-			<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}} >{{playlist.value.playlist}}</ion-select-option>
-		</ion-select>
-	</ion-item>
+	<div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
+		<ion-row>
+			<ion-col>
+				<!-- Select playlists -->
+				<ion-item>
+					<ion-label>Playlists</ion-label>
+					<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)" (ionFocus)="getPlaylists()">
+						<!-- Probablemente non necesite isto vvv -->
+						<!-- <ion-select-option value="New">New playlist</ion-select-option> -->
+						<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}}>{{playlist.value.playlist}}</ion-select-option>
+					</ion-select>
+				</ion-item>
+			</ion-col>
+		</ion-row>
 
-	<!-- Show playlists -->
-	<ion-list *ngFor="let song of ( playlistSongs | async)">
-		<ion-item>
-			<ion-grid>
-				<ion-row >
-					<ion-col>
-						<ion-label text-wrap>
-							<h2>{{ song.value.song }}</h2>
-							<h6>{{ song.value.artists }}</h6>
-						</ion-label>
-					</ion-col>
-					<ion-col size=1 >
-						<ion-button color="light" >
-							-
-						</ion-button>
-					</ion-col>
-						<ion-col size=1 >
-							<ion-label>
-								<h2>00</h2>
-							</ion-label>
-						</ion-col>
-						<ion-col size=1 >
-							<ion-button color="light" >
-								+
-							</ion-button>
-						</ion-col>
-				</ion-row>
-			</ion-grid>
-		</ion-item>
-	</ion-list>
+		<ion-row>
+			<ion-col>
+				<!-- Show playlists -->
+				<ion-list *ngFor="let song of ( playlistSongs | async)">
+					<ion-item>
+						<ion-grid>
+							<ion-row >
+								<ion-col>
+									<ion-label text-wrap>
+										<h2>{{ song.value.song }}</h2>
+										<h6>{{ song.value.artists }}</h6>
+									</ion-label>
+								</ion-col>
+								<ion-col size=1 >
+									<ion-button color="light" >
+										-
+									</ion-button>
+								</ion-col>
+									<ion-col size=1 >
+										<ion-label>
+											<h2>00</h2>
+										</ion-label>
+									</ion-col>
+									<ion-col size=1 >
+										<ion-button color="light" >
+											+
+										</ion-button>
+									</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-item>
+				</ion-list>
+			</ion-col>
+		</ion-row>
 
-	<ion-infinite-scroll threshold="100px" (ionInfinite)="infinitesongs($event)">
-		<ion-infinite-scroll-content
-			loadingSpinner="crescent"
-			loadingText="Loading more data...">
-		</ion-infinite-scroll-content>
-	</ion-infinite-scroll>
+		<ion-infinite-scroll threshold="100px" (ionInfinite)="infinitesongs($event)">
+			<ion-infinite-scroll-content
+				loadingSpinner="crescent"
+				loadingText="Loading more data...">
+			</ion-infinite-scroll-content>
+		</ion-infinite-scroll>
+	</div>
 
 </ion-content>

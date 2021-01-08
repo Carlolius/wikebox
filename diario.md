@@ -244,3 +244,10 @@ Despois de mirar bastante opto por probar [diferentes interceptors](https://jaso
 
 **18/12/2020**  
 Agora cando se fai o login tamén se garda a data de caducidade do refresh token +1 día. Pra comprobar isLoggedIn primeiro se comproba se a data de caducidade é anterior ao timestamp. Cando se fai o refresh token tamén se almacena o novo refresh token e se actualiza a data de caducidade, a priori funciona todo ben.
+
+**21/12/2020**  
+O refresh token non cambia o obter un novo access token, polo tanto non se pode actualizar, non sei se non se actualiza, pero como caduca despois de 1 día non debería de ser moi importante.  
+Tentando facer que as cancións se vaian engadindo a unha nova playlist creada manualmente por min.
+
+**04/01/2021**  
+Creando o modelo para almacear as playlists que vaian a soar. Duda, unha taboa de "playlists" pra todos os usuarios ou unha táboa para cada un? Unha taboa para cada un, podería ser [así](https://learndjango.com/tutorials/django-best-practices-referencing-user-model)  
