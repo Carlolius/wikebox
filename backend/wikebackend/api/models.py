@@ -19,7 +19,7 @@ class LocalPlaylist(models.Model):
     title = models.CharField(max_length=100)
     artists = models.CharField(max_length=100)
     duration = models.DurationField
-    uri = models.CharField()
+    uri = models.CharField(max_length=200)
     votes = models.IntegerField()
 
     def __str__(self):
