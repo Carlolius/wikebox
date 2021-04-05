@@ -2,4 +2,4 @@ django
 django-rest-framework
 django-cors-headers
 djangorestframework_simplejwt
-tekore
+spotipy
