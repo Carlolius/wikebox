@@ -5,7 +5,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 
 import { Storage } from '@ionic/storage';
-import { JwtHelperService } from '@auth0/angular-jwt';
+/* import { JwtHelperService } from '@auth0/angular-jwt'; */
 
 import { HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
