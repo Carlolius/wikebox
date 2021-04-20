@@ -3,6 +3,7 @@ import api.music.utils as utils
 
 # Create your models here.
 class SongPlayingNow(models.Model):
+    id = models.BigAutoField(primary_key=True)
     artist = models.CharField(max_length=1000)
     title = models.CharField(max_length=1000)
     duration = models.DurationField()
@@ -16,6 +17,7 @@ class SongPlayingNow(models.Model):
 
 # Local playlists model
 class LocalPlaylist(models.Model):
+    id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=100)
     artists = models.CharField(max_length=100)
     duration = models.DurationField
