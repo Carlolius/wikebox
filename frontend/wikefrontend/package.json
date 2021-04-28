@@ -23,7 +23,6 @@
     "@ionic-native/splash-screen": "*",
     "@ionic-native/status-bar": "*",
     "@ionic/angular": "*",
-    "@ionic/storage": "*",
     "@ionic/storage-angular": "^3.0.6",
     "angular": "*",
     "angular-jwt": "*",
