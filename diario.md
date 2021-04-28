@@ -251,3 +251,6 @@ Tentando facer que as cancións se vaian engadindo a unha nova playlist creada m
 
 **04/01/2021**  
 Creando o modelo para almacear as playlists que vaian a soar. Duda, unha taboa de "playlists" pra todos os usuarios ou unha táboa para cada un? Unha taboa para cada un, podería ser [así](https://learndjango.com/tutorials/django-best-practices-referencing-user-model)  
+
+**28/04/2021**  
+Por cambios en angular o sistema de almacenaxe (Storage) xa non creaba a base de datos o inicio polo tanto non se podían gardar os token. Na páxina do modulo de angular en GitHub [iexplican como crear a base de datos o inicio](https://github.com/ionic-team/ionic-storage#with-angular).

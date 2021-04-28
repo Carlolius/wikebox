@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 /* import { JwtHelperService } from '@auth0/angular-jwt'; */
 
 import { HttpHeaders } from '@angular/common/http';
@@ -20,6 +20,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 
 
 export class AuthService {
+	private _storage: Storage | null = null;
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
 	/* loggedIn = false; // not necessary */
@@ -33,7 +34,16 @@ export class AuthService {
 		private storage: Storage,
 		private navCtrl: NavController,
 		private router: Router,
-	) { }
+	) {
+		// Init for storage service
+		this.init();
+	}
+
+	// Init for storage service
+	async init() {
+		const storage = await this.storage.create();
+		this._storage = storage;
+	}
 
 	// Can activate
 	// Test with isLoggedIn and if the token is not empty can activate
