@@ -10,11 +10,13 @@
 			<ion-col offset="2" size="5" class="ion-align-self-center">
 
 				<!-- Search bar and show results on popover -->
+				<!-- La siguiente línea era la que se usaba antes, queda aquí por si acaso -->
+					<!-- (ionChange)="searchChanged($event)" -->
 				<ion-searchbar
 					[(ngModel)]="searchTerm"
 					[debounce]="600"
-					(ionChange)="searchChanged($event)"
-					(ionChange)="showpop($event)"
+					(ionChange)="searchChanged()"
+					(ionChange)="searchShowpop($event)"
 					placeholder="Search a song"
 					showCancelButton="focus">
 				</ion-searchbar>

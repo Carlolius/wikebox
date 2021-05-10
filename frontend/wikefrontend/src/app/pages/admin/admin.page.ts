@@ -45,7 +45,7 @@ export class AdminPage implements OnInit {
 	}
 
 	// Popover that shows results of search
-	async showpop( event ) {
+	async searchShowpop( event ) {
 		const popover = await this.searchPopover.create({
 			component: SearchresultpopComponent, 
 			event: event,
@@ -63,6 +63,8 @@ export class AdminPage implements OnInit {
 		// Check if there are data
 		if (data) {
 			this.clickSearchSong( data.item )
+			/* Meter aquí a función de que cando clicke na canción a engada a playlist */
+
 		}
 	}
 

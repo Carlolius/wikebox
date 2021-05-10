@@ -14,7 +14,7 @@
 
 
 	<!-- Search bar and show results -->
-	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="500" (ionChange)="searchChanged($event)" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
+	<ion-searchbar [(ngModel)]="searchTerm" [debounce]="500" (ionChange)="searchChanged()" placeholder="Search a song" showCancelButton="focus"></ion-searchbar>
 
 	<ion-list>
 		<ion-item button (click)="clickSearchSong(item.value.uri)" *ngFor="let item of (results | async)">

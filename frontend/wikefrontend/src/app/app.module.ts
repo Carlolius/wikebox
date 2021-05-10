@@ -22,19 +22,19 @@ import { AuthModule } from './services/auth.module';
 import { Interceptor } from './services/interceptor.service';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
+	declarations: [AppComponent],
+	entryComponents: [],
+	imports: [
 		BrowserModule,
 		IonicModule.forRoot(),
 		HttpClientModule,
 		AuthModule,
 		AppRoutingModule,
 	],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {
+	providers: [
+		StatusBar,
+		SplashScreen,
+		{
 			provide: RouteReuseStrategy,
 			useClass: IonicRouteStrategy
 		},
@@ -43,8 +43,8 @@ import { Interceptor } from './services/interceptor.service';
 			useClass: Interceptor,
 			multi: true
 		},
-    ApiService // The service that connects with Django
-  ],
-  bootstrap: [AppComponent]
+		ApiService // The service that connects with Django
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule {}
