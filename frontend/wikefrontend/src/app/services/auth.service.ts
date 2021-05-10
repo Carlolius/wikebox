@@ -93,7 +93,7 @@ export class AuthService {
 	// Register
 
 	register(username: String, password: String) {
-		console.log("HOLI: "+username)
+		console.log("Welcome: "+username)
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
 			username: username,
 			password: password

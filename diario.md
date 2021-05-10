@@ -254,3 +254,9 @@ Creando o modelo para almacear as playlists que vaian a soar. Duda, unha taboa d
 
 **28/04/2021**  
 Por cambios en angular o sistema de almacenaxe (Storage) xa non creaba a base de datos o inicio polo tanto non se podían gardar os token. Na páxina do modulo de angular en GitHub [iexplican como crear a base de datos o inicio](https://github.com/ionic-team/ionic-storage#with-angular).
+
+**29/04/2021**  
+Había un problema coas playlist que parece que non as gardaba ben e agora xa vai sen facerlle nada, tal vez un problema co almacenamento destas.
+
+**10/05/2021**  
+Creados os serializers pra introducir os datos nas bases. Novo problema, o querer facer o rexistro o interceptor de angular detecta que non ten o access token polo tanto rexeita a conexión cando ao facer o rexistro non é posible obter ese token xa que non existe ata que o usuario se rexistre.

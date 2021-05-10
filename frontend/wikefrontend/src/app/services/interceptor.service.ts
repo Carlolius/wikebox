@@ -7,12 +7,18 @@ import { catchError, filter, take, switchMap } from 'rxjs/operators';
 @Injectable()
 export class Interceptor implements HttpInterceptor {
 
+	private isRegister = false;
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(public authService: AuthService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+		if (request.url.includes('/register')) {
+			this.isRegister = true;
+			return next.handle(request);
+		}
 
     if (this.authService.getJwtToken()) {
       request = this.addToken(request, this.authService.getJwtToken());
