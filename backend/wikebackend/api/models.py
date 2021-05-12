@@ -12,6 +12,8 @@ class SongPlayingNow(models.Model):
     path = models.CharField(max_length=200)
     uri = models.CharField(max_length=200, unique=True)
     votes = models.IntegerField()
+    def __str__(self):
+        return self.uri
 
 # Local playlists model
 class LocalPlaylist(models.Model):
@@ -22,3 +24,5 @@ class LocalPlaylist(models.Model):
     uri = models.CharField(max_length=200, unique=True)
     created = datetime.now()
     votes = models.IntegerField()
+    def __str__(self):
+        return self.title

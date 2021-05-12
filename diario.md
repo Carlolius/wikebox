@@ -259,4 +259,21 @@ Por cambios en angular o sistema de almacenaxe (Storage) xa non creaba a base de
 Había un problema coas playlist que parece que non as gardaba ben e agora xa vai sen facerlle nada, tal vez un problema co almacenamento destas.
 
 **10/05/2021**  
-Creados os serializers pra introducir os datos nas bases. Novo problema, o querer facer o rexistro o interceptor de angular detecta que non ten o access token polo tanto rexeita a conexión cando ao facer o rexistro non é posible obter ese token xa que non existe ata que o usuario se rexistre.
+Creados os serializers pra introducir os datos nas bases.  
+Novo problema, o querer facer o rexistro o interceptor de angular detecta que non ten o access token polo tanto rexeita a conexión cando ao facer o rexistro non é posible obter ese token xa que non existe ata que o usuario se rexistre.
+
+**11/05/2021**  
+Xa funciona ben o rexistro, nas settings the django oubo que quitar IsAuthenticated dos permisos por defecto, [o principio deste tutorial mais ou menos](https://python.plainenglish.io/django-rest-framework-jwt-auth-with-login-and-register-77f830cd8789).  
+Para playlistmode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen. Para o queue mode se engaden as cancións a unha playlist local.  
+[Aquí](https://www.geeksforgeeks.org/modelserializer-in-serializers-django-rest-framework/) explicase como facer o dos serializes e models, seguir por ahí.
+
+**12/05/2021**  
+Dende postman consigo cargar os datos nas tablas correspondentes da base. Pra parsear directamente os datos de spotify a BD faría falla un serializer?  
+
+Outra dúbida, podería parsear os datos de search e getplaylists coa axuda dun serializador? Recollería un json e o podería pasar a un diccionario.  
+
+Cando se fai click nunha canción que aparece no popover hai que metela na BD:  
+
+* Facer unha view que chame o viewset que mete as cancións na BD. Con pasar a uri sería suficiente porque fai outra consulta a Spotify para obter o resto de datos da canción.
+  * Obteño un json que tería que transformar en algo para a BD cun serializer, o mesmo que quero para search e getplaylists.
+* Pasar os datos directamente dende o frontend ao viewset.

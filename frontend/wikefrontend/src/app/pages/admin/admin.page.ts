@@ -32,8 +32,11 @@ export class AdminPage implements OnInit {
 	// When click in a search result
 	clickSearchSong( item ) {
 		console.log( item )
-		/* Cola playlist?¿ */
-		/* Crear unha lista, despois meter as cancións de algún modo */
+		/* Meter aquí a función de que cando clicke na canción a engada a playlist */
+		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
+		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
+		/* algo como if mode = playlist else if mode = queue... */
+		this.apiService.spotifyClickSeachSong(item)
 	}
 
 	// Load the songs from a selected playlist
@@ -63,8 +66,6 @@ export class AdminPage implements OnInit {
 		// Check if there are data
 		if (data) {
 			this.clickSearchSong( data.item )
-			/* Meter aquí a función de que cando clicke na canción a engada a playlist */
-
 		}
 	}
 

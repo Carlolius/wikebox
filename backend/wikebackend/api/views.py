@@ -5,10 +5,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
-from .serializers import SongPlayingNowSerializer
-from .models import SongPlayingNow
 
 from .music import spotify
+
+# import viewsets
+from rest_framework import viewsets
+from .models import SongPlayingNow, LocalPlaylist
+from .serializers import SongPlayingNowSerializer, LocalPlaylistSerializer
 
 # Create your views here.
 
@@ -20,9 +23,18 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
 
-class SongPlayingNowViewSet(generics.ListCreateAPIView):
+# class SongPlayingNowViewSet(generics.ListCreateAPIView):
+#     # Error from pylint
+#     queryset = SongPlayingNow.objects.all()
+#     serializer_class = SongPlayingNowSerializer
+class SongPlayingNowViewSet(viewsets.ModelViewSet):
+    # Error from pylint
     queryset = SongPlayingNow.objects.all()
     serializer_class = SongPlayingNowSerializer
+
+class LocalPlaylistViewSet(viewsets.ModelViewSet):
+    queryset = LocalPlaylist.objects.all()
+    serializer_class = LocalPlaylistSerializer
 
 
 ## Spotify ##

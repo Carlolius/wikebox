@@ -49,11 +49,12 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [ 
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+    # If is activated you can't register new users due you don't have the token
+    # 'DEFAULT_PERMISSION_CLASSES': [ 
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
+        # SimpleJWT handles the authentication
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }

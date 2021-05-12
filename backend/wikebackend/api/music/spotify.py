@@ -62,6 +62,7 @@ def getClient2():
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
 
+# Para non ter que facer o bucle desta función pode ser boa idea facer un serializer que transforme os datos.
 # Search for a song
 def search(search):
     client = getClient2()
