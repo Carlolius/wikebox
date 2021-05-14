@@ -2,7 +2,7 @@ from rest_framework import generics
 # Auth imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
@@ -27,11 +27,13 @@ class HelloView(APIView):
 #     # Error from pylint
 #     queryset = SongPlayingNow.objects.all()
 #     serializer_class = SongPlayingNowSerializer
+@permission_classes([IsAuthenticated])
 class SongPlayingNowViewSet(viewsets.ModelViewSet):
     # Error from pylint
     queryset = SongPlayingNow.objects.all()
     serializer_class = SongPlayingNowSerializer
 
+@permission_classes([IsAuthenticated])
 class LocalPlaylistViewSet(viewsets.ModelViewSet):
     queryset = LocalPlaylist.objects.all()
     serializer_class = LocalPlaylistSerializer
@@ -40,6 +42,7 @@ class LocalPlaylistViewSet(viewsets.ModelViewSet):
 ## Spotify ##
 
 # Get the url to make the login in the Spotify api
+@permission_classes([IsAuthenticated])
 def SpotifyGet(self):
     url = spotify.getUrl()
     resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
@@ -47,6 +50,7 @@ def SpotifyGet(self):
 
 # Crops the callback url given by the Spotify api and obtains the token
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def callBack(request):
     authCode = request.data['url']
     spotify.callBackUrl(authCode)
@@ -56,12 +60,14 @@ def callBack(request):
 
 # Get user playlists
 # Aquí habería que meter tamén o limit e o offset para poder ver todas as listas
+@permission_classes([IsAuthenticated])
 def getPlaylists(self):
     playlists = spotify.getPlaylists()
     return HttpResponse(playlists)
 
 # Load the songs of a playlist given the playlist uri
 # Aquí habería que meter tamén o limit e o offset para poder ver todas as cancións
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def getPlaylistSongs(request):
     playlistId = request.data['playlistId']
@@ -70,6 +76,7 @@ def getPlaylistSongs(request):
 
 # Search for a song
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def search(request):
     search = request.data['search']
     # Necessary for when you delete all the chars in the search bar, avoids empty request

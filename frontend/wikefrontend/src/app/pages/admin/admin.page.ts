@@ -65,7 +65,7 @@ export class AdminPage implements OnInit {
 		const { data } = await popover.onWillDismiss();
 		// Check if there are data
 		if (data) {
-			this.clickSearchSong( data.item )
+			this.clickSearchSong( data.item)
 		}
 	}
 
