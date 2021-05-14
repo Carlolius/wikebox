@@ -270,10 +270,25 @@ Para playlistmode, ten que haber unha playlist de spotify seleccionada e se van 
 **12/05/2021**  
 Dende postman consigo cargar os datos nas tablas correspondentes da base. Pra parsear directamente os datos de spotify a BD faría falla un serializer?  
 
-Outra dúbida, podería parsear os datos de search e getplaylists coa axuda dun serializador? Recollería un json e o podería pasar a un diccionario.  
+**Outra dúbida**, podería parsear os datos de search e getplaylists coa axuda dun serializador? Recollería un json e o podería pasar a un diccionario.  
 
 Cando se fai click nunha canción que aparece no popover hai que metela na BD:  
 
 * Facer unha view que chame o viewset que mete as cancións na BD. Con pasar a uri sería suficiente porque fai outra consulta a Spotify para obter o resto de datos da canción.
   * Obteño un json que tería que transformar en algo para a BD cun serializer, o mesmo que quero para search e getplaylists.
 * Pasar os datos directamente dende o frontend ao viewset.
+
+**13/05/2021**  
+Creación do modelo relacional da base de datos. Hai 4 táboas:
+
+1) Wike, táboa das instancias que haxa de Wikebox.
+1) User, táboa de Django que contén os usuarios.
+1) Groups, táboa de Django que contén grupos cos seus permisos.
+1) Playlist, táboa coas cancións.
+
+Os permisos de Django poden bloquear os accesos, [documentación](https://www.django-rest-framework.org/api-guide/permissions/)  
+Engadidos os permisos as views da api `@permission_classes([IsAuthenticated])` agora non se poden facer peticións a api sen estar autentificado, de todas formas pódese crear un usuario sen estar autentificado, pero non borralos (creo).
+
+**14/05/2021**  
+O modelo de usuario necesita ser modificado para que se poida engadir a qué instancia pertence. O resto de modelos están feitos.  
+Pequena actualización da memoria.
