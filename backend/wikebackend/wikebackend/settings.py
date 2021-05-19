@@ -120,6 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom user model made by me
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

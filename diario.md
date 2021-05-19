@@ -292,3 +292,6 @@ Engadidos os permisos as views da api `@permission_classes([IsAuthenticated])` a
 **14/05/2021**  
 O modelo de usuario necesita ser modificado para que se poida engadir a qué instancia pertence. O resto de modelos están feitos.  
 Pequena actualización da memoria.
+
+**19/05/2021**  
+Estou intentando modificar o modelo de usuario para que se poida engadir a qué número de instancia pertence cada usuario. Hai que crear un novo modelo de usuario baseado no AbstractUser de Django, aínda non funciona e non sei ben cal é a razón.
