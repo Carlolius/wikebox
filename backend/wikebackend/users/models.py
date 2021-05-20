@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
     id = models.AutoField(primary_key=True)
     # username = None
     # email = models.EmailField(_('email address'), unique=True)
-    instance = models.IntegerField
+    instance_number = models.IntegerField(null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

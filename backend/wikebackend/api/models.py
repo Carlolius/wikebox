@@ -7,7 +7,7 @@ from datetime import datetime
 class instance(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    url = models.CharField(max_length=1000)
+    url = models.CharField(max_length=1000, unique=True)
     # Chave foránea ao modelo de User
     admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING)
 
