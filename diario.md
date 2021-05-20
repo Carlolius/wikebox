@@ -295,3 +295,14 @@ Pequena actualización da memoria.
 
 **19/05/2021**  
 Estou intentando modificar o modelo de usuario para que se poida engadir a qué número de instancia pertence cada usuario. Hai que crear un novo modelo de usuario baseado no AbstractUser de Django, aínda non funciona e non sei ben cal é a razón.
+
+**20/05/2021**  
+Modificación do modelo de usuario usando [este](https://testdriven.io/blog/django-custom-user-model/#model-manager) mais [este](https://docs.hektorprofe.net/django/api-django-rest/sistema-autenticacion-registro/) tutoriais.
+No modelo de usuario xa se pode engadir a instancia a que pertence o usuario, a idea é:  
+
+1. Créase admin.
+1. Usuario admin da nome e engade url a instancia.
+1. A instancia créase automáticamente.
+1. Os usuarios rexístranse através da url e entón xa pertencen a instancia.
+
+Engadida unha pequena parte do capítulo 2 da memoria.
