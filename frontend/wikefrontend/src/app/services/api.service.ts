@@ -67,13 +67,21 @@ export class ApiService {
 		/* ); */
 	}
 
-	// Get items from a playlist
-	spotifyGetPlaylistSongs(playlistId:string): Observable<any> {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlistSongs/', {'playlistId': playlistId}).pipe(
+	// Add songs to LocalPlaylist
+	spotifyAddToLocalPlaylist(playlistId:string): Observable<any> {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/addlocalplaylist/', {'playlistId': playlistId}).pipe(
 			map(results => Object.keys(results).map(key => ({value: results[key]}))
 				 ),
 		);
 	}
+	/* // Get items from a playlist */
+	/* /1* Non se usa isto *1/ */
+	/* spotifyGetPlaylistSongs(playlistId:string): Observable<any> { */
+	/* 	return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlistSongs/', {'playlistId': playlistId}).pipe( */
+	/* 		map(results => Object.keys(results).map(key => ({value: results[key]})) */
+	/* 			 ), */
+	/* 	); */
+	/* } */
 
 	spotifyClickSeachSong(songUri:string){
 		return this.httpClient.post(this.SERVER_ADDRESS + 'api/local/', {'songUri': songUri}).pipe(

@@ -8,8 +8,11 @@ class instance(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     url = models.CharField(max_length=1000, unique=True)
+    spotify_token = models.CharField(max_length=1000, null=True, blank= True)
     # Chave foránea ao modelo de User
     admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return self.name
 
 # Local playlists model
 class LocalPlaylist(models.Model):
@@ -18,7 +21,7 @@ class LocalPlaylist(models.Model):
     title = models.CharField(max_length=1000)
     duration = models.DurationField(default=None)
     uri = models.CharField(max_length=200)
-    votes = models.IntegerField()
+    votes = models.IntegerField(default=0)
     created = datetime.now()
     instance = models.ForeignKey(instance, on_delete=models.DO_NOTHING)
     def __str__(self):

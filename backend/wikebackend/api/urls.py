@@ -18,5 +18,6 @@ urlpatterns = [
         path('callback/', views.callBack),
         path('search/', views.search),
         path('playlists/', views.getPlaylists),
-        path('playlistSongs/', views.getPlaylistSongs),
+        # path('playlistSongs/', views.getPlaylistSongs),
+        path('addlocalplaylist/', views.addToLocalPlaylist),
 ]

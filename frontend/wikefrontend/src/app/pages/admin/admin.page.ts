@@ -40,9 +40,19 @@ export class AdminPage implements OnInit {
 	}
 
 	// Load the songs from a selected playlist
+	/* Xa non se debería usar, borrar */
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
-	getPlaylistSongs( playlistId:string ) {
-		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs( playlistId )
+	/* getPlaylistSongs( playlistId:string ) { */
+	/* 	this.playlistSongs = this.apiService.spotifyGetPlaylistSongs( playlistId ) */
+	/* 	console.log( playlistId ) */
+	/* 	console.log( this.playlistSongs ) */
+	/* } */
+	
+	// Add playlist songs to LocalPlaylist
+	/* É unha copia de getPlaylistSongs */
+	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
+	addToLocalPlaylist( playlistId:string ) {
+		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
 		console.log( playlistId )
 		console.log( this.playlistSongs )
 	}

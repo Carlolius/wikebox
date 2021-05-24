@@ -306,3 +306,20 @@ No modelo de usuario xa se pode engadir a instancia a que pertence o usuario, a 
 1. Os usuarios rexístranse através da url e entón xa pertencen a instancia.
 
 Engadida unha pequena parte do capítulo 2 da memoria.
+
+**21/05/2021**  
+Nota da idea desta noite:  
+Para solventar o problema de ter unha instancia antes de crear o usuario, mostrarase unha páxina onde se rexistra a instancia e despois os usuarios se rexistran en: www.wikebox.com/instancia/register e o login en www.wikebox.com/instancia/login
+
+Problema: rexitrase a instancia pero non usuarios.  
+Se hai instancias sen usuarios borranse despois de 24 horas.  
+Os usuarios seguen sendo independientes das instancias xa que conservan o seu id.
+
+Hoxe:  
+Intento engadir as cancións de unha playlist de Spotify ao modelo de LocalPlaylist non satisfactoriamente.
+
+**22/05/2021**  
+En spotify.py estou intentando reformatear a forma de obter as cancións e metelas no modelo. Hai que ver que datos son os que fan falla "track" probablemente e despois facer un bucle para meter todas as cancións. Igual non é mala idea facer o diccionario primeiro e despois metelas na bd.
+
+**24/05/2021**  
+Se engaden playlists a LocalPlaylist. Pero non se recorre ben o bucle das cancións recibidas xa que o parámetro non é iterable, tal vez haxa que facer un diccionario coas cancións antes de metelo no modelo.

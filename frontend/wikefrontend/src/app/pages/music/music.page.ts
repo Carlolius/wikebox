@@ -36,11 +36,11 @@ export class MusicPage implements OnInit {
 
 	// Load the songs from a selected playlist
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
-	getPlaylistSongs(playlistId:string) {
-		this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId)
-		console.log(playlistId)
-		console.log(this.playlistSongs)
-	}
+	/* getPlaylistSongs(playlistId:string) { */
+	/* 	this.playlistSongs = this.apiService.spotifyGetPlaylistSongs(playlistId) */
+	/* 	console.log(playlistId) */
+	/* 	console.log(this.playlistSongs) */
+	/* } */
 
 	// Infinite scroll of songs
 	infinitesongs(event){

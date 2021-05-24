@@ -65,14 +65,26 @@ def getPlaylists(self):
     playlists = spotify.getPlaylists()
     return HttpResponse(playlists)
 
-# Load the songs of a playlist given the playlist uri
-# Aquí habería que meter tamén o limit e o offset para poder ver todas as cancións
-@permission_classes([IsAuthenticated])
+# Add songs to LocalPlaylist given the playlist uri
+# Aquí habería que meter tamén o limit e o offset para poder engadir todas as cancións
 @api_view(['POST'])
-def getPlaylistSongs(request):
-    playlistId = request.data['playlistId']
-    playlistSongs = spotify.getPlaylistSongs(playlistId)
+@permission_classes([IsAuthenticated])
+def addToLocalPlaylist(request):
+    playlistSongs = spotify.addToLocalPlaylist(request.data['playlistId'], request.user.user_instance)
+    print("Pasa por aquí")
+    print(playlistSongs)
+    LocalPlaylistSerializer(playlistSongs, LocalPlaylist)
+    print("Pasa por aquí2")
     return HttpResponse(playlistSongs)
+
+# # Load the songs of a playlist given the playlist uri
+# # Aquí habería que meter tamén o limit e o offset para poder ver todas as cancións
+# @permission_classes([IsAuthenticated])
+# @api_view(['POST'])
+# def getPlaylistSongs(request):
+#     playlistId = request.data['playlistId']
+#     playlistSongs = spotify.getPlaylistSongs(playlistId)
+#     return HttpResponse(playlistSongs)
 
 # Search for a song
 @api_view(['POST'])

@@ -2,7 +2,11 @@ import os
 import spotipy
 import getpass # to get the system username
 
+import datetime
+
 import json
+
+from ..models import LocalPlaylist
 
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
@@ -122,6 +126,25 @@ def getPlaylistSongs(playlistId):
                 'song': dictsongs[i]['track']['name'],
                 'artists': dictsongs[i]['track']['artists'][0]['name']
                 }
+    return json.dumps(songs)
+
+# Copy of getPlaylistSongs
+# Pasar tamén o offset e o limit para poder ver todas as cancións
+def addToLocalPlaylist(playlistId, userinstance):
+    client = getClient2()
+    spotifyPlaylist = client.playlist_tracks(playlistId)
+    songs = spotifyPlaylist['items']
+    playlist = LocalPlaylist()
+    print(songs) # Continuar aquí, songs non se pode recorrer porque debe de ser 1 podo facer un diccionario aquí ou algo así.
+    for i in range(len(songs)):
+        # id = models.BigAutoField(primary_key=True)
+        # playlist.artists = songs[i] 
+        playlist.title = songs[i]['track']['name']
+        playlist.duration = datetime.timedelta(milliseconds = songs[i]['track']['duration_ms'])
+        # playlist.uri =
+        playlist.created = songs[i]['added_at']
+        playlist.instance = userinstance
+        playlist.save()
     return json.dumps(songs)
 
 # Get user info, testing porpouse
