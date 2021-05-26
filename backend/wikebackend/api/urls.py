@@ -19,5 +19,5 @@ urlpatterns = [
         path('search/', views.search),
         path('playlists/', views.getPlaylists),
         # path('playlistSongs/', views.getPlaylistSongs),
-        path('addlocalplaylist/', views.addToLocalPlaylist),
+        path('addlocalplaylist/', views.playlistToLocalPlaylist),
 ]

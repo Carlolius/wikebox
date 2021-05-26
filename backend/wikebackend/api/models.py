@@ -23,6 +23,7 @@ class LocalPlaylist(models.Model):
     uri = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
     created = datetime.now()
+    added_mode = models.CharField(max_length=50)  # Added during search or during playlist load
     instance = models.ForeignKey(instance, on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.title

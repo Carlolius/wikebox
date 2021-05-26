@@ -323,3 +323,9 @@ En spotify.py estou intentando reformatear a forma de obter as cancións e metel
 
 **24/05/2021**  
 Se engaden playlists a LocalPlaylist. Pero non se recorre ben o bucle das cancións recibidas xa que o parámetro non é iterable, tal vez haxa que facer un diccionario coas cancións antes de metelo no modelo.
+
+**25/05/2021**  
+O mesmo problema de onte, estou intentando facer un diccionario para engadir as cancións a base de datos, xa que o problema de onte que só engade a última non o souben resolver.
+
+**26/05/2021**  
+Xa se engaden as cancións dunha playlist a LocalPlaylist, dende ahí podemos traballar coas cancións.

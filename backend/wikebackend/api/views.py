@@ -6,12 +6,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
-from .music import spotify
+from api.music import spotify
 
 # import viewsets
 from rest_framework import viewsets
-from .models import SongPlayingNow, LocalPlaylist
-from .serializers import SongPlayingNowSerializer, LocalPlaylistSerializer
+from api.models import SongPlayingNow, LocalPlaylist
+from api.serializers import SongPlayingNowSerializer, LocalPlaylistSerializer
 
 # Create your views here.
 
@@ -69,12 +69,10 @@ def getPlaylists(self):
 # Aquí habería que meter tamén o limit e o offset para poder engadir todas as cancións
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def addToLocalPlaylist(request):
-    playlistSongs = spotify.addToLocalPlaylist(request.data['playlistId'], request.user.user_instance)
-    print("Pasa por aquí")
-    print(playlistSongs)
-    LocalPlaylistSerializer(playlistSongs, LocalPlaylist)
-    print("Pasa por aquí2")
+def playlistToLocalPlaylist(request):
+    playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userInstance)
+    # print(playlistSongs)
+    # LocalPlaylistSerializer(playlistSongs, LocalPlaylist)
     return HttpResponse(playlistSongs)
 
 # # Load the songs of a playlist given the playlist uri

@@ -6,7 +6,9 @@ import datetime
 
 import json
 
-from ..models import LocalPlaylist
+from api.models import LocalPlaylist
+
+from django.core import serializers
 
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
@@ -128,24 +130,34 @@ def getPlaylistSongs(playlistId):
                 }
     return json.dumps(songs)
 
-# Copy of getPlaylistSongs
 # Pasar tamén o offset e o limit para poder ver todas as cancións
-def addToLocalPlaylist(playlistId, userinstance):
+def playlistToLocalPlaylist(playlistId, userinstance):
     client = getClient2()
     spotifyPlaylist = client.playlist_tracks(playlistId)
-    songs = spotifyPlaylist['items']
-    playlist = LocalPlaylist()
-    print(songs) # Continuar aquí, songs non se pode recorrer porque debe de ser 1 podo facer un diccionario aquí ou algo así.
+    songs = spotifyPlaylist['items']  # Takes just the songs
+    playlist = LocalPlaylist()  # Assign the model
+    # Engadir parámetro de quen engade as cancións para poder borrar só as "automáticas" e así poder cambiar de playlist sen perder as dos usuarios
+    LocalPlaylist.objects.filter(instance=userinstance).delete() # Cleans the LocalPlaylist when selected playlist chagnes
     for i in range(len(songs)):
-        # id = models.BigAutoField(primary_key=True)
-        # playlist.artists = songs[i] 
+        playlist.pk = None  # The pk is assigned automatically, this is needed for that
+        artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
+        string = ""
+        for j in range(len(artists)):
+            string += artists[j]['name']
+            if j+1 != len(artists):
+                string += ", "  # Separate the artist names
+        playlist.artists = string
         playlist.title = songs[i]['track']['name']
         playlist.duration = datetime.timedelta(milliseconds = songs[i]['track']['duration_ms'])
-        # playlist.uri =
+        playlist.uri = songs[i]['track']['uri']
         playlist.created = songs[i]['added_at']
-        playlist.instance = userinstance
+        playlist.added_mode = "playlist"
+        playlist.instance = userinstance  # The instance of the user comes as parameter
         playlist.save()
     return json.dumps(songs)
+
+def searchToLocalPlaylist(songId, userinstance):
+    client = getClient2()
 
 # Get user info, testing porpouse
 def userinfo():
