@@ -329,3 +329,6 @@ O mesmo problema de onte, estou intentando facer un diccionario para engadir as 
 
 **26/05/2021**  
 Xa se engaden as cancións dunha playlist a LocalPlaylist, dende ahí podemos traballar coas cancións.
+
+**27/05/2021**  
+Searchtoplaylist non funcina porque dende o urls.py non chega a petición as views. Segue sendo o mesmo ao final do día de hoxe.

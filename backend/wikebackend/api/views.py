@@ -65,6 +65,27 @@ def getPlaylists(self):
     playlists = spotify.getPlaylists()
     return HttpResponse(playlists)
 
+# Search for a song
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def search(request):
+    search = request.data['search']
+    # Necessary for when you delete all the chars in the search bar, avoids empty request
+    if search != '':
+        songs = spotify.search(request.data['search'])
+        # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
+        return HttpResponse(songs)
+    else:
+        return Response(data=None, status=200)
+
+# Add a searched song to playlist given the song uri
+# @api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def searchToLocalPlaylist(request):
+    print("pasa?")
+    searchToPlaylist = spotify.searchToLocalPlaylist(request.data['songUri'], request.user.userInstance)
+    return HttpResponse(searchToPlaylist)
+
 # Add songs to LocalPlaylist given the playlist uri
 # Aquí habería que meter tamén o limit e o offset para poder engadir todas as cancións
 @api_view(['POST'])
@@ -83,16 +104,3 @@ def playlistToLocalPlaylist(request):
 #     playlistId = request.data['playlistId']
 #     playlistSongs = spotify.getPlaylistSongs(playlistId)
 #     return HttpResponse(playlistSongs)
-
-# Search for a song
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def search(request):
-    search = request.data['search']
-    # Necessary for when you delete all the chars in the search bar, avoids empty request
-    if search != '':
-        songs = spotify.search(request.data['search'])
-        # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
-        return HttpResponse(songs)
-    else:
-        return Response(data=None, status=200)

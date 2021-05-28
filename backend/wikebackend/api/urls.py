@@ -17,7 +17,7 @@ urlpatterns = [
         path('token/', views.SpotifyGet, name='token' ),
         path('callback/', views.callBack),
         path('search/', views.search),
+        path('searchtolocalplaylist/', views.searchToLocalPlaylist),
         path('playlists/', views.getPlaylists),
-        # path('playlistSongs/', views.getPlaylistSongs),
-        path('addlocalplaylist/', views.playlistToLocalPlaylist),
+        path('playlisttolocalplaylist/', views.playlistToLocalPlaylist),
 ]

@@ -156,8 +156,28 @@ def playlistToLocalPlaylist(playlistId, userinstance):
         playlist.save()
     return json.dumps(songs)
 
-def searchToLocalPlaylist(songId, userinstance):
+def searchToLocalPlaylist(songUri, userinstance):
     client = getClient2()
+    playlist = LocalPlaylist()  # Assign the model
+    searchedSong = client.track(songUri)
+    print("searchToLocalPlaylistSpotify")
+    print(searchedSong)
+
+    # playlist.pk = None  # The pk is assigned automatically, this is needed for that
+    # artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
+    # string = ""
+    # for j in range(len(artists)):
+    #     string += artists[j]['name']
+    #     if j+1 != len(artists):
+    #         string += ", "  # Separate the artist names
+    # playlist.artists = string
+    # playlist.title = songs[i]['track']['name']
+    # playlist.duration = datetime.timedelta(milliseconds = songs[i]['track']['duration_ms'])
+    # playlist.uri = songs[i]['track']['uri']
+    # playlist.created = songs[i]['added_at']
+    # playlist.added_mode = "playlist"
+    # playlist.instance = userinstance  # The instance of the user comes as parameter
+    # playlist.save()
 
 # Get user info, testing porpouse
 def userinfo():

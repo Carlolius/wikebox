@@ -13,6 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class ApiService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
+	justcheck: any;
 
 	constructor(
 		private httpClient: HttpClient,
@@ -67,11 +68,24 @@ export class ApiService {
 		/* ); */
 	}
 
+	/* spotifyClickSeachedSong(songUri:string): Observable<any> { */
+	/* 	console.log("click") */
+	/* 	return this.httpClient.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri}).pipe( */
+	/* 		map(results => Object.keys(results).map(key => ({value: results[key]}))), */
+	/* 	); */
+	/* } */
+
+
+	spotifyClickSeachedSong(songUri) {
+		console.log("spotifyClickSeachedSong")
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri}).pipe(
+		);
+	}
+
 	// Add songs to LocalPlaylist
 	spotifyAddToLocalPlaylist(playlistId:string): Observable<any> {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/addlocalplaylist/', {'playlistId': playlistId}).pipe(
-			map(results => Object.keys(results).map(key => ({value: results[key]}))
-				 ),
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlisttolocalplaylist/', {'playlistId': playlistId}).pipe(
+			map(results => Object.keys(results).map(key => ({value: results[key]}))),
 		);
 	}
 	/* // Get items from a playlist */
@@ -82,11 +96,4 @@ export class ApiService {
 	/* 			 ), */
 	/* 	); */
 	/* } */
-
-	spotifyClickSeachSong(songUri:string){
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/local/', {'songUri': songUri}).pipe(
-			map(results => Object.keys(results).map(key => ({value: results[key]}))
-				 ),
-		);
-	}
 }

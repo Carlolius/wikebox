@@ -15,6 +15,7 @@ export class AdminPage implements OnInit {
 	playlists: any
 	playlistSongs: any
 	searchTerm: string
+	searchedSong: any
 	/* Meter por aquí variables del tipo */
 	/* limit_search: 50 */
 	/* offset_search: 0 */
@@ -30,13 +31,14 @@ export class AdminPage implements OnInit {
 	}
 
 	// When click in a search result
-	clickSearchSong( item ) {
-		console.log( item )
+	clickSearchSong( songUri:string ) {
 		/* Meter aquí a función de que cando clicke na canción a engada a playlist */
 		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
 		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
 		/* algo como if mode = playlist else if mode = queue... */
-		this.apiService.spotifyClickSeachSong(item)
+		console.log( songUri )
+		this.searchedSong = this.apiService.spotifyClickSeachedSong( songUri )
+		console.log(this.searchedSong)
 	}
 
 	// Load the songs from a selected playlist
@@ -49,7 +51,6 @@ export class AdminPage implements OnInit {
 	/* } */
 	
 	// Add playlist songs to LocalPlaylist
-	/* É unha copia de getPlaylistSongs */
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addToLocalPlaylist( playlistId:string ) {
 		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
@@ -75,6 +76,7 @@ export class AdminPage implements OnInit {
 		const { data } = await popover.onWillDismiss();
 		// Check if there are data
 		if (data) {
+			/* this.apiService.spotifyClickSeachedSong(data.item) */
 			this.clickSearchSong( data.item)
 		}
 	}
