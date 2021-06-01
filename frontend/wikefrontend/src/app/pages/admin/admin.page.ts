@@ -88,8 +88,10 @@ export class AdminPage implements OnInit {
 
 	// Get the user playlists
 	/* Hay que pasar el limit y el offset para poder recibir todas las listas */
+	/* Pode ser que falle con conexións lentas a internet? */
 	getPlaylists() {
 		this.playlists = this.apiService.spotifyGetPlaylists();
+		console.log("les playlists", this.playlists.playlistId)
 	}
 
 	generatePlaylist() {

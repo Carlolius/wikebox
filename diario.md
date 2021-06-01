@@ -332,3 +332,6 @@ Xa se engaden as cancións dunha playlist a LocalPlaylist, dende ahí podemos tr
 
 **27/05/2021**  
 Searchtoplaylist non funcina porque dende o urls.py non chega a petición as views. Segue sendo o mesmo ao final do día de hoxe.
+
+**01/06/2021**  
+As peticións a api parece que non están ben formadas de todo, estou intentando revisar os observables para facer ben as peticións e resolver xa varios problemas con isto.

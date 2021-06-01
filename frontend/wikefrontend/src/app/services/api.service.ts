@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable } from "rxjs/internal/Observable";
+import { Observable } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
 
 @Injectable()
+
+export class Playlist{
+	public uri: string;
+}
 
 export class ApiService {
 
@@ -39,20 +43,28 @@ export class ApiService {
 	}
 
 	// Get the playlists of the user
-	spotifyGetPlaylists(){
+	/* spotifyGetPlaylists(){ */
+	/* 	return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe( */
+	/* 		map(results => Object.keys(results).map(key => ({value: results[key]})) */
+	/* 			 ), */
+	/* 	); */
+	/* } */
+	spotifyGetPlaylists(): Observable<Playlist[]>{
 		return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe(
-			map(results => Object.keys(results).map(key => ({value: results[key]}))
-				 ),
-		);
+			res => {
+				return res.json().results.map(item => {
+					return new Playlist(
+					);
+				});
+			});
 	}
 
 	// Search for songs in the spotify api
 	// Get the results and map it to value result so it's printable in the html if empty search catches the error
 	spotifySearch(searchTerm:string): Observable<any> {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe(
-			map(results => Object.keys(results).map(key => ({value: results[key]}))
-				 ),
-				 catchError(err => ([]))
+			map(results => Object.keys(results).map(key => ({value: results[key]}))),
+				catchError(err => ([]))
 		);
 		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe( */
 		/* 	map(results => { */
@@ -76,7 +88,7 @@ export class ApiService {
 	/* } */
 
 
-	spotifyClickSeachedSong(songUri) {
+	spotifyClickSeachedSong(songUri:string) {
 		console.log("spotifyClickSeachedSong")
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri}).pipe(
 		);
