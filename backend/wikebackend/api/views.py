@@ -79,10 +79,9 @@ def search(request):
         return Response(data=None, status=200)
 
 # Add a searched song to playlist given the song uri
-# @api_view(['POST'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def searchToLocalPlaylist(request):
-    print("pasa?")
     searchToPlaylist = spotify.searchToLocalPlaylist(request.data['songUri'], request.user.userInstance)
     return HttpResponse(searchToPlaylist)
 
@@ -92,8 +91,6 @@ def searchToLocalPlaylist(request):
 @permission_classes([IsAuthenticated])
 def playlistToLocalPlaylist(request):
     playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userInstance)
-    # print(playlistSongs)
-    # LocalPlaylistSerializer(playlistSongs, LocalPlaylist)
     return HttpResponse(playlistSongs)
 
 # # Load the songs of a playlist given the playlist uri

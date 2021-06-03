@@ -136,8 +136,7 @@ def playlistToLocalPlaylist(playlistId, userinstance):
     spotifyPlaylist = client.playlist_tracks(playlistId)
     songs = spotifyPlaylist['items']  # Takes just the songs
     playlist = LocalPlaylist()  # Assign the model
-    # Engadir parámetro de quen engade as cancións para poder borrar só as "automáticas" e así poder cambiar de playlist sen perder as dos usuarios
-    LocalPlaylist.objects.filter(instance=userinstance).delete() # Cleans the LocalPlaylist when selected playlist chagnes
+    LocalPlaylist.objects.filter(added_mode="playlist").filter(instance=userinstance).delete() # Cleans the LocalPlaylist when selected playlist chagnes
     for i in range(len(songs)):
         playlist.pk = None  # The pk is assigned automatically, this is needed for that
         artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
@@ -150,7 +149,8 @@ def playlistToLocalPlaylist(playlistId, userinstance):
         playlist.title = songs[i]['track']['name']
         playlist.duration = datetime.timedelta(milliseconds = songs[i]['track']['duration_ms'])
         playlist.uri = songs[i]['track']['uri']
-        playlist.created = songs[i]['added_at']
+        # playlist.created = songs[i]['added_at']
+        playlist.created = datetime.datetime.now()
         playlist.added_mode = "playlist"
         playlist.instance = userinstance  # The instance of the user comes as parameter
         playlist.save()
@@ -160,24 +160,22 @@ def searchToLocalPlaylist(songUri, userinstance):
     client = getClient2()
     playlist = LocalPlaylist()  # Assign the model
     searchedSong = client.track(songUri)
-    print("searchToLocalPlaylistSpotify")
-    print(searchedSong)
-
-    # playlist.pk = None  # The pk is assigned automatically, this is needed for that
-    # artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
-    # string = ""
-    # for j in range(len(artists)):
-    #     string += artists[j]['name']
-    #     if j+1 != len(artists):
-    #         string += ", "  # Separate the artist names
-    # playlist.artists = string
-    # playlist.title = songs[i]['track']['name']
-    # playlist.duration = datetime.timedelta(milliseconds = songs[i]['track']['duration_ms'])
-    # playlist.uri = songs[i]['track']['uri']
-    # playlist.created = songs[i]['added_at']
-    # playlist.added_mode = "playlist"
-    # playlist.instance = userinstance  # The instance of the user comes as parameter
-    # playlist.save()
+    playlist.pk = None  # The pk is assigned automatically, this is needed for that
+    artists = searchedSong['artists']  # Loop in the artist if there are more than one
+    string = ""
+    for j in range(len(artists)):
+        string += artists[j]['name']
+        if j+1 != len(artists):
+            string += ", "  # Separate the artist names
+    playlist.artists = string
+    playlist.title = searchedSong['name']
+    playlist.duration = datetime.timedelta(milliseconds = searchedSong['duration_ms'])
+    playlist.uri = searchedSong['uri']
+    playlist.created = datetime.datetime.now()
+    playlist.added_mode = "search"
+    playlist.instance = userinstance  # The instance of the user comes as parameter
+    playlist.save()
+    return json.dumps(searchedSong)
 
 # Get user info, testing porpouse
 def userinfo():

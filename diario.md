@@ -335,3 +335,6 @@ Searchtoplaylist non funcina porque dende o urls.py non chega a petición as vie
 
 **01/06/2021**  
 As peticións a api parece que non están ben formadas de todo, estou intentando revisar os observables para facer ben as peticións e resolver xa varios problemas con isto.
+
+**03/06/2021**  
+Cambiando a forma de facer as peticións co get e facendo o subscribe funciona todo o tema que é playlists e engadir cancións dende a búsqueda.

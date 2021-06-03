@@ -10,10 +10,6 @@ import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 
-export class Playlist{
-	public uri: string;
-}
-
 export class ApiService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
@@ -43,20 +39,11 @@ export class ApiService {
 	}
 
 	// Get the playlists of the user
-	/* spotifyGetPlaylists(){ */
-	/* 	return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe( */
-	/* 		map(results => Object.keys(results).map(key => ({value: results[key]})) */
-	/* 			 ), */
-	/* 	); */
-	/* } */
-	spotifyGetPlaylists(): Observable<Playlist[]>{
+	spotifyGetPlaylists(){
 		return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe(
-			res => {
-				return res.json().results.map(item => {
-					return new Playlist(
-					);
-				});
-			});
+			map(results => Object.keys(results).map(key => ({value: results[key]}))
+				 ),
+		);
 	}
 
 	// Search for songs in the spotify api
@@ -80,32 +67,17 @@ export class ApiService {
 		/* ); */
 	}
 
-	/* spotifyClickSeachedSong(songUri:string): Observable<any> { */
-	/* 	console.log("click") */
-	/* 	return this.httpClient.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri}).pipe( */
-	/* 		map(results => Object.keys(results).map(key => ({value: results[key]}))), */
-	/* 	); */
-	/* } */
-
-
+	// Add a searched song to LocalPlaylist
 	spotifyClickSeachedSong(songUri:string) {
-		console.log("spotifyClickSeachedSong")
-		this.httpClient.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri}).pipe(
-		);
+		this.httpClient
+			.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri})
+			.subscribe();
 	}
 
 	// Add songs to LocalPlaylist
-	spotifyAddToLocalPlaylist(playlistId:string): Observable<any> {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlisttolocalplaylist/', {'playlistId': playlistId}).pipe(
-			map(results => Object.keys(results).map(key => ({value: results[key]}))),
-		);
+	spotifyAddToLocalPlaylist(playlistId:string) {
+		this.httpClient
+			.post(this.SERVER_ADDRESS + 'api/playlisttolocalplaylist/', {'playlistId': playlistId})
+			.subscribe();
 	}
-	/* // Get items from a playlist */
-	/* /1* Non se usa isto *1/ */
-	/* spotifyGetPlaylistSongs(playlistId:string): Observable<any> { */
-	/* 	return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlistSongs/', {'playlistId': playlistId}).pipe( */
-	/* 		map(results => Object.keys(results).map(key => ({value: results[key]})) */
-	/* 			 ), */
-	/* 	); */
-	/* } */
 }

@@ -36,9 +36,7 @@ export class AdminPage implements OnInit {
 		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
 		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
 		/* algo como if mode = playlist else if mode = queue... */
-		console.log( songUri )
 		this.searchedSong = this.apiService.spotifyClickSeachedSong( songUri )
-		console.log(this.searchedSong)
 	}
 
 	// Load the songs from a selected playlist
@@ -54,8 +52,6 @@ export class AdminPage implements OnInit {
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addToLocalPlaylist( playlistId:string ) {
 		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
-		console.log( playlistId )
-		console.log( this.playlistSongs )
 	}
 
 	// Popover that shows results of search
@@ -91,7 +87,6 @@ export class AdminPage implements OnInit {
 	/* Pode ser que falle con conexións lentas a internet? */
 	getPlaylists() {
 		this.playlists = this.apiService.spotifyGetPlaylists();
-		console.log("les playlists", this.playlists.playlistId)
 	}
 
 	generatePlaylist() {
