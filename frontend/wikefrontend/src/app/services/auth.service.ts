@@ -97,7 +97,7 @@ export class AuthService {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
 			username: username,
 			password: password,
-			instance: myInstance
+			userInstance: myInstance
 		})
 	}
 

@@ -340,3 +340,7 @@ As peticións a api parece que non están ben formadas de todo, estou intentando
 Cambiando a forma de facer as peticións co get e facendo o subscribe funciona todo o tema que é playlists e engadir cancións dende a búsqueda.  
 
 Na url de Ionic hai que xerar de algunha forma o nome das diferentes instancias pero sen ter que xerar iso. É dicir, que cando se rexistre a instancia Wike1 se poida acceder a /wike1/register e demáis urls.
+
+**04/06/2021**  
+Dende Ionic se envía o parámetro da url que pertence a instancia ":myInstance" e este fai que o usuario se rexistre na instancia correspondente. Para mañá teño que crear a páxina de "Nova Instancia" que crea unha instancia e asigne unha URL a esta. Despois os usuarios se rexistran dende /nomeinstancia/register e xa se rexistran nesa mesma instancia, o primeiro usuario é o administrador. O login debe poder ser tanto en /login coma en /instancia/login.  
+Usei [este](https://medium.com/django-rest/django-rest-framework-login-and-register-user-fd91cf6029d5) tutorial para modificar o rexistro en Django, [este outro](https://ionicframework.com/blog/navigating-the-change-with-ionic-4-and-angular-router/) para pasar os parámetros da url na solicitude.
