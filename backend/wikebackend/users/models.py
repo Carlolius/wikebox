@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
     userInstance = models.ForeignKey("api.instance", on_delete=models.CASCADE, null=True, blank=True)  # Non debería de ser nulo pero non podo crear superuser se non
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['userInstance']
 
     objects = CustomUserManager()
 

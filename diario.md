@@ -337,4 +337,6 @@ Searchtoplaylist non funcina porque dende o urls.py non chega a petición as vie
 As peticións a api parece que non están ben formadas de todo, estou intentando revisar os observables para facer ben as peticións e resolver xa varios problemas con isto.
 
 **03/06/2021**  
-Cambiando a forma de facer as peticións co get e facendo o subscribe funciona todo o tema que é playlists e engadir cancións dende a búsqueda.
+Cambiando a forma de facer as peticións co get e facendo o subscribe funciona todo o tema que é playlists e engadir cancións dende a búsqueda.  
+
+Na url de Ionic hai que xerar de algunha forma o nome das diferentes instancias pero sen ter que xerar iso. É dicir, que cando se rexistre a instancia Wike1 se poida acceder a /wike1/register e demáis urls.

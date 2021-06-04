@@ -6,9 +6,9 @@ from datetime import datetime
 
 # Create your models here.
 class instance(models.Model):
-    id = models.BigAutoField(primary_key=True)
+    # id = models.BigAutoField(primary_key=True)
+    url = models.CharField(max_length=1000, primary_key=True)
     name = models.CharField(max_length=100)
-    url = models.CharField(max_length=1000, unique=True)
     spotify_token = models.CharField(max_length=1000, null=True, blank= True)
     # Chave foránea ao modelo de User
     admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING)
