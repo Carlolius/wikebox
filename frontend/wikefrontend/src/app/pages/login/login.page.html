@@ -18,7 +18,7 @@
 						<ion-button style="margin-left:10%;margin-right:10%" type="submit" [disabled]="form.invalid" (click)="login(form)" expand="block" size="default" color="app">Login</ion-button>
 					</ion-col>
 					<ion-col>
-						<ion-button style="margin-left:10%;margin-right:10%" type="submit" [routerLink]="['/register']" expand="block" size="default" color="app">New user</ion-button>
+						<ion-button style="margin-left:10%;margin-right:10%" type="click" (click)="newuser()" expand="block" size="default" color="app">New user</ion-button>
 					</ion-col>
 				</ion-row>
 			</ion-col>

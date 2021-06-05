@@ -5,6 +5,7 @@
 	<div>
 		<ion-row class="ion-justify-content-center">
 			<ion-col size="5">
+				<div style="text-align:center">Register new user, first one will be the admin.</div>
 				<form #form="ngForm" (ngSubmit)="register(form)" method="post">
 					<ion-item style="margin-top:10%">
             <ion-input name="username" type="text" placeholder="Username" ngModel required></ion-input>

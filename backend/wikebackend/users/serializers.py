@@ -19,9 +19,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         uInstance = instance.objects.filter(name=validated_data['userInstance']).get() 
-        user = User.objects.create_user(**validated_data)
-        user.userInstance = uInstance
-        # Token.objects.create(user=user)  # Creates a token when the user is created, not necessary
+        # Check if there are an admin at the instance if there aren't first one it's admin.
+        try:
+            # No admin
+            haveAdmin = instance.objects.filter(name=validated_data['userInstance'], admin=None).get()
+            user = User.objects.create_admin(**validated_data)
+            user.userInstance = uInstance
+            # Updates the instance admin to user
+            instance.objects.filter(name=validated_data['userInstance']).update(admin=user)
+        except:
+            # Already admin
+            user = User.objects.create_user(**validated_data)
+            user.userInstance = uInstance
+
         return user
 
 
