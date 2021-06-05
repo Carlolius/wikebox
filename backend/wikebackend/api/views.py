@@ -7,6 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
 from api.music import spotify
+from api.models import instance
+
+import re  # regular expressions
 
 # import viewsets
 from rest_framework import viewsets
@@ -37,6 +40,15 @@ class SongPlayingNowViewSet(viewsets.ModelViewSet):
 class LocalPlaylistViewSet(viewsets.ModelViewSet):
     queryset = LocalPlaylist.objects.all()
     serializer_class = LocalPlaylistSerializer
+
+@api_view(['POST'])
+def RegisterInstance(request):
+    name = re.sub(r'\W+', '', request.data['urlInstance'])
+    newInstance = instance.objects.create(
+            url=name,
+            name=request.data['urlInstance']
+            )
+    return Response(data=None, status=200)
 
 
 ## Spotify ##

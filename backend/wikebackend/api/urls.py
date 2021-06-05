@@ -20,4 +20,5 @@ urlpatterns = [
         path('searchtolocalplaylist/', views.searchToLocalPlaylist),
         path('playlists/', views.getPlaylists),
         path('playlisttolocalplaylist/', views.playlistToLocalPlaylist),
+        path('instanceregister/', views.RegisterInstance),
 ]

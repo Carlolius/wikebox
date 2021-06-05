@@ -24,6 +24,10 @@ export class ApiService {
 		return this.httpClient.get(this.SERVER_ADDRESS);
 	}
 
+	registerInstance(instance: String) {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/instanceregister/', {urlInstance: instance})
+	}
+
 	// Gets the Spotify api login url and open it in the same window
 	spotifyLoginUrl() {
 		this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {

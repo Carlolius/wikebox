@@ -11,7 +11,7 @@ class instance(models.Model):
     name = models.CharField(max_length=100)
     spotify_token = models.CharField(max_length=1000, null=True, blank= True)
     # Chave foránea ao modelo de User
-    admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING)
+    admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING, null=True, blank=True)
     def __str__(self):
         return self.name
 

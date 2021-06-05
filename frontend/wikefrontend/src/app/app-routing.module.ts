@@ -46,6 +46,10 @@ const routes: Routes = [
 		loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule),
 			canActivate: [AuthService]
 	},
+  {
+    path: 'instance',
+    loadChildren: () => import('./pages/instance/instance.module').then( m => m.InstancePageModule)
+  },
 ];
 
 @NgModule({
