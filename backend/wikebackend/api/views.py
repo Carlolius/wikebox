@@ -48,7 +48,7 @@ def RegisterInstance(request):
             url=name,
             name=request.data['urlInstance']
             )
-    return Response(data=None, status=200)
+    return Response(data=name, status=200)
 
 
 ## Spotify ##
