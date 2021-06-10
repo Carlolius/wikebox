@@ -10,8 +10,6 @@
 			<ion-col offset="2" size="5" class="ion-align-self-center">
 
 				<!-- Search bar and show results on popover -->
-				<!-- La siguiente línea era la que se usaba antes, queda aquí por si acaso -->
-					<!-- (ionChange)="searchChanged($event)" -->
 				<ion-searchbar
 					[(ngModel)]="searchTerm"
 					[debounce]="600"
@@ -27,12 +25,6 @@
 			</ion-col>
 		</ion-row>
 	</div>
-	<!-- <ion-label>Playlists</ion-label> -->
-	<!-- <ion-list> -->
-	<!-- 	<ion-item *ngFor="let playlist of (playlists | async)"> -->
-	<!-- 		<ion-label>{{playlist.value.playlist}}</ion-label> -->
-	<!-- 	</ion-item> -->
-	<!-- </ion-list> -->
 
 	<div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
 		<ion-row>
@@ -40,13 +32,24 @@
 				<!-- Select playlists -->
 				<ion-item>
 					<ion-label>Playlists</ion-label>
-					<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="addToLocalPlaylist(C.value)" (ionFocus)="getPlaylists()">
-						<!-- Probablemente non necesite isto vvv -->
-						<!-- <ion-select-option value="New">New playlist</ion-select-option> -->
+					<ion-select #P placeholder="choose a playlist to populate the queue" interface="action-sheet" (ionChange)="addToLocalPlaylist(P.value)" (ionFocus)="getPlaylists()">
 						<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}}>{{playlist.value.playlist}}</ion-select-option>
 					</ion-select>
 				</ion-item>
+				<!-- Select device -->
 			</ion-col>
+			<ion-col>
+				<ion-item>
+					<ion-label>Device</ion-label>
+					<ion-select #D [placeholder]="deviceName" interface="alert" (ionChange)="chooseDevice(D.value)" (ionFocus)="getDevices()">
+					<ion-select-option *ngFor="let device of (devices | async)" [value]="device">{{device.value.name}}</ion-select-option>
+					</ion-select>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+
+		<ion-row>
+			<ion-button expand="full" (click)="playButton()"><ion-icon name="play-outline"></ion-icon></ion-button>
 		</ion-row>
 
 		<!-- O comentado debaixo servía para amosar as playlist recibidas directamente dende a api de spotify, agora, é similar pero a playlist é local. -->
@@ -69,14 +72,16 @@
 
 		<ion-row>
 			<ion-col>
-				<!-- Show playlists -->
-				<ion-list *ngFor="let song of ( playlistSongs | async)">
+				<!-- <ion-button expand="full" (click)="showLocalPlaylist()">Reload</ion-button> -->
+
+				<!-- Show songs -->
+				<ion-list *ngFor="let song of ( queueSongs | async) | keyvalue ">
 					<ion-item>
 						<ion-grid>
 							<ion-row >
 								<ion-col>
 									<ion-label text-wrap>
-										<h2>{{ song.value.song }}</h2>
+										<h2>{{ song.value.title }}</h2>
 										<h6>{{ song.value.artists }}</h6>
 									</ion-label>
 								</ion-col>

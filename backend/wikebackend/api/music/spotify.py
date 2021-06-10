@@ -68,6 +68,35 @@ def getClient2():
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
 
+# Get the user active devices
+def chooseDevice():
+    client = getClient2()
+    devices = client.devices()
+    devices = devices['devices']
+    devicesDict = {}
+    # If no active devices send no active devices
+    if len(devices) >= 1:
+        for i in range(len(devices)):
+            devicesDict[i] = {
+                    'id': devices[i]['id'],
+                    'name': devices[i]['name']
+                    }
+    else:
+        devicesDict[0] = {
+                'id': "No id",
+                'name': "No active devices"
+                }
+        
+    devicesJson = json.dumps(devicesDict)
+    return devicesJson
+
+# Start to play music
+def playMusic(device, userinstance):
+    client = getClient2()
+    song = LocalPlaylist.objects.filter(instance=userinstance).order_by('votes', 'created').values('uri').first()
+    uriSongs = [song['uri']]
+    client.start_playback(device_id = device, uris = uriSongs)
+
 # Para non ter que facer o bucle desta función pode ser boa idea facer un serializer que transforme os datos.
 # Search for a song
 def search(search):

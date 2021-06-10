@@ -1,7 +1,7 @@
 import { Platform, AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { tap, catchError } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 
 import { Storage } from '@ionic/storage-angular';
@@ -28,6 +28,8 @@ export class AuthService {
 	access:any;
 	refresh:any;
 	data:any;
+	user:any;
+	instance:any;
 
 	constructor(
 		private httpClient: HttpClient,
@@ -51,34 +53,39 @@ export class AuthService {
 		console.log("route: ", route)
 		this.isLoggedIn().then((token) => {
 			if (!token) {
-				this.router.navigate(["login"]);
+				this.router.navigateByUrl("login");
 				return false;
 			}})
 			return true;
 		}
 
-	// Login
+	getInstance() {
+		this.httpClient.post(this.SERVER_ADDRESS + 'users/getinstance/', {"username": this.user})
+		.subscribe(data => {
+			const instance = JSON.stringify(data)
+			const unquoted = instance.replace(/['"]+/g, '');
+			this.instance = unquoted;
+			this.storeInstance(unquoted)})
+	}
 
+	// Login
 	login(username: String, password: String) {
 		console.log("Name: "+  username)
 		console.log("Password: "+ password)
+		this.user = username
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {
 			"username": username, 
 			"password": password
 		})
 		.pipe(
 			tap(token => {
+				this.getInstance()
 				this.token = token;
 				this.storeJwtToken(this.token.access)
 				this.storeRefreshToken(this.token.refresh)
+				this.storeUser()
 				this.storeExpiration()
-				/* localStorage.setItem("access", this.token.access) */
-				/* localStorage.setItem("refresh", this.token.refresh) */
-				/* localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000)) */
 				this.storage.set("token", this.token)
-				/* localStorage.setItem("token", this.token) */
-				/* this.storage.set("access", this.token.access) */
-				/* this.storage.set("refresh", this.token.refresh) */
 				.then(
 					() => {
 						//console.log('Token Stored');
@@ -107,9 +114,12 @@ export class AuthService {
 		this.storage.remove("token");
 		/* localStorage.setItem("token", this.token); */
 		/* Revocar access token */
-		localStorage.removeItem("access");
-		localStorage.removeItem("refresh");
-		localStorage.removeItem("expiration");
+		/* localStorage.removeItem("access"); */
+		/* localStorage.removeItem("refresh"); */
+		/* localStorage.removeItem("expiration"); */
+		/* localStorage.removeItem("username"); */
+		/* localStorage.removeItem("instance"); */
+		localStorage.clear()
 		this.navCtrl.navigateRoot('/home');
 	}
 
@@ -160,6 +170,15 @@ export class AuthService {
 		localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000))
 	}
 
+	private storeUser() {
+		localStorage.setItem("username", this.user)
+	}
+
+	private storeInstance(data:any) {
+		localStorage.setItem("instance", data)
+	}
+
+	
 	refreshToken() {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
 			'refresh': this.getRefreshToken()
@@ -184,16 +203,4 @@ export class AuthService {
 		});
 	}
 
-	//// User not used
-	user() {
-		const headers = new HttpHeaders({
-			'Authorization': this.token["token_type"]+" "+this.token["access_token"]
-		});
-		return this.httpClient.get<User>(this.SERVER_ADDRESS + 'session', { headers: headers })
-		.pipe(
-			tap(user => {
-				return user;
-			})
-		)
-	}
 }

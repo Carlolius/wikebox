@@ -28,6 +28,14 @@ export class ApiService {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'api/instanceregister/', {urlInstance: instance})
 	}
 
+	queueSongs(){
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request})
+		/* return this.httpClient.get(this.SERVER_ADDRESS + 'api/queuesongs/').pipe( */
+		/* 	map(results => Object.keys(results).map(key => ({value: results[key]})) */
+		/* 		 ), */
+		/* ); */
+	}
+
 	// Gets the Spotify api login url and open it in the same window
 	spotifyLoginUrl() {
 		this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
@@ -40,6 +48,24 @@ export class ApiService {
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href }).subscribe((response) => {
 			console.log(response)
 		})
+	}
+
+	/* spotifyChooseDevice(){ */
+	/* 	return this.httpClient.get(this.SERVER_ADDRESS+ 'api/choosedevice/').subscribe((response)=>{ */
+	/* 		console.log("spotifyChooseDevice", response) */
+	/* 	}) */
+	/* } */
+
+spotifyChooseDevice(){
+		return this.httpClient
+		.get(this.SERVER_ADDRESS + 'api/choosedevice/')
+			.pipe(
+				map(results => Object
+						.keys(results)
+						.map(key => ({value: results[key]}))
+					 ),
+				/* map(results => console.log(JSON.stringify(results))) */
+		);
 	}
 
 	// Get the playlists of the user
@@ -83,5 +109,11 @@ export class ApiService {
 		this.httpClient
 			.post(this.SERVER_ADDRESS + 'api/playlisttolocalplaylist/', {'playlistId': playlistId})
 			.subscribe();
+	}
+
+	// Start to play
+	spotifyPlay(device:string){
+		console.log("spotifyPlay")
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/playmusic/', {'device': device}).subscribe();
 	}
 }

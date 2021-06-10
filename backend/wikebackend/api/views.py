@@ -7,8 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
 from api.music import spotify
-from api.models import instance
+from api.models import instance, LocalPlaylist
 
+import json
 import re  # regular expressions
 
 # import viewsets
@@ -50,6 +51,13 @@ def RegisterInstance(request):
             )
     return Response(data=name, status=200)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def queueSongs(request):
+    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes'))
+    # songs = list(LocalPlaylist.objects.order_by('votes', 'created').values('artists', 'title', 'votes'))
+    jsongs = json.dumps(songs)
+    return HttpResponse(jsongs)
 
 ## Spotify ##
 
@@ -89,6 +97,19 @@ def search(request):
         return HttpResponse(songs)
     else:
         return Response(data=None, status=200)
+
+
+# Select device where music plays
+def chooseDevice(self):
+    devices = spotify.chooseDevice()
+    return HttpResponse(devices)
+
+# Start to play
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def playMusic(request):
+    spotify.playMusic(request.data['device'], request.user.userInstance)
+    return Response(data=None, status=200)
 
 # Add a searched song to playlist given the song uri
 @api_view(['POST'])

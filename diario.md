@@ -346,4 +346,26 @@ Dende Ionic se envía o parámetro da url que pertence a instancia ":myInstance"
 Usei [este](https://medium.com/django-rest/django-rest-framework-login-and-register-user-fd91cf6029d5) tutorial para modificar o rexistro en Django, [este outro](https://ionicframework.com/blog/navigating-the-change-with-ionic-4-and-angular-router/) para pasar os parámetros da url na solicitude.
 
 **05/06/2021**  
-Rexistranse as instancias e os usuarios nestas, se non hai ningún usuario na instancia este será o administrador da instancia, os demais son usuarios normais. O login se pode facer tanto en /instancia/login como en /login, de todas formas habería que revisar as redireccións.
+Rexistranse as instancias e os usuarios nestas, se non hai ningún usuario na instancia este será o administrador da instancia, os demais son usuarios normais. O login se pode facer tanto en /instancia/login como en /login, de todas formas habería que revisar as redireccións.  
+
+Podo facer a obtención do username facendo a consulta co Token.
+
+**07/06/2021**  
+En apariencia as redireccións funcionan ben, se se fai login sen a instancia na url non chegas ao home, pero poñeréi un botón para ir a música e no home se explica como vai a gramola mais ou menos.  
+O seguinte é poñerse coa música.
+
+**08/06/2021**  
+Estou intentando amosar a localplaylist na páxina música, hai que facer un post para que reciba o usuario e poda sacar a instancia, por agora da erro, parece de sintaxis, pero a saber.  
+As cancións locais aparecen na páxina de música, estou intentando amosar os devices.  
+
+Falta:
+
+* Escoller o device
+* Que soe a música
+* Os votos
+
+**09/06/2021**  
+Non funciona amosar os devices no selector, creo que é porque non está ben feito o diccionario (comparado coas playlist), hai que intentar recibir ben o diccionario.
+
+**10/06/2021**  
+O selector de device funciona xa, faltaría escollelo automáticamente se se pode. Se reproducen cancións tamén.

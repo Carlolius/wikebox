@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
+import { Router } from "@angular/router";
 
 @Component({
 	selector: 'page-home',
@@ -22,19 +23,17 @@ export class HomePage implements OnInit {
 		private apiService: ApiService,
 		private storage: Storage,
 		private toastController: ToastController,
-		private NavController: NavController
+		private NavController: NavController,
+		private router: Router
 	){ }
 
 	ngOnInit() {
+		if (localStorage.getItem("instance") != null) {
+			this.router.navigate([localStorage.getItem("instance") + '/home'])
+		}
 		// Xa comprobamos se está logueado nas rutas
 		/* this.authService.isLoggedIn() */
 	}
-
-	// Esto o cambiei, está copiado do dos usuarios
-
-	/* isLoggedIn() { */
-	/* 	this.authService.isLoggedIn(); */
-	/* } */
 
 	isLoggedIn() {
 		this.authService.isLoggedIn()

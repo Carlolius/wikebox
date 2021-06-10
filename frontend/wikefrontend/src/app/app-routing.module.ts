@@ -4,8 +4,14 @@ import {AuthService} from './services/auth.service';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
+	/* { path: '', redirectTo: 'home', pathMatch: 'full' }, */
 	{
 		path: 'home',
+		loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
+			canActivate: [AuthService]
+	},
+	{
+		path: ':myInstance/home',
 		loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
 			canActivate: [AuthService]
 	},
@@ -23,7 +29,6 @@ const routes: Routes = [
 		path: ':myInstance/register',
 		loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
 	},
-	/* Non testado aínda, pero supoño que debería funcionar. */
 	{
 		path: 'login',
 		loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
@@ -34,7 +39,8 @@ const routes: Routes = [
 	},
 	{
 		path: 'callback',
-		loadChildren: () => import('./pages/callback/callback.module').then( m => m.CallbackPageModule)
+		loadChildren: () => import('./pages/callback/callback.module').then( m => m.CallbackPageModule),
+			canActivate: [AuthService]
 	},
 	{
 		path: ':myInstance/music',
@@ -46,10 +52,10 @@ const routes: Routes = [
 		loadChildren: () => import('./pages/admin/admin.module').then( m => m.AdminPageModule),
 			canActivate: [AuthService]
 	},
-  {
-    path: 'instance',
-    loadChildren: () => import('./pages/instance/instance.module').then( m => m.InstancePageModule)
-  },
+	{
+		path: 'instance',
+		loadChildren: () => import('./pages/instance/instance.module').then( m => m.InstancePageModule)
+	},
 ];
 
 @NgModule({

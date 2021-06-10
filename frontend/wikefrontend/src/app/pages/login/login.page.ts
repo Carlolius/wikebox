@@ -20,14 +20,25 @@ export class LoginPage implements OnInit {
 
 	ngOnInit() {
 		this.myInstance = this.activatedRoute.snapshot.paramMap.get('myInstance');
+		/* console.log(this.myInstance) */
+		/* if (this.myInstance != null) { */
+		/* 	this.router.navigate([this.myInstance + '/home']) */
+		/* } */
 	}
 	login(form){
 		this.authService.login(form.value.username, form.value.password).subscribe((res)=>{
 			// A redirección do router debería de ser a instancia do propio usuario
-			this.router.navigateByUrl('home');
+			if (this.myInstance != null)
+				this.router.navigate([localStorage.getItem("instance") + '/home'])
+			else
+				this.router.navigateByUrl('home')
 		});
 	}
 	newuser(){
-		this.router.navigateByUrl(this.myInstance + '/register')
+		if (this.myInstance != null) {
+			this.router.navigate([this.myInstance + '/register'])
+		} else {
+			this.router.navigateByUrl("instance")
+		}
 	}
 }

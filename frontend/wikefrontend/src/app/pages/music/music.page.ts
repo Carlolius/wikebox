@@ -16,6 +16,10 @@ export class MusicPage implements OnInit {
 	playlistSongs: any
 	searchTerm: string
 	searchedSong: any
+	queueSongs: any
+	devices: any
+	deviceName:string = "Choose device"
+	deviceId:string
 	/* Meter por aquí variables del tipo */
 	/* limit_search: 50 */
 	/* offset_search: 0 */
@@ -28,30 +32,24 @@ export class MusicPage implements OnInit {
 	) { }
 
 	ngOnInit() {
+		this.showLocalPlaylist()
 	}
 
 	// When click in a search result
 	clickSearchSong( songUri:string ) {
-		/* Meter aquí a función de que cando clicke na canción a engada a playlist */
 		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
 		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
-		/* algo como if mode = playlist else if mode = queue... */
 		this.searchedSong = this.apiService.spotifyClickSeachedSong( songUri )
 	}
-
-	// Load the songs from a selected playlist
-	/* Xa non se debería usar, borrar */
-	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
-	/* getPlaylistSongs( playlistId:string ) { */
-	/* 	this.playlistSongs = this.apiService.spotifyGetPlaylistSongs( playlistId ) */
-	/* 	console.log( playlistId ) */
-	/* 	console.log( this.playlistSongs ) */
-	/* } */
 	
 	// Add playlist songs to LocalPlaylist
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addToLocalPlaylist( playlistId:string ) {
 		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
+	}
+
+	showLocalPlaylist() {
+		this.queueSongs = this.apiService.queueSongs()
 	}
 
 	// Popover that shows results of search
@@ -63,16 +61,13 @@ export class MusicPage implements OnInit {
 				results: this.results,
 			},
 		});
-
 		// If the search field it's empty don't show the popover
 		if (this.searchTerm != "") {
 			await popover.present();
 		}
-
 		const { data } = await popover.onWillDismiss();
 		// Check if there are data
 		if (data) {
-			/* this.apiService.spotifyClickSeachedSong(data.item) */
 			this.clickSearchSong( data.item)
 		}
 	}
@@ -82,19 +77,32 @@ export class MusicPage implements OnInit {
 		console.log( "Cargando siguientes..." )
 	}
 
+	chooseDevice( device:any ){
+		this.deviceName = device.value.name
+		this.deviceId = device.value.id
+	}
+
+	getDevices(){
+		this.devices = this.apiService.spotifyChooseDevice();
+		/* console.log("getDevices", Object.values(this.devices)) */
+	}
+
 	// Get the user playlists
 	/* Hay que pasar el limit y el offset para poder recibir todas las listas */
 	/* Pode ser que falle con conexións lentas a internet? */
 	getPlaylists() {
 		this.playlists = this.apiService.spotifyGetPlaylists();
-	}
-
-	generatePlaylist() {
+		/* console.log("playlists", this.playlists) */
 	}
 
 	// When something is written in search bar
 	searchChanged() {
 		this.results = this.apiService.spotifySearch( this.searchTerm );
+	}
+
+	playButton(){
+		console.log("playButton")
+		const play = this.apiService.spotifyPlay(this.deviceId)
 	}
 
 }

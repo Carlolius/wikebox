@@ -21,4 +21,7 @@ urlpatterns = [
         path('playlists/', views.getPlaylists),
         path('playlisttolocalplaylist/', views.playlistToLocalPlaylist),
         path('instanceregister/', views.RegisterInstance),
+        path('queuesongs/', views.queueSongs),
+        path('choosedevice/', views.chooseDevice),
+        path('playmusic/', views.playMusic),
 ]
