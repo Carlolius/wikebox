@@ -9,6 +9,7 @@ from django.http import HttpRequest, HttpResponse
 from api.music import spotify
 from api.models import instance, LocalPlaylist
 
+from datetime import datetime, timedelta
 import json
 import re  # regular expressions
 
@@ -42,6 +43,7 @@ class LocalPlaylistViewSet(viewsets.ModelViewSet):
     queryset = LocalPlaylist.objects.all()
     serializer_class = LocalPlaylistSerializer
 
+# Register new instance
 @api_view(['POST'])
 def RegisterInstance(request):
     name = re.sub(r'\W+', '', request.data['urlInstance'])
@@ -53,11 +55,69 @@ def RegisterInstance(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+def playingNow(request):
+    playing = list(SongPlayingNow.objects.filter(instance=request.user.userInstance).values('artists', 'title'))
+    if not playing:
+        playing = [{'artists': 'song', 'title': 'No playing'}]
+    jplaying = json.dumps(playing)
+    return HttpResponse(jplaying)
+    
+# Pops the first song of the list if is the one playing
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def popTop(request):
+    current = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('uri').first()
+    top = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('uri').first()
+    if current == top:
+        res = "same"
+        LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').first().delete()
+    else:
+        res = "notSame"
+    return Response(data=res, status=200)
+
+# Adds the next song to the queue
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addToQueue(request):
+    totalTime = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('duration').first()
+    nowTime = spotify.currentProgress()
+    if nowTime != None:
+        totalTime = totalTime['duration']
+        nowTime = timedelta(milliseconds=nowTime['progress_ms'])
+        changeTime = nowTime + timedelta(seconds=20)
+        if changeTime > totalTime:
+            spotify.addToQueue(request.user.userInstance)
+            res = "Change"
+        else:
+            res = "No change"
+    else:
+        res = "No playing"
+
+    return Response(data=res, status=200)
+
+# Get the songs of the LocalPlaylist
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def queueSongs(request):
-    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes'))
-    # songs = list(LocalPlaylist.objects.order_by('votes', 'created').values('artists', 'title', 'votes'))
+    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def voteP(request):
+    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
+    N = N+1
+    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
+    return Response(data="lala", status=200)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def voteN(request):
+    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
+    N = N-1
+    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
+    return Response(data="lala", status=200)
 
 ## Spotify ##
 
@@ -98,8 +158,15 @@ def search(request):
     else:
         return Response(data=None, status=200)
 
+# Return the current playing song
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def currentSong(request):
+    currentPlaying = spotify.currentSong(request.user.userInstance)
+    return Response(data=currentPlaying, status=200)
 
 # Select device where music plays
+@permission_classes([IsAuthenticated])
 def chooseDevice(self):
     devices = spotify.chooseDevice()
     return HttpResponse(devices)

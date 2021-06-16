@@ -24,4 +24,10 @@ urlpatterns = [
         path('queuesongs/', views.queueSongs),
         path('choosedevice/', views.chooseDevice),
         path('playmusic/', views.playMusic),
+        path('currentplaying/', views.currentSong),
+        path('playingnow/', views.playingNow),
+        path('poptop/', views.popTop),
+        path('addtoqueue/', views.addToQueue),
+        path('votep/', views.voteP),
+        path('voten/', views.voteN),
 ]

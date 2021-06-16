@@ -369,3 +369,12 @@ Non funciona amosar os devices no selector, creo que é porque non está ben fei
 
 **10/06/2021**  
 O selector de device funciona xa, faltaría escollelo automáticamente se se pode. Se reproducen cancións tamén.
+
+**11/06/2021**  
+Non consigo amosar a canción que está a soar.
+
+**12/06/2021**  
+Non se amosa a canción. Hai que converter os tempos para facer a comparación e saber canto falta para que remate a canción. Despois faltarían as votacións.
+
+**13/06/2021**  
+Funcionan os votos. E se engaden e borran cancións cando é necesario.

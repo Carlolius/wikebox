@@ -6,7 +6,7 @@ import datetime
 
 import json
 
-from api.models import LocalPlaylist
+from api.models import LocalPlaylist, SongPlayingNow
 
 from django.core import serializers
 
@@ -90,12 +90,56 @@ def chooseDevice():
     devicesJson = json.dumps(devicesDict)
     return devicesJson
 
-# Start to play music
-def playMusic(device, userinstance):
+# Add next song from LocalPlaylist to Spotify queue
+def addToQueue(userInstance):
     client = getClient2()
-    song = LocalPlaylist.objects.filter(instance=userinstance).order_by('votes', 'created').values('uri').first()
+    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('votes', 'created').values('uri').first()
+    print("uri", curi['uri'])
+    curi = json.dumps(curi['uri'])
+    print("uri", curi)
+    curi = curi[15:]
+    curi = curi.replace("\"", "")
+    print("uri", curi)
+    client.add_to_queue(curi)
+
+# Start to play music
+def playMusic(device, userInstance):
+    client = getClient2()
+    song = LocalPlaylist.objects.filter(instance=userInstance).order_by('votes', 'created').values('uri').first()
     uriSongs = [song['uri']]
     client.start_playback(device_id = device, uris = uriSongs)
+
+# Get the progress of the playing song
+def currentProgress():
+    client = getClient2()
+    currentProgress = client.current_user_playing_track()
+    return currentProgress
+
+# Get the current playing song
+def currentSong(userInstance):
+    client = getClient2()
+    # SongPlayingNow.objects.all().delete() # Cleans the SongPlayingNow when song changes
+    songPlaying = SongPlayingNow()  # Assign the model
+    currentSong = client.current_user_playing_track()
+    if currentSong != None:
+        SongPlayingNow.objects.filter(instance=userInstance).delete() # Cleans the SongPlayingNow when song changes
+        songPlaying.pk = None  # The pk is assigned automatically, this is needed for that
+        artists = currentSong['item']['artists']  # Loop in the artist if there are more than one
+        string = ""
+        for j in range(len(artists)):
+            string += artists[j]['name']
+            if j+1 != len(artists):
+                string += ", "  # Separate the artist names
+        songPlaying.artists = string
+        songPlaying.title = currentSong['item']['name']
+        songPlaying.duration = datetime.timedelta(milliseconds = currentSong['item']['duration_ms'])
+        songPlaying.uri = currentSong['item']['uri']
+        songPlaying.instance = userInstance  # The instance of the user comes as parameter
+        songPlaying.save()
+        return json.dumps(currentSong)
+    else:
+        return json.dumps(currentSong)
+        
 
 # Para non ter que facer o bucle desta función pode ser boa idea facer un serializer que transforme os datos.
 # Search for a song

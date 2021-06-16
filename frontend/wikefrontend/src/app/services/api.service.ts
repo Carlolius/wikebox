@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class ApiService {
 
 	SERVER_ADDRESS: string = 'http://localhost:8000/';
-	justcheck: any;
+
 
 	constructor(
 		private httpClient: HttpClient,
@@ -26,6 +26,32 @@ export class ApiService {
 
 	registerInstance(instance: String) {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'api/instanceregister/', {urlInstance: instance})
+	}
+
+	playingNow(){
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request}).subscribe((response) => {
+			console.log("leresponse", response)
+			/* return(response) */
+		});
+
+		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request}).pipe( */
+		/* map(results => Object.keys(results).map(key => ({value: results[key]})))) */
+	}
+
+	voteP(song:string){
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/votep/', {'uri': song}).subscribe()
+	}
+
+	voteN(song:string){
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/voten/', {'uri': song}).subscribe()
+	}
+
+	popTop(){
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/poptop/', {request: Request}).subscribe()
+	}
+
+	addToQueue(){
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/addtoqueue/', {request: Request}).subscribe()
 	}
 
 	queueSongs(){
@@ -50,21 +76,14 @@ export class ApiService {
 		})
 	}
 
-	/* spotifyChooseDevice(){ */
-	/* 	return this.httpClient.get(this.SERVER_ADDRESS+ 'api/choosedevice/').subscribe((response)=>{ */
-	/* 		console.log("spotifyChooseDevice", response) */
-	/* 	}) */
-	/* } */
-
-spotifyChooseDevice(){
+	spotifyChooseDevice(){
 		return this.httpClient
 		.get(this.SERVER_ADDRESS + 'api/choosedevice/')
-			.pipe(
-				map(results => Object
-						.keys(results)
-						.map(key => ({value: results[key]}))
-					 ),
-				/* map(results => console.log(JSON.stringify(results))) */
+		.pipe(
+			map(results => Object
+					.keys(results)
+					.map(key => ({value: results[key]}))
+				 ),
 		);
 	}
 
@@ -113,7 +132,12 @@ spotifyChooseDevice(){
 
 	// Start to play
 	spotifyPlay(device:string){
-		console.log("spotifyPlay")
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/playmusic/', {'device': device}).subscribe();
 	}
+
+	// Song that is playing
+	spotifyCurrentSong(){
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/currentplaying/', {'request': Request}).subscribe()
+	}
+	
 }

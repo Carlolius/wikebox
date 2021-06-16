@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 
 import { ApiService } from '../../services/api.service';  // Import the music service
 import { PopoverController } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { SearchresultpopComponent } from 'src/app/components/searchresultpop/sea
 	templateUrl: './music.page.html',
 	styleUrls: ['./music.page.scss'],
 })
+
 export class MusicPage implements OnInit {
 	results: Observable<any>
 	playlists: any
@@ -20,6 +21,7 @@ export class MusicPage implements OnInit {
 	devices: any
 	deviceName:string = "Choose device"
 	deviceId:string
+	currentPlaying:any
 	/* Meter por aquí variables del tipo */
 	/* limit_search: 50 */
 	/* offset_search: 0 */
@@ -32,7 +34,11 @@ export class MusicPage implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.showLocalPlaylist()
+		this.showLocalPlaylist();
+		this.currentSong();
+		this.popTop();
+		this.addToQueue();
+		this.repeat()
 	}
 
 	// When click in a search result
@@ -41,11 +47,45 @@ export class MusicPage implements OnInit {
 		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
 		this.searchedSong = this.apiService.spotifyClickSeachedSong( songUri )
 	}
+
+	// Vote positive for a song
+	voteP(uri){
+		this.apiService.voteP(uri)
+	}
+
+	// Vote negative for a song
+	voteN(uri){
+		this.apiService.voteN(uri)
+	}
+
+	// Necessary checks every 5 seconds
+	repeat(){
+		interval(5000)
+			.subscribe((x) => {
+				this.showLocalPlaylist();
+				this.currentSong();
+				this.popTop();
+				this.addToQueue();
+		});
+	}
 	
 	// Add playlist songs to LocalPlaylist
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addToLocalPlaylist( playlistId:string ) {
 		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
+	}
+
+	popTop(){
+		this.apiService.popTop()
+	}
+
+	addToQueue(){
+		this.apiService.addToQueue()
+	}
+	
+	showPlayingNow() {
+		this.apiService.playingNow()
+		console.log("currentplaying", this.currentPlaying)
 	}
 
 	showLocalPlaylist() {
@@ -101,8 +141,12 @@ export class MusicPage implements OnInit {
 	}
 
 	playButton(){
-		console.log("playButton")
-		const play = this.apiService.spotifyPlay(this.deviceId)
+		this.apiService.spotifyPlay(this.deviceId)
+	}
+
+	currentSong(){
+		this.apiService.spotifyCurrentSong();
+		this.showPlayingNow();
 	}
 
 }

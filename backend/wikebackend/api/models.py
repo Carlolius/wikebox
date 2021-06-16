@@ -35,8 +35,8 @@ class SongPlayingNow(models.Model):
     artists = models.CharField(max_length=1000)
     title = models.CharField(max_length=1000)
     duration = models.DurationField(default=None)
-    path = models.CharField(max_length=200)
-    uri = models.CharField(max_length=200, unique=True)
-    votes = models.IntegerField()
+    # uri = models.CharField(max_length=200, unique=True)
+    uri = models.CharField(max_length=200)
+    instance = models.ForeignKey(instance, on_delete=models.DO_NOTHING)
     def __str__(self):
-        return self.uri
+        return self.title
