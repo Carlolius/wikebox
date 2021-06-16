@@ -1,0 +1,79 @@
+\chapter{Planificación}
+~\label{chap:planificacion}
+\lettrine{P}ara a planificación dos proxectos se deben ter en conta tanto os custos como o tempo, neste capítulo explicase as etapas da desta durante o proceso de desenvolvemento, a planificación é acorde a metodoloxía Scrum~\ref{Scrum}.
+
+\section{Planificación inicial}
+Unha vez realizado a análise (capítulo~\ref{chap:analise}) se decidiu dividir o traballo en 5 grupos:
+\begin{itemize}
+	\item \textbf{Configuración inicial do proxecto:} Recolección de información sobre as ferramentas a utilizar para a posta en marcha do proxecto, configuración do entorno de desenvolvemento.
+	\item \textbf{Implementación da persistencia:} Deseño da base de datos, modificación do modelo de usuarios de Django.
+	\item \textbf{Conexión coa API de Spotify:} Creación da lóxica no backend, peticións necesarias da aplicación o API de Spotify. Configuración da xestión de usuarios.
+	\item \textbf{Conexión frontend backend:} Planificación e implementación do frontend, conexión con \acrfull{JWT} aos usuarios do backend.
+	\item \textbf{Xeración do espazo web:} Peticións ao backend e xestión de permisos.
+\end{itemize}
+
+\section{Adaptación da planificación a Scrum}
+O desenvolvemento do proxecto se dividiu en 4 fases, as cales tiveron unha duración de entre 3 e 5 semanas dependendo da complexidade, a metodoloxía foi adaptada a natureza do proxecto. Se realizou un Sprint Planning~\ref{scrum:planning} ao principio de cada fase onde se obtivo o Sprint Backlog~\ref{scrum:sprintbacklog} e ao finalizar cada unha se fixo o Sprint Review~\ref{scrum:review} e o Sprint Retrospective~\ref{scrum:retrospective}. Durante a realización do proxecto, tamén se levou un diario de traballo que facilitou a organización.
+
+\subsection{Primeiro sprint}
+No primeiro sprint se levou a cabo a implementación a primeira fase, se creou o Product Backlog~\ref{scrum:productbacklog} baseado nos requisitos funcionais. Posteriormente se estableceu o espazo de traballo, se configurou o editor NeoVim cunha selección de plugins adaptados ao proxecto, tamén se configurou o repositorio de GitLab. Neste sprint tamén incluímos as probas iniciais tanto coa API de Spotify coma con Ionic xa que se trataba dun framework novo para o desenvolvedor, por último tamén se realizaron os mockups do frontend~\ref{fig:mockups}.
+\subsection{Segundo sprint}
+Neste sprint se deseñou a base de datos, se crearon os modelos de datos en Django e se modificou o modelo xa preestablecido de usuarios en Django para engadir mais datos que este non contiña, na figura~\ref{fig:database} podemos ver a súa estrutura. 
+\subsection{Terceiro sprint}
+No terceiro sprint fíxose a conexión do backend coa API de Spotify, crearonse as peticións necesarias coa axuda da libraría de Python Spotipy, esta proporciona todas as funcionalidades necesarias, dende a obtención do token de autenticación contra a plataforma de música ata a reprodución, pasando pola xestión de playlists e a cola de reprodución.
+\subsection{Cuarto sprint}
+Para o cuarto sprint se planificou o deseño do frontend baseado nos mockups realizados. Tamén se fixo a conexión mediante \acrshort{JWT} para a xestión de usuarios. Estudáronse outros métodos para facer dita conexión, pero se concluíu que a autenticación con \acrshort{JWT} era a mais segura e útil no noso caso. Este sprint foi mais longo do esperado debido a novidade no uso deste tipo de autenticación, poñendo fincapé na especial dificultade de renovar os tokens de autenticación co token de refresco.
+\subsection{Quinto sprint}
+No quinto e último sprint se crearon as páxinas do frontend, se tivo en conta os permisos de acceso tanto na parte do frontend coma do backend permitindo tan só as accións necesarias.
+
+\section{Custos do proxecto}
+O software utilizado durante a creación deste proxecto foi sempre con licencias libres, en canto a recursos hardware non foron necesarios debido a que tan só foi necesario un ordenador do que xa se dispoñía. Polo tanto os recursos utilizados restrínxese tan só os recursos humanos.\\
+Na táboa~\ref{tab:custos_humanos} mostrase os recursos humanos utilizados medidos en horas de traballo.
+
+\begin{figure}[hp]
+  \caption{Mockups do frontend}
+	\label{fig:mockups}
+  \centering
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/Login.png}
+    \caption{Mockup vista de login}
+    \label{fig:mockup_login}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/Admin_home.png}
+    \caption{Mockup vista do admin}
+		\label{fig:mockup_admin_home}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/User.png}
+    \caption{Mockup vista de usuario}
+		\label{fig:mockup_usuario}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/Admin_options.png}
+    \caption{Mockup opcións do admin}
+		\label{fig:mockup_admin_options}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[hp!]
+	\caption{Estrutura da base de datos}
+	\label{fig:database}
+	\includegraphics[width=\textwidth]{imaxes/Wikebox_database.png}
+\end{figure}
+
+\begin{table}[hp]
+	\caption{Tempo empregado no proxecto}
+	\label{tab:custos_humanos}
+	\begin{center}
+		\begin{tabular}{| l | l |}
+			\hline
+			Tarefa & Tempo\\ \hline
+			Documentación & 80h \\
+			Desenvolvemento do backend & 100h \\
+			Desenvolvemento do frontend & 200h \\
+			Probas & 30h\\
+			Total & 410h \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}

@@ -24,15 +24,20 @@
     1. Sistema de xestión de base de datos
     1. Apis
 
-1. Análise de viabilidade
+1. Análise
+    1. Metodoloxía de desenvolvemento  
+        1. Scrum
+        1. Scrum aplicado o proxecto
     1. Viabilidade económica
     1. Viabilidade técnica
     1. Viabilidade do mercado
-
-1. Metodoloxía de desenvolvemento  
-    1. Scrum
-    1. Scrum aplicado o proxecto
-    1. Iteracións
+    1. Análise de requisitos
+        1. Requisitos da aplicación
+        1. Especificación de requisitos
+            1. Requisitos funcionais
+            1. Requisitos non funcionais
+        1. Actores
+        1. Casos de uso
 
 1. Planificación
     1. Recursos
@@ -40,15 +45,6 @@
         1. Recursos software
         1. Recursos hardware
     1. Planificación inicial
-
-1. Análise de requisitos
-    1. Requisitos da aplicación
-    1. Viabilidade económica
-    1. Especificación de requisitos
-        1. Requisitos funcionais
-        1. Requisitos non funcionais
-    1. Actores
-    1. Casos de uso
 
 1. Deseño
     1. Arquitectura

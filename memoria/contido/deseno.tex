@@ -1,0 +1,22 @@
+\chapter{Deseño}
+~\label{chap:deseno}
+\lettrine{N}o seguinte capítulo explicaránse os aspectos relevantes do deseño da nosa aplicación, coma a arquitectura adoptada e os servizos utilizados.
+
+\section{Arquitectura}
+No caso deste proxecto utilizanse dous frameworks diferentes no que cada seu teñe unha arquitectura diferente, Angular (o framework que usamos con Ionic) utiliza a típica modelo, vista, controlador e Django cambia esta derradeira por plantilla\footnote{Template en inglés.}. Ambos patróns de arquitecturas se basean nas ideas de reutilización do código e separación de conceptos o que separa as representacións internas da información co xeito que se presenta os usuarios fianis da aplicación, estas características son básicas para facilitar a tarefa de desenvolver a aplicación e facilitar o seu mantemento, pero o seu funcionamento non e de todo igual.
+\subsection{MVC: Modelo, vista, controlador}
+Trátase do patrón de deseño software máis conocido, é moi utilizado no desenvolvemento web.
+\begin{itemize}
+	\item \textbf{Model:} O \textbf{modelo} é a representación da información coa que o sistema opera, polo tanto xestiona todos os accesos a dita informacion, tanto consultas como actualizacións. Envía a vista a información que esta lle vai solicitando para ser mostrada na interface do usuario, as peticións de acceso ou manipulación chegan ao modelo a través do controlador.
+	\item \textbf{View:} A \textbf{vista} encargase da representación de cara ao usuario de toda a información da aplicación.
+	\item \textbf{Controller:} O \textbf{controlador} é o encargado de interpretar as instruccións e accións que realizan os usuarios finais da aplicación, facendo uso das funcionalidades implementadas no modelo. Pódese dicir que o controlador fai de intermediario entre a vista e o modelo.
+\end{itemize}
+\subsection{MVT: Modelo, vista, plantilla}
+A diferencia da arquitectura \textbf{MVC,} neste caso a parte do controlador é manexada directamente polo framework, é un patrón de deseño coñecido por Django. 
+\begin{itemize}
+	\item \textbf{Model:} O \textbf{modelo} é similar ao caso de MVC, actúa como interface para os datos, é basicamente a estructura lóxica detras da aplicación web ou a API no noso caso.
+	\item \textbf{View} A \textbf{vista} executa a lóxica de negocio, interactúa co modelo e renderiza a plantilla. Acepta  peticións \acrshort{HTTP} e devolve tamén peticións \acrshort{HTTP}.
+	\item \textbf{Template:} A \textbf{plantilla} é o compoñente diferenciador da arquitectura MVC. A plantilla actúa como a capa de presentación, básicamente é o código \acrshort{HTML} que renderiza a información. O contido das plantillas pode ser tanto estático coma dinámico.
+\end{itemize}
+
+Como vemos a gran vantaxa das arquitecturas é a separación das responsabilidades dentro da aplicación, deste xeito se existen cambios nos datos (Modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademáis de que o usuario non interactúa en ningún momento directamente cos datos.
