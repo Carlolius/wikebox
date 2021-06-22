@@ -95,10 +95,23 @@ def addToQueue(request):
 
     return Response(data=res, status=200)
 
+# Checks the actual LocalPlayilist
+def queueSongsL():
+    if queueSongsV == None:
+        queueSongsV = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes', 'uri'))
+
 # Get the songs of the LocalPlaylist
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def queueSongs(request):
+    if queueSongsV:
+        #######
+        #######
+        #######
+        # Por aquí seguir
+        #######
+        #######
+        #######
     songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)

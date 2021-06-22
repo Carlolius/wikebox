@@ -378,3 +378,11 @@ Non se amosa a canción. Hai que converter os tempos para facer a comparación e
 
 **13/06/2021**  
 Funcionan os votos. E se engaden e borran cancións cando é necesario.
+
+**21/06/2021**  
+Intentando retirar o reload inncesario pareceme que as listas non se ordean de forma completamente correcta.  
+Momentos nos que se actualiza a lista queueSongs:
+
+1. engadir canción (addToQueue)
+1. cambio de canción (popTop)
+1. votación (voteP, voteN)
