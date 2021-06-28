@@ -34,11 +34,11 @@ export class MusicPage implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.showLocalPlaylist();
+		this.apiService.queueSongs().subscribe(data => this.queueSongs = data);
 		this.currentSong();
 		this.popTop();
 		this.addToQueue();
-		this.repeat()
+		this.repeat();
 	}
 
 	// When click in a search result
@@ -62,7 +62,7 @@ export class MusicPage implements OnInit {
 	repeat(){
 		interval(5000)
 			.subscribe((x) => {
-				this.showLocalPlaylist();
+				this.apiService.queueSongs().subscribe(data => this.queueSongs = data);
 				this.currentSong();
 				this.popTop();
 				this.addToQueue();
@@ -83,15 +83,6 @@ export class MusicPage implements OnInit {
 		this.apiService.addToQueue()
 	}
 	
-	showPlayingNow() {
-		this.apiService.playingNow()
-		console.log("currentplaying", this.currentPlaying)
-	}
-
-	showLocalPlaylist() {
-		this.queueSongs = this.apiService.queueSongs()
-	}
-
 	// Popover that shows results of search
 	async searchShowpop( event ) {
 		const popover = await this.searchPopover.create({
@@ -142,6 +133,10 @@ export class MusicPage implements OnInit {
 
 	playButton(){
 		this.apiService.spotifyPlay(this.deviceId)
+	}
+
+	showPlayingNow() {
+		this.apiService.playingNow().subscribe(data => this.currentPlaying = data);
 	}
 
 	currentSong(){

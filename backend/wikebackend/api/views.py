@@ -87,6 +87,7 @@ def addToQueue(request):
         changeTime = nowTime + timedelta(seconds=20)
         if changeTime > totalTime:
             spotify.addToQueue(request.user.userInstance)
+            LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').first().delete() # Probando que borre a canción cando a engada a cola
             res = "Change"
         else:
             res = "No change"
@@ -95,24 +96,11 @@ def addToQueue(request):
 
     return Response(data=res, status=200)
 
-# Checks the actual LocalPlayilist
-def queueSongsL():
-    if queueSongsV == None:
-        queueSongsV = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes', 'uri'))
-
 # Get the songs of the LocalPlaylist
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def queueSongs(request):
-    if queueSongsV:
-        #######
-        #######
-        #######
-        # Por aquí seguir
-        #######
-        #######
-        #######
-    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('artists', 'title', 'votes', 'uri'))
+    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)
 

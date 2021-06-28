@@ -52,57 +52,37 @@
 			<ion-col size="0.8">
 				<ion-button expand="full" (click)="playButton()"><ion-icon name="play-outline"></ion-icon></ion-button>
 			</ion-col>
-			<!-- <ion-col> -->
-			<!-- 	<!-1- <li *ngFor="let current of currentPlaying ">{{current}}</li> -1-> -->
-			<!-- 	{{currentPlaying}} -->
-			<!-- </ion-col> -->
+			<ion-col>
+				<div *ngFor="let current of currentPlaying ">{{current.title}} - {{current.artists}}</div>
+			</ion-col>
 		</ion-row>
-
-		<!-- O comentado debaixo servía para amosar as playlist recibidas directamente dende a api de spotify, agora, é similar pero a playlist é local. -->
-
-	<!-- <div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);"> -->
-	<!-- 	<ion-row> -->
-	<!-- 		<ion-col> -->
-	<!-- 			<!-1- Select playlists -1-> -->
-	<!-- 			<ion-item> -->
-	<!-- 				<ion-label>Playlists</ion-label> -->
-	<!-- 				<ion-select #C placeholder="choose a playlist" interface="action-sheet" (ionChange)="getPlaylistSongs(C.value)" (ionFocus)="getPlaylists()"> -->
-	<!-- 					<!-1- Probablemente non necesite isto vvv -1-> -->
-	<!-- 					<!-1- <ion-select-option value="New">New playlist</ion-select-option> -1-> -->
-	<!-- 					<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}}>{{playlist.value.playlist}}</ion-select-option> -->
-	<!-- 				</ion-select> -->
-	<!-- 			</ion-item> -->
-	<!-- 		</ion-col> -->
-	<!-- 	</ion-row> -->
-
 
 		<ion-row>
 			<ion-col>
-				<!-- <ion-button expand="full" (click)="showLocalPlaylist()">Reload</ion-button> -->
 
 				<!-- Show songs -->
-				<ion-list *ngFor="let song of ( queueSongs | async) | keyvalue ">
+				<ion-list *ngFor="let song of queueSongs">
 					<ion-item>
 						<ion-grid>
 							<ion-row >
 								<ion-col>
 									<ion-label text-wrap>
-										<h2>{{ song.value.title }}</h2>
-										<h6>{{ song.value.artists }}</h6>
+										<h2>{{ song.title }}</h2>
+										<h6>{{ song.artists }}</h6>
 									</ion-label>
 								</ion-col>
 								<ion-col size=1 >
-									<ion-button color="light" (click)="voteN(song.value.uri)">
+									<ion-button color="light" (click)="voteN(song.uri)">
 										-
 									</ion-button>
 								</ion-col>
 								<ion-col size=1 >
 										<ion-label>
-											<h2>{{ song.value.votes }}</h2>
+											<h2>{{ song.votes }}</h2>
 										</ion-label>
 								</ion-col>
 								<ion-col size=1 >
-									<ion-button color="light" (click)="voteP(song.value.uri)">
+									<ion-button color="light" (click)="voteP(song.uri)">
 										+
 									</ion-button>
 								</ion-col>

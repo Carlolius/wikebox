@@ -386,3 +386,8 @@ Momentos nos que se actualiza a lista queueSongs:
 1. engadir canción (addToQueue)
 1. cambio de canción (popTop)
 1. votación (voteP, voteN)
+
+**28/06/2021**  
+Coa axuda dos observables a lista non parpadea cada vez que recarga, tamén amosamos a canción que está a soar.  
+Sería necesario engadir que tanto amosar canción como amosar a cola se executen ao *votar* e engadir *cancións*.  
+Estaría ben repasar as funcións nas que non se usan observables e se debería.

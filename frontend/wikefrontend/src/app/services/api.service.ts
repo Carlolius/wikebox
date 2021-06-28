@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { Observable } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
+
+import {IEsongs} from '../songs';
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
@@ -12,7 +14,7 @@ import { map, catchError } from 'rxjs/operators';
 
 export class ApiService {
 
-	SERVER_ADDRESS: string = 'http://localhost:8000/';
+	private SERVER_ADDRESS: string = 'http://localhost:8000/';
 
 
 	constructor(
@@ -26,16 +28,6 @@ export class ApiService {
 
 	registerInstance(instance: String) {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'api/instanceregister/', {urlInstance: instance})
-	}
-
-	playingNow(){
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request}).subscribe((response) => {
-			console.log("leresponse", response)
-			/* return(response) */
-		});
-
-		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request}).pipe( */
-		/* map(results => Object.keys(results).map(key => ({value: results[key]})))) */
 	}
 
 	voteP(song:string){
@@ -54,12 +46,8 @@ export class ApiService {
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/addtoqueue/', {request: Request}).subscribe()
 	}
 
-	queueSongs(){
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request})
-		/* return this.httpClient.get(this.SERVER_ADDRESS + 'api/queuesongs/').pipe( */
-		/* 	map(results => Object.keys(results).map(key => ({value: results[key]})) */
-		/* 		 ), */
-		/* ); */
+	queueSongs(): Observable<IEsongs[]>{
+		return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request});
 	}
 
 	// Gets the Spotify api login url and open it in the same window
@@ -102,18 +90,6 @@ export class ApiService {
 			map(results => Object.keys(results).map(key => ({value: results[key]}))),
 				catchError(err => ([]))
 		);
-		/* return this.httpClient.post(this.SERVER_ADDRESS + 'api/search/', {'search': searchTerm}).pipe( */
-		/* 	map(results => { */
-		/* 		if (results) { */
-		/* 			const mapped = Object.keys(results).map(key => ({value: results[key]})); */
-		/* 			map(mapped => mapped['value']) */
-		/* 			console.log(mapped) */
-		/* 		} */
-		/* 		else { */
-		/* 			console.log('Empty result') */
-		/* 		} */
-		/* 	}), */
-		/* ); */
 	}
 
 	// Add a searched song to LocalPlaylist
@@ -135,9 +111,14 @@ export class ApiService {
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/playmusic/', {'device': device}).subscribe();
 	}
 
-	// Song that is playing
+	// Adds the current song to the model
 	spotifyCurrentSong(){
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/currentplaying/', {'request': Request}).subscribe()
 	}
-	
+
+	// Gets the current song to show at the frontend
+	playingNow(): Observable<IEsongs[]>{
+		return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request});
+	}
+
 }
