@@ -391,3 +391,13 @@ Momentos nos que se actualiza a lista queueSongs:
 Coa axuda dos observables a lista non parpadea cada vez que recarga, tamén amosamos a canción que está a soar.  
 Sería necesario engadir que tanto amosar canción como amosar a cola se executen ao *votar* e engadir *cancións*.  
 Estaría ben repasar as funcións nas que non se usan observables e se debería.
+
+**29/06/2021**  
+Non funciona correctamente engadir canción a cola, a maioría das veces da un 404 not found.
+
+**01/07/2021**  
+Erro 404 cando se fai addToQueue ( engadir canción a cola de reproducción) é porque non atopa o dispositivo, segundo di a [documentación de Spotify](https://developer.spotify.com/documentation/web-api/reference/#endpoint-add-to-queue).  
+Solucionadas varias cousas o evitar o 404: 1. A currentsong se poñía a None. 2. Non se engadía a canción seguinte ben. 3. Non se gardaba a última canción engadida.  
+Solucioneino poñendo un try e except para o 404 e usando unha variable global para o tema de non engadir se xa estaba engadida.  
+Xa se engaden ben as cancións segundo os votos. Tamén a lista se actualiza despois de facer cambios nela.  
+O erro do 404 non ten pinta de estar ben ben do todo.

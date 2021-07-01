@@ -34,41 +34,60 @@ export class MusicPage implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.apiService.queueSongs().subscribe(data => this.queueSongs = data);
 		this.currentSong();
-		this.popTop();
 		this.addToQueue();
-		this.repeat();
+		this.popTop();
+		this.showQueue();
+		this.check5();
+		this.check10();
 	}
 
 	// When click in a search result
 	clickSearchSong( songUri:string ) {
 		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
 		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
-		this.searchedSong = this.apiService.spotifyClickSeachedSong( songUri )
+		this.searchedSong = this.apiService.spotifyClickSeachedSong(songUri);
+		this.showQueue();
 	}
 
 	// Vote positive for a song
 	voteP(uri){
-		this.apiService.voteP(uri)
+		this.apiService.voteP(uri);
+		this.showQueue();
 	}
 
 	// Vote negative for a song
 	voteN(uri){
 		this.apiService.voteN(uri)
+		this.showQueue();
 	}
 
 	// Necessary checks every 5 seconds
-	repeat(){
+	check5(){
 		interval(5000)
 			.subscribe((x) => {
-				this.apiService.queueSongs().subscribe(data => this.queueSongs = data);
+				this.getDevices();
 				this.currentSong();
 				this.popTop();
+				this.showQueue();
+			});
+	}
+
+	// Necessary checks every 10 seconds
+	check10(){
+		interval(10000)
+			.subscribe((x) => {
 				this.addToQueue();
-		});
+			});
 	}
 	
+	showQueue(){
+		this.apiService.queueSongs().subscribe(data => {
+			if (JSON.stringify(this.queueSongs) != JSON.stringify(data)) {
+				this.queueSongs = data
+			}});
+	}
+
 	// Add playlist songs to LocalPlaylist
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addToLocalPlaylist( playlistId:string ) {
@@ -80,7 +99,7 @@ export class MusicPage implements OnInit {
 	}
 
 	addToQueue(){
-		this.apiService.addToQueue()
+		this.apiService.addToQueue().subscribe();
 	}
 	
 	// Popover that shows results of search
@@ -114,9 +133,26 @@ export class MusicPage implements OnInit {
 	}
 
 	getDevices(){
-		this.devices = this.apiService.spotifyChooseDevice();
-		/* console.log("getDevices", Object.values(this.devices)) */
+		this.apiService.spotifyChooseDevice().subscribe(data => {
+			if (data.length = 1) { // engadir que o device non pode ser "ningún"
+				this.devices = data
+				this.deviceName = data[0].value.name
+				this.deviceId = data[0].value.id
+			} else {
+				this.devices = data
+			}
+		});
 	}
+
+	/* showQueue(){ */
+	/* 	this.apiService.queueSongs().subscribe(data => { */
+	/* 		if (JSON.stringify(this.queueSongs) != JSON.stringify(data)) { */
+	/* 			this.queueSongs = data */
+	/* 		}}); */
+	/* } */
+
+
+
 
 	// Get the user playlists
 	/* Hay que pasar el limit y el offset para poder recibir todas las listas */

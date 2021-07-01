@@ -42,7 +42,7 @@
 				<ion-item>
 					<ion-label>Device</ion-label>
 					<ion-select #D [placeholder]="deviceName" interface="alert" (ionChange)="chooseDevice(D.value)" (ionFocus)="getDevices()">
-					<ion-select-option *ngFor="let device of (devices | async)" [value]="device">{{device.value.name}}</ion-select-option>
+					<ion-select-option *ngFor="let device of devices" [value]="device">{{device.value.name}}</ion-select-option>
 					</ion-select>
 				</ion-item>
 			</ion-col>

@@ -67,28 +67,34 @@ def playingNow(request):
 @permission_classes([IsAuthenticated])
 def popTop(request):
     current = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').values('uri').first()
+    top = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
     if current == top:
         res = "same"
-        LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').first().delete()
+        LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').first().delete()
     else:
         res = "notSame"
     return Response(data=res, status=200)
 
 # Adds the next song to the queue
+lastInQueue = None # Global var for keep the last song added to the queue
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def addToQueue(request):
-    totalTime = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('duration').first()
-    nowTime = spotify.currentProgress()
-    if nowTime != None:
+    totalTime = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('duration').first() # Get the total duration of the song
+    nowTime = spotify.currentProgress() # Get the progress of the song
+    if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
-        changeTime = nowTime + timedelta(seconds=20)
+        changeTime = nowTime + timedelta(seconds=60) # Establish the time to add the next song
         if changeTime > totalTime:
-            spotify.addToQueue(request.user.userInstance)
-            LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('votes', 'created').first().delete() # Probando que borre a canción cando a engada a cola
-            res = "Change"
+            adding = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
+            global lastInQueue
+            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
+                spotify.addToQueue(request.user.userInstance)
+                lastInQueue = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
+                res = "Change"
+            else:
+                res = "Already added"
         else:
             res = "No change"
     else:

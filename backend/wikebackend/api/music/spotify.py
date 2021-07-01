@@ -93,19 +93,19 @@ def chooseDevice():
 # Add next song from LocalPlaylist to Spotify queue
 def addToQueue(userInstance):
     client = getClient2()
-    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('votes', 'created').values('uri').first()
-    print("uri", curi['uri'])
-    curi = json.dumps(curi['uri'])
-    print("uri", curi)
-    curi = curi[15:]
-    curi = curi.replace("\"", "")
-    print("uri", curi)
-    client.add_to_queue(curi)
+    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first() # Get the uri of the next song
+    ccuri = json.dumps(curi['uri']) # Get just the compleat uri
+    cccuri = ccuri[15:] # Cleans the not important part of uri
+    rcccuri = cccuri.replace("\"", "") # Remove the quotation marks "
+    try: # Sometimes Spotify returns 404 if can't find the device, with try we dont get the error
+        client.add_to_queue(rcccuri, None)
+    except:
+        raise FileNotFoundError('Spotify error 404 not found')
 
 # Start to play music
 def playMusic(device, userInstance):
     client = getClient2()
-    song = LocalPlaylist.objects.filter(instance=userInstance).order_by('votes', 'created').values('uri').first()
+    song = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first()
     uriSongs = [song['uri']]
     client.start_playback(device_id = device, uris = uriSongs)
 
@@ -120,8 +120,25 @@ def currentSong(userInstance):
     client = getClient2()
     # SongPlayingNow.objects.all().delete() # Cleans the SongPlayingNow when song changes
     songPlaying = SongPlayingNow()  # Assign the model
-    currentSong = client.current_user_playing_track()
-    if currentSong != None:
+    # currentSong = client.current_user_playing_track()
+    currentSong = client.currently_playing()
+
+    # O seguinte é para testar
+
+    # if currentSong != None:
+    #     print("#####")
+    #     print("Currentsong:", currentSong['item']['name'])
+    #     print("uri:", currentSong['item']['uri'])
+    #     print("progress_ms:", currentSong['progress_ms'])
+    #     print("duration_ms:", currentSong['item']['duration_ms'])
+    #     print("isplaying:", currentSong['is_playing'])
+    #     print("#####")
+    # else:
+    #     print("#####")
+    #     print("song is NONE")
+    #     print("#####")
+
+    if (currentSong != None) and (currentSong['is_playing'] == True):
         SongPlayingNow.objects.filter(instance=userInstance).delete() # Cleans the SongPlayingNow when song changes
         songPlaying.pk = None  # The pk is assigned automatically, this is needed for that
         artists = currentSong['item']['artists']  # Loop in the artist if there are more than one
@@ -137,8 +154,9 @@ def currentSong(userInstance):
         songPlaying.instance = userInstance  # The instance of the user comes as parameter
         songPlaying.save()
         return json.dumps(currentSong)
-    else:
-        return json.dumps(currentSong)
+    elif (currentSong == None) or (currentSong['is_playing'] == False):
+        SongPlayingNow.objects.filter(instance=userInstance).delete() # Cleans the SongPlayingNow when song changes
+        return json.dumps(None)
         
 
 # Para non ter que facer o bucle desta función pode ser boa idea facer un serializer que transforme os datos.
