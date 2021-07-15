@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';  // Import the music service
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-callback',
@@ -10,10 +11,14 @@ export class CallbackPage implements OnInit {
 
   constructor(
 		private apiService: ApiService,
+		private router: Router
 	) { }
 
   ngOnInit() {
 		this.apiService.spotifyCallback();
+		if (localStorage.getItem("instance") != null) {
+			this.router.navigate([localStorage.getItem("instance") + '/home'])
+		}
   }
 
 	getSpotifyToken() {

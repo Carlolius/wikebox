@@ -61,7 +61,7 @@ export class ApiService {
 
 	// Gets the Spotify api login url and open it in the same window
 	spotifyLoginUrl() {
-		this.httpClient.get(this.SERVER_ADDRESS + 'api/token/').subscribe((response) => {
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {'request': Request}).subscribe((response) => {
 			window.open(response[0].url, '_self');
 		})
 	}
@@ -75,7 +75,7 @@ export class ApiService {
 
 	spotifyChooseDevice(){
 		return this.httpClient
-		.get(this.SERVER_ADDRESS + 'api/choosedevice/')
+		.post(this.SERVER_ADDRESS + 'api/choosedevice/', {'request': Request})
 		.pipe(
 			map(results => Object
 					.keys(results)

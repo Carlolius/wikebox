@@ -1,57 +1,38 @@
-import os
-import spotipy
-import getpass # to get the system username
-
 import datetime
-
 import json
 
+import spotipy
 from api.models import LocalPlaylist, SongPlayingNow
-
 from django.core import serializers
 
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
 redirect_uri = 'http://localhost:8100/callback/'
-scope = 'user-library-read'
-username = getpass.getuser() # get system username
-auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_cache_" + username)
-
-# En front comprobar la respuesta, si es http abrir ventana para login, si no se supone que ya tienes el client
-def getClient(response_url):
-    # Authorization Code Flow for Spotify’s OAuth implementation
-    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_cache_" + username)
-    if auth_manager.get_cached_token() != None:
-        # If there are a token get it
-        auth_manager.get_cached_token()
-        return spotipy.Spotify(auth_manager=auth_manager)
-    else:
-        if response_url != None:
-            # Crop the response url to get the code
-            authCode = auth_manager.parse_response_code("response_url")
-            # Get token
-            auth_manager.get_access_token(code=authCode,as_dict=False)
-            # Create api client
-            return spotipy.Spotify(auth_manager=auth_manager)
-        else:
-            # Get authentification url, open it and authentificate user
-            auth_url = auth_manager.get_authorize_url()
-            return auth_url
+scope = 'user-library-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, playlist-read-private'
 
 # Get client obtiene el cliente que necesita → token
 # Token se obtiene del cache o de callbackurl que necesita → authCode
 # AuthCode se obtiene del front que necesita → auth url
 # Authurl necesita el auth_manager que se crea  al principio con las variables asignadas
 
-# If there are a cached token (.spotify_cache_username) gets it
-def cache():
+# Generate auth manager
+def amanager(userInstance):
+    instance = str(userInstance)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
+    return auth_manager
+
+
+# If there are a cached token (.spotify_token_userInstance) gets it
+def cache(userInstance):
+    auth_manager = amanager(userInstance)
     if auth_manager.get_cached_token() != None:
         # If there are a token get it
         auth_manager.get_cached_token()
         return spotipy.Spotify(auth_manager=auth_manager)
 
 # Crops the callback url given by the Spotify api and obtains the token
-def callBackUrl(authCode):
+def callBackUrl(authCode, userInstance):
+    auth_manager = amanager(userInstance)
     authCode = auth_manager.parse_response_code(authCode)
     # Get token
     token = auth_manager.get_access_token(code=authCode,as_dict=False)
@@ -59,18 +40,20 @@ def callBackUrl(authCode):
     return token
 
 # Get the url to make the login in the Spotify api
-def getUrl():
+def getUrl(userInstance):
+    auth_manager = amanager(userInstance)
     authUrl = auth_manager.get_authorize_url()
     return authUrl
 
 # Get the Spotify client, to interact with the Spotify api
-def getClient2():
+def getClient(userInstance):
+    auth_manager = amanager(userInstance)
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
 
 # Get the user active devices
-def chooseDevice():
-    client = getClient2()
+def chooseDevice(userInstance):
+    client = getClient(userInstance)
     devices = client.devices()
     devices = devices['devices']
     devicesDict = {}
@@ -92,7 +75,7 @@ def chooseDevice():
 
 # Add next song from LocalPlaylist to Spotify queue
 def addToQueue(userInstance):
-    client = getClient2()
+    client = getClient(userInstance)
     curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first() # Get the uri of the next song
     ccuri = json.dumps(curi['uri']) # Get just the compleat uri
     cccuri = ccuri[15:] # Cleans the not important part of uri
@@ -104,20 +87,20 @@ def addToQueue(userInstance):
 
 # Start to play music
 def playMusic(device, userInstance):
-    client = getClient2()
+    client = getClient(userInstance)
     song = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first()
     uriSongs = [song['uri']]
     client.start_playback(device_id = device, uris = uriSongs)
 
 # Get the progress of the playing song
-def currentProgress():
-    client = getClient2()
+def currentProgress(userInstance):
+    client = getClient(userInstance)
     currentProgress = client.current_user_playing_track()
     return currentProgress
 
 # Get the current playing song
 def currentSong(userInstance):
-    client = getClient2()
+    client = getClient(userInstance)
     # SongPlayingNow.objects.all().delete() # Cleans the SongPlayingNow when song changes
     songPlaying = SongPlayingNow()  # Assign the model
     # currentSong = client.current_user_playing_track()
@@ -159,10 +142,9 @@ def currentSong(userInstance):
         return json.dumps(None)
         
 
-# Para non ter que facer o bucle desta función pode ser boa idea facer un serializer que transforme os datos.
 # Search for a song
-def search(search):
-    client = getClient2()
+def search(search, userInstance):
+    client = getClient(userInstance)
     searchResponse = client.search(search, limit=10) # Retuns a 'dict' of songs
     cleanlist = searchResponse['tracks']['items'] # Gets the important part of the response
     # Creates a dictionary and populates it with the responses
@@ -178,13 +160,13 @@ def search(search):
 
 # Generate a new session playlist
 def generateSession(name):
-    client = getClient2()
+    client = getClient()
 
 # Get the user playlists
 # Functionality similar to search fuction
 # Pasar tamén o offset e o limit para poder ver todas as listas
-def getPlaylists():
-    client = getClient2()
+def getPlaylists(userInstance):
+    client = getClient(userInstance)
     user = client.current_user()
     # dictPlaylists = client.user_playlists(user['id'], limit=limite, offset=offset)
     dictPlaylists = client.user_playlists(user['id'])
@@ -209,8 +191,8 @@ def getPlaylists():
 
 # Get the songs of a playlist given the uri
 # Pasar tamén o offset e o limit para poder ver todas as cancións
-def getPlaylistSongs(playlistId):
-    client = getClient2()
+def getPlaylistSongs(playlistId, userInstance):
+    client = getClient(userInstance)
     dictsongs = client.playlist_tracks(playlistId)
     dictsongs = dictsongs['items']
     songs = {}
@@ -222,12 +204,12 @@ def getPlaylistSongs(playlistId):
     return json.dumps(songs)
 
 # Pasar tamén o offset e o limit para poder ver todas as cancións
-def playlistToLocalPlaylist(playlistId, userinstance):
-    client = getClient2()
+def playlistToLocalPlaylist(playlistId, userInstance):
+    client = getClient(userInstance)
     spotifyPlaylist = client.playlist_tracks(playlistId)
     songs = spotifyPlaylist['items']  # Takes just the songs
     playlist = LocalPlaylist()  # Assign the model
-    LocalPlaylist.objects.filter(added_mode="playlist").filter(instance=userinstance).delete() # Cleans the LocalPlaylist when selected playlist chagnes
+    LocalPlaylist.objects.filter(added_mode="playlist").filter(instance=userInstance).delete() # Cleans the LocalPlaylist when selected playlist chagnes
     for i in range(len(songs)):
         playlist.pk = None  # The pk is assigned automatically, this is needed for that
         artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
@@ -243,12 +225,12 @@ def playlistToLocalPlaylist(playlistId, userinstance):
         # playlist.created = songs[i]['added_at']
         playlist.created = datetime.datetime.now()
         playlist.added_mode = "playlist"
-        playlist.instance = userinstance  # The instance of the user comes as parameter
+        playlist.instance = userInstance  # The instance of the user comes as parameter
         playlist.save()
     return json.dumps(songs)
 
-def searchToLocalPlaylist(songUri, userinstance):
-    client = getClient2()
+def searchToLocalPlaylist(songUri, userInstance):
+    client = getClient(userInstance)
     playlist = LocalPlaylist()  # Assign the model
     searchedSong = client.track(songUri)
     playlist.pk = None  # The pk is assigned automatically, this is needed for that
@@ -264,13 +246,13 @@ def searchToLocalPlaylist(songUri, userinstance):
     playlist.uri = searchedSong['uri']
     playlist.created = datetime.datetime.now()
     playlist.added_mode = "search"
-    playlist.instance = userinstance  # The instance of the user comes as parameter
+    playlist.instance = userInstance  # The instance of the user comes as parameter
     playlist.save()
     return json.dumps(searchedSong)
 
 # Get user info, testing porpouse
-def userinfo():
-    client = getClient2()
+def userinfo(userInstance):
+    client = getClient(userInstance)
     info = client.current_user()
     print(info)
     return info['display_name']

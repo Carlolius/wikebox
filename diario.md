@@ -401,3 +401,6 @@ Solucionadas varias cousas o evitar o 404: 1. A currentsong se poñía a None. 2
 Solucioneino poñendo un try e except para o 404 e usando unha variable global para o tema de non engadir se xa estaba engadida.  
 Xa se engaden ben as cancións segundo os votos. Tamén a lista se actualiza despois de facer cambios nela.  
 O erro do 404 non ten pinta de estar ben ben do todo.
+
+**02/07/2021**  
+Por agora gardamos o token do usuario de Spotify co nome de .spotify_cache_username, pero deberíamos de obter o nome da instancia xa que o token estará asignado a instancia non ao nome do usuario da máquina. Para isto hai que pasar o nome da instancia e crear a variable auth_manager con este nome.

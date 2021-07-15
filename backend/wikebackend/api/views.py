@@ -81,7 +81,7 @@ lastInQueue = None # Global var for keep the last song added to the queue
 @permission_classes([IsAuthenticated])
 def addToQueue(request):
     totalTime = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('duration').first() # Get the total duration of the song
-    nowTime = spotify.currentProgress() # Get the progress of the song
+    nowTime = spotify.currentProgress(request.user.userInstance) # Get the progress of the song
     if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
@@ -129,9 +129,10 @@ def voteN(request):
 ## Spotify ##
 
 # Get the url to make the login in the Spotify api
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def SpotifyGet(self):
-    url = spotify.getUrl()
+def SpotifyGet(request):
+    url = spotify.getUrl(request.user.userInstance)
     resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
     return HttpResponse(resp)
 
@@ -140,16 +141,16 @@ def SpotifyGet(self):
 @permission_classes([IsAuthenticated])
 def callBack(request):
     authCode = request.data['url']
-    spotify.callBackUrl(authCode)
-    info = spotify.userinfo()
+    spotify.callBackUrl(authCode, request.user.userInstance)
+    info = spotify.userinfo(request.user.userInstance)
     resp = "[{\"url\":" + "\"" + info + "\"" + "}]"
     return HttpResponse(resp)
 
 # Get user playlists
 # Aquí habería que meter tamén o limit e o offset para poder ver todas as listas
 @permission_classes([IsAuthenticated])
-def getPlaylists(self):
-    playlists = spotify.getPlaylists()
+def getPlaylists(request):
+    playlists = spotify.getPlaylists(request.user.userInstance)
     return HttpResponse(playlists)
 
 # Search for a song
@@ -159,7 +160,7 @@ def search(request):
     search = request.data['search']
     # Necessary for when you delete all the chars in the search bar, avoids empty request
     if search != '':
-        songs = spotify.search(request.data['search'])
+        songs = spotify.search(request.data['search'], request.user.userInstance)
         # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
         return HttpResponse(songs)
     else:
@@ -173,9 +174,10 @@ def currentSong(request):
     return Response(data=currentPlaying, status=200)
 
 # Select device where music plays
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def chooseDevice(self):
-    devices = spotify.chooseDevice()
+def chooseDevice(request):
+    devices = spotify.chooseDevice(request.user.userInstance)
     return HttpResponse(devices)
 
 # Start to play
