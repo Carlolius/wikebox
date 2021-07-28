@@ -68,11 +68,14 @@ def playingNow(request):
 def popTop(request):
     current = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('uri').first()
     top = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
-    if current == top:
-        res = "same"
-        LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').first().delete()
+    if current != None:
+        if current == top:
+            res = "same"
+            LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').first().delete()
+        else:
+            res = "notSame"
     else:
-        res = "notSame"
+        res = "Not playing"
     return Response(data=res, status=200)
 
 # Adds the next song to the queue
