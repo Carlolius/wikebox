@@ -404,3 +404,18 @@ O erro do 404 non ten pinta de estar ben ben do todo.
 
 **02/07/2021**  
 Por agora gardamos o token do usuario de Spotify co nome de .spotify_cache_username, pero deberíamos de obter o nome da instancia xa que o token estará asignado a instancia non ao nome do usuario da máquina. Para isto hai que pasar o nome da instancia e crear a variable auth_manager con este nome.
+
+**16/07/2021**  
+Instruccións de instalación en servidor:  
+
+* Instalar nodejs
+* Instalar cordova
+* Instalar ionic
+* Instalar angular
+
+* Instalar python
+* Instalar pip
+* Instalar virtualenv con pip
+* Crear virtualenv: python3 -m venv
+* Activar venv
+* Installar requeriments: pip3 install -r requeriments.txt

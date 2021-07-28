@@ -1,7 +1,7 @@
 # Ignore unnecessary files
 
 ## Wikebox related ##
-.spotify_cache_*
+.spotify_token_*
 
 ## Nvim Session ##
 *.vim
