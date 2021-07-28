@@ -1,31 +1,33 @@
-<ion-content>
+<ion-header [translucent]="true">
 	<div style="text-align:left;background-color:black;color:var(--ion-color-app);padding-top:0.5%;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
-		<ion-row>
-			<ion-col size="1">
-				<ion-img style="width: 100%;" src="assets/images/jukebox_icon.png"></ion-img>
-			</ion-col>
+		<ion-row class="ion-align-items-center">
 			<ion-col size="1" class="ion-align-self-center">
-				<p style="font-size:150%;">Wikebox</p>
+				<ion-img style="width:100%; float:center" src="assets/images/jukebox_icon.png"></ion-img>
 			</ion-col>
-			<ion-col offset="2" size="5" class="ion-align-self-center">
+			<ion-col size="2" class="ion-align-self-center">
+				<p style="font-size:120%;">Wikebox</p>
+			</ion-col>
+			<ion-col size="6" class="ion-align-self-center">
 
 				<!-- Search bar and show results on popover -->
 				<ion-searchbar
-					[(ngModel)]="searchTerm"
-					[debounce]="600"
-					(ionChange)="searchChanged()"
-					(ionChange)="searchShowpop($event)"
-					placeholder="Search a song"
-					showCancelButton="focus">
+						[(ngModel)]="searchTerm"
+						[debounce]="600"
+						(ionChange)="searchChanged()"
+						(ionChange)="searchShowpop($event)"
+						placeholder="Search a song"
+						showCancelButton="focus">
 				</ion-searchbar>
 
 			</ion-col>
-			<ion-col offset="2" class="ion-align-self-center">
-				username
+			<ion-col offset="2" class="ion-align-self-right">
+				<ion-button fill="clear" (click)="showPopMenu($event)">{{userName}}</ion-button>
 			</ion-col>
 		</ion-row>
 	</div>
+</ion-header>
 
+<ion-content>
 	<div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
 		<ion-row>
 			<ion-col>

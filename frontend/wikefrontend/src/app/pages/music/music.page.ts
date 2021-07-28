@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Observable } from 'rxjs';
 
 import { ApiService } from '../../services/api.service';  // Import the music service
 import { PopoverController } from '@ionic/angular';
 import { SearchresultpopComponent } from 'src/app/components/searchresultpop/searchresultpop.component';
+import { PopmenuComponent } from 'src/app/components/popmenu/popmenu.component';
 
 @Component({
 	selector: 'app-music',
@@ -22,6 +23,9 @@ export class MusicPage implements OnInit {
 	deviceName:string = "Choose device"
 	deviceId:string
 	currentPlaying:any
+	userName:string
+	check5:any 
+	check10:any
 	/* Meter por aquí variables del tipo */
 	/* limit_search: 50 */
 	/* offset_search: 0 */
@@ -31,16 +35,34 @@ export class MusicPage implements OnInit {
 	constructor(
 		private apiService: ApiService,
 		private searchPopover: PopoverController,
+		private popMenu: PopoverController,
 	) { }
 
 	ngOnInit() {
+		this.userName = localStorage.getItem("username")
 		this.currentSong();
 		this.addToQueue();
 		this.popTop();
 		this.showQueue();
-		this.check5();
-		this.check10();
+		// Necessary checks for the backend
+		// Subscribe to an observable to get the data
+		this.check5 = interval(5000).subscribe(() => {
+			this.getDevices();
+			this.currentSong();
+			this.popTop();
+			this.showQueue();
+		})
+		this.check10 = interval(10000).subscribe(() => {
+			this.addToQueue();
+		})
 	}
+
+	ngOnDestroy() {
+		// When the page is closed stop the checks
+		this.check5.unsubscribe();
+		this.check10.unsubscribe();
+	}
+
 
 	// When click in a search result
 	clickSearchSong( songUri:string ) {
@@ -49,21 +71,21 @@ export class MusicPage implements OnInit {
 		this.searchedSong = this.apiService.spotifyClickSeachedSong(songUri);
 		this.showQueue();
 	}
-
+	
 	// Vote positive for a song
-	voteP(uri){
+	voteP(uri:string){
 		this.apiService.voteP(uri);
 		this.showQueue();
 	}
 
 	// Vote negative for a song
-	voteN(uri){
+	voteN(uri:string){
 		this.apiService.voteN(uri)
 		this.showQueue();
 	}
 
 	// Necessary checks every 5 seconds
-	check5(){
+	/* check5(){
 		interval(5000)
 			.subscribe((x) => {
 				this.getDevices();
@@ -79,7 +101,7 @@ export class MusicPage implements OnInit {
 			.subscribe((x) => {
 				this.addToQueue();
 			});
-	}
+	} */
 	
 	showQueue(){
 		this.apiService.queueSongs().subscribe(data => {
@@ -102,11 +124,20 @@ export class MusicPage implements OnInit {
 		this.apiService.addToQueue().subscribe();
 	}
 	
+	async showPopMenu(ev: any){
+		 const popover = await this.popMenu.create({
+			 component: PopmenuComponent,
+			 event: ev
+		 });
+		 await popover.present();
+		 await popover.onDidDismiss();
+	}
+
 	// Popover that shows results of search
-	async searchShowpop( event ) {
+	async searchShowpop( ev: any ) {
 		const popover = await this.searchPopover.create({
 			component: SearchresultpopComponent, 
-			event: event,
+			event: ev,
 			componentProps: {
 				results: this.results,
 			},
@@ -143,16 +174,6 @@ export class MusicPage implements OnInit {
 			}
 		});
 	}
-
-	/* showQueue(){ */
-	/* 	this.apiService.queueSongs().subscribe(data => { */
-	/* 		if (JSON.stringify(this.queueSongs) != JSON.stringify(data)) { */
-	/* 			this.queueSongs = data */
-	/* 		}}); */
-	/* } */
-
-
-
 
 	// Get the user playlists
 	/* Hay que pasar el limit y el offset para poder recibir todas las listas */

@@ -53,7 +53,7 @@ export class AuthService {
 		console.log("route: ", route)
 		this.isLoggedIn().then((token) => {
 			if (!token) {
-				this.router.navigateByUrl("login");
+				this.router.navigateByUrl("home");
 				return false;
 			}})
 			return true;
@@ -120,7 +120,7 @@ export class AuthService {
 		/* localStorage.removeItem("username"); */
 		/* localStorage.removeItem("instance"); */
 		localStorage.clear()
-		this.navCtrl.navigateRoot('/home');
+		// this.navCtrl.navigateRoot('/home');
 	}
 
 	// Is logged in
