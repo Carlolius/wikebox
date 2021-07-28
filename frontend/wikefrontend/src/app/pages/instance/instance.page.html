@@ -1,25 +1,17 @@
-<ion-header>
-	<ion-toolbar>
-		<ion-title>instance</ion-title>
-	</ion-toolbar>
-</ion-header>
-
-<ion-content>
-	<div style="text-align:left;background-color:black;color:var(--ion-color-app);padding-top:0.5%;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
-		<ion-row>
-			<ion-col size="1">
-				<ion-img style="width: 100%;" src="assets/images/jukebox_icon.png"></ion-img>
+<ion-header [translucent]="true">
+	<div style="text-align:center;background-color:black;color:var(--ion-color-app);padding-top:0.5%;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
+		<ion-row class="ion-align-items-center ion-justify-content-center">
+			<ion-col size="2" class="ion-align-self-center">
+				<ion-img style="width:80%; float:center" src="assets/images/jukebox_icon.png"></ion-img>
 			</ion-col>
-			<ion-col size="1" class="ion-align-self-center">
-				<p style="font-size:150%;">Wikebox</p>
-			</ion-col>
-			<ion-col offset="2" size="5" class="ion-align-self-center">
-			</ion-col>
-			<ion-col offset="2" class="ion-align-self-center">
-				username
+			<ion-col size="5" class="ion-align-self-center">
+				<p style="font-size:170%;">Welcome to Wikebox</p>
 			</ion-col>
 		</ion-row>
 	</div>
+</ion-header>
+
+<ion-content>
 	<div>
 		<ion-row class="ion-justify-content-center">
 			<ion-col size="5">

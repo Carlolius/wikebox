@@ -17,6 +17,8 @@ import { Router } from "@angular/router";
 export class HomePage implements OnInit {
 
 	data = '';
+	userName: string;
+	instanceName: string;
 
 	constructor(
 		private authService: AuthService,
@@ -31,18 +33,35 @@ export class HomePage implements OnInit {
 		if (localStorage.getItem("instance") != null) {
 			this.router.navigate([localStorage.getItem("instance") + '/home'])
 		}
-		// Xa comprobamos se está logueado nas rutas
-		/* this.authService.isLoggedIn() */
+		this.userName = localStorage.getItem("username")
+		this.instanceName = localStorage.getItem("instance")
+		if (this.isLoggedIn && localStorage.getItem("instance") != null){
+			this.router.navigate([localStorage.getItem("instance") + '/music'])
+		}
 	}
 
+	goToHome() {
+		this.router.navigateByUrl("home")
+	}
+
+	goToInstance() {
+		this.router.navigateByUrl("instance")
+	}
+
+	goToLogin() {
+		this.router.navigateByUrl("login")
+	}
+	
 	isLoggedIn() {
 		this.authService.isLoggedIn()
+		return true
 	}	
 
 	logout() {
 		this.authService.logout();
-    this.NavController.navigateRoot('/login');
+		this.NavController.navigateRoot('/login');
 	}
+
 	getData() {
 		this.authService.getData()
 	}
@@ -51,11 +70,8 @@ export class HomePage implements OnInit {
 		this.apiService.spotifyLoginUrl()
 	}
 
-
 	clearToken() {
-		// ONLY FOR TESTING!
 		this.storage.remove('token');
-
 		let toast = this.toastController.create({
 			message: 'JWT removed',
 			duration: 3000
