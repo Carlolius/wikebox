@@ -28,8 +28,9 @@ export class LoginPage implements OnInit {
 	login(form){
 		this.authService.login(form.value.username, form.value.password).subscribe((res)=>{
 			// A redirección do router debería de ser a instancia do propio usuario
-			if (this.myInstance != null)
-				this.router.navigate([localStorage.getItem("instance") + '/home'])
+			if (this.myInstance != null){
+				this.router.navigate([this.myInstance + '/home'])
+			}
 			else
 				this.router.navigateByUrl('home')
 		});
