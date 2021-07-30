@@ -59,6 +59,11 @@ export class ApiService {
 	/* 												.pipe(distinctUntilChanged((p:IEsongs[], q:IEsongs[]) => (JSON.stringify(p) === JSON.stringify(q)))); */
 	/* } */
 
+	// Check if can connect with Spotify 
+	spotifyareToken(): Observable<any> {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/areToken/', {'request': Request})
+	}
+
 	// Gets the Spotify api login url and open it in the same window
 	spotifyLoginUrl() {
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {'request': Request}).subscribe((response) => {
@@ -86,7 +91,7 @@ export class ApiService {
 
 	// Get the playlists of the user
 	spotifyGetPlaylists(){
-		return this.httpClient.get(this.SERVER_ADDRESS + 'api/playlists/').pipe(
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/playlists/', {'request': Request}).pipe(
 			map(results => Object.keys(results).map(key => ({value: results[key]}))
 				 ),
 		);

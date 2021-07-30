@@ -21,14 +21,10 @@ def amanager(userInstance):
     auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
     return auth_manager
 
-
 # If there are a cached token (.spotify_token_userInstance) gets it
 def cache(userInstance):
     auth_manager = amanager(userInstance)
-    if auth_manager.get_cached_token() != None:
-        # If there are a token get it
-        auth_manager.get_cached_token()
-        return spotipy.Spotify(auth_manager=auth_manager)
+    return auth_manager.get_cached_token()
 
 # Crops the callback url given by the Spotify api and obtains the token
 def callBackUrl(authCode, userInstance):
@@ -50,6 +46,13 @@ def getClient(userInstance):
     auth_manager = amanager(userInstance)
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
+
+def areToken(userInstance):
+    token = cache(userInstance)
+    if token != None:
+        return True
+    else:
+        return False
 
 # Get the user active devices
 def chooseDevice(userInstance):
@@ -157,10 +160,6 @@ def search(search, userInstance):
                 }
     songJson = json.dumps(songList) # Convert the dictionary to a json
     return songJson
-
-# Generate a new session playlist
-def generateSession(name):
-    client = getClient()
 
 # Get the user playlists
 # Functionality similar to search fuction

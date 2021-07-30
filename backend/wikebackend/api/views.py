@@ -53,6 +53,15 @@ def RegisterInstance(request):
             )
     return Response(data=name, status=200)
 
+# Check if can connect with Spotify 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def areToken(request):
+    are = spotify.areToken(request.user.userInstance)
+    return HttpResponse(json.dumps(are))
+
+
+# Checks which song is playing now
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def playingNow(request):
@@ -151,6 +160,7 @@ def callBack(request):
 
 # Get user playlists
 # Aquí habería que meter tamén o limit e o offset para poder ver todas as listas
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def getPlaylists(request):
     playlists = spotify.getPlaylists(request.user.userInstance)

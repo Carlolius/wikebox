@@ -5,6 +5,7 @@ import { ApiService } from '../../services/api.service';  // Import the music se
 import { PopoverController } from '@ionic/angular';
 import { SearchresultpopComponent } from 'src/app/components/searchresultpop/searchresultpop.component';
 import { PopmenuComponent } from 'src/app/components/popmenu/popmenu.component';
+import { PopTokenComponent } from 'src/app/components/pop-token/pop-token.component';
 
 @Component({
 	selector: 'app-music',
@@ -36,6 +37,7 @@ export class MusicPage implements OnInit {
 		private apiService: ApiService,
 		private searchPopover: PopoverController,
 		private popMenu: PopoverController,
+		private popToken: PopoverController,
 	) { }
 
 	ngOnInit() {
@@ -44,6 +46,7 @@ export class MusicPage implements OnInit {
 		this.addToQueue();
 		this.popTop();
 		this.showQueue();
+		this.spotifyareToken();
 		// Necessary checks for the backend
 		// Subscribe to an observable to get the data
 		this.check5 = interval(5000).subscribe(() => {
@@ -58,16 +61,35 @@ export class MusicPage implements OnInit {
 	}
 
 	ngOnDestroy() {
-		// When the page is closed stop the checks
-		this.check5.unsubscribe();
-		this.check10.unsubscribe();
+		// When the page is closed unsubscribe to the checks
+		this.check5.next()
+		this.check5.complete()
+		this.check10.next()
+		this.check10.complete()
 	}
 
+	// Shows the obtain token popover
+	async tokenPopover(){
+		const popover = await this.popToken.create({
+			component: PopTokenComponent,
+		});
+		await popover.present();
+	}
+				
+	// Check to obtain the Spotify token
+	spotifyareToken(){
+		this.apiService.spotifyareToken().subscribe(data => {
+			if(data != true){
+				// If there aren't token, stop the checks and ask to login in Spotify
+				this.check5.complete()
+				this.check10.complete()
+				this.tokenPopover()
+			}
+		});
+	}
 
 	// When click in a search result
 	clickSearchSong( songUri:string ) {
-		/* Para playlist mode, ten que haber unha playlist de spotify seleccionada e se van a ir engadindo na playlist as cancións que se seleccionen */
-		/* Para queue mode, ten que gardar as cancións na bd de spotify. */
 		this.searchedSong = this.apiService.spotifyClickSeachedSong(songUri);
 		this.showQueue();
 	}

@@ -54,6 +54,7 @@
 			<ion-col size="0.8">
 				<ion-button expand="full" (click)="playButton()"><ion-icon name="play-outline"></ion-icon></ion-button>
 			</ion-col>
+				<ion-button expand="full" (click)="spotifyareToken()">Token?</ion-button>
 			<ion-col>
 				<div *ngFor="let current of currentPlaying ">{{current.title}} - {{current.artists}}</div>
 			</ion-col>
