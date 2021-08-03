@@ -47,6 +47,7 @@ def getClient(userInstance):
     client = spotipy.Spotify(auth_manager=auth_manager)
     return client
 
+# Check if the token exists on the system
 def areToken(userInstance):
     token = cache(userInstance)
     if token != None:
@@ -255,4 +256,3 @@ def userinfo(userInstance):
     info = client.current_user()
     print(info)
     return info['display_name']
-

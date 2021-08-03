@@ -13,12 +13,14 @@ from datetime import datetime, timedelta
 import json
 import re  # regular expressions
 
+import threading
+import time
+
+
 # import viewsets
 from rest_framework import viewsets
 from api.models import SongPlayingNow, LocalPlaylist
 from api.serializers import SongPlayingNowSerializer, LocalPlaylistSerializer
-
-# Create your views here.
 
 # View for test auth purpouses
 class HelloView(APIView):
@@ -72,38 +74,34 @@ def playingNow(request):
     return HttpResponse(jplaying)
     
 # Pops the first song of the list if is the one playing
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def popTop(request):
-    current = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
+def popTop(wike):
+    current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
+    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
     if current != None:
         if current == top:
             res = "same"
-            LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').first().delete()
+            LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').first().delete()
         else:
             res = "notSame"
     else:
         res = "Not playing"
-    return Response(data=res, status=200)
+    return res
 
 # Adds the next song to the queue
 lastInQueue = None # Global var for keep the last song added to the queue
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def addToQueue(request):
-    totalTime = SongPlayingNow.objects.filter(instance=request.user.userInstance).values('duration').first() # Get the total duration of the song
-    nowTime = spotify.currentProgress(request.user.userInstance) # Get the progress of the song
+def addToQueue(wike):
+    totalTime = SongPlayingNow.objects.filter(instance=wike).values('duration').first() # Get the total duration of the song
+    nowTime = spotify.currentProgress(wike) # Get the progress of the song
     if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
-        changeTime = nowTime + timedelta(seconds=60) # Establish the time to add the next song
+        changeTime = nowTime + timedelta(seconds=120) # Establish the time to add the next song
         if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
+            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
             global lastInQueue
             if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
-                spotify.addToQueue(request.user.userInstance)
-                lastInQueue = LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('uri').first()
+                spotify.addToQueue(wike)
+                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
                 res = "Change"
             else:
                 res = "Already added"
@@ -112,7 +110,7 @@ def addToQueue(request):
     else:
         res = "No playing"
 
-    return Response(data=res, status=200)
+    return res
 
 # Get the songs of the LocalPlaylist
 @api_view(['POST'])
@@ -215,11 +213,15 @@ def playlistToLocalPlaylist(request):
     playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userInstance)
     return HttpResponse(playlistSongs)
 
-# # Load the songs of a playlist given the playlist uri
-# # Aquí habería que meter tamén o limit e o offset para poder ver todas as cancións
-# @permission_classes([IsAuthenticated])
-# @api_view(['POST'])
-# def getPlaylistSongs(request):
-#     playlistId = request.data['playlistId']
-#     playlistSongs = spotify.getPlaylistSongs(playlistId)
-#     return HttpResponse(playlistSongs)
+def checkerThread():
+    while True:
+        wikes = instance.objects.all()
+        for wike in wikes:
+            if spotify.areToken(wike):
+                if spotify.currentProgress(wike) != None and spotify.currentProgress(wike)['is_playing']:
+                    addToQueue(wike)
+                    popTop(wike)
+        time.sleep(5)
+
+x = threading.Thread(target=checkerThread)
+x.start()

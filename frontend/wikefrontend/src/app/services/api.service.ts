@@ -38,18 +38,6 @@ export class ApiService {
 		this.httpClient.post(this.SERVER_ADDRESS + 'api/voten/', {'uri': song}).subscribe()
 	}
 
-	popTop(){
-		this.httpClient.post(this.SERVER_ADDRESS + 'api/poptop/', {request: Request}).subscribe()
-	}
-
-	/* addToQueue(){ */
-	/* 	this.httpClient.post(this.SERVER_ADDRESS + 'api/addtoqueue/', {request: Request}).subscribe() */
-	/* } */
-
-	addToQueue(): Observable<IEsongs[]>{
-		return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/addtoqueue/', {request: Request});
-	}
-
 	queueSongs(): Observable<IEsongs[]>{
 		return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request});
 	}

@@ -43,8 +43,6 @@ export class MusicPage implements OnInit {
 	ngOnInit() {
 		this.userName = localStorage.getItem("username")
 		this.currentSong();
-		this.addToQueue();
-		this.popTop();
 		this.showQueue();
 		this.spotifyareToken();
 		// Necessary checks for the backend
@@ -52,11 +50,7 @@ export class MusicPage implements OnInit {
 		this.check5 = interval(5000).subscribe(() => {
 			this.getDevices();
 			this.currentSong();
-			this.popTop();
 			this.showQueue();
-		})
-		this.check10 = interval(10000).subscribe(() => {
-			this.addToQueue();
 		})
 	}
 
@@ -64,8 +58,6 @@ export class MusicPage implements OnInit {
 		// When the page is closed unsubscribe to the checks
 		this.check5.next()
 		this.check5.complete()
-		this.check10.next()
-		this.check10.complete()
 	}
 
 	// Shows the obtain token popover
@@ -106,25 +98,6 @@ export class MusicPage implements OnInit {
 		this.showQueue();
 	}
 
-	// Necessary checks every 5 seconds
-	/* check5(){
-		interval(5000)
-			.subscribe((x) => {
-				this.getDevices();
-				this.currentSong();
-				this.popTop();
-				this.showQueue();
-			});
-	}
-
-	// Necessary checks every 10 seconds
-	check10(){
-		interval(10000)
-			.subscribe((x) => {
-				this.addToQueue();
-			});
-	} */
-	
 	showQueue(){
 		this.apiService.queueSongs().subscribe(data => {
 			if (JSON.stringify(this.queueSongs) != JSON.stringify(data)) {
@@ -138,14 +111,6 @@ export class MusicPage implements OnInit {
 		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
 	}
 
-	popTop(){
-		this.apiService.popTop()
-	}
-
-	addToQueue(){
-		this.apiService.addToQueue().subscribe();
-	}
-	
 	async showPopMenu(ev: any){
 		 const popover = await this.popMenu.create({
 			 component: PopmenuComponent,
