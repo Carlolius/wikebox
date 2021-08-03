@@ -95,7 +95,7 @@ def addToQueue(wike):
     if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
-        changeTime = nowTime + timedelta(seconds=120) # Establish the time to add the next song
+        changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
         if changeTime > totalTime:
             adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
             global lastInQueue
@@ -126,7 +126,7 @@ def voteP(request):
     N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
     N = N+1
     LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
-    return Response(data="lala", status=200)
+    return Response(data="plus", status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -134,7 +134,7 @@ def voteN(request):
     N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
     N = N-1
     LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
-    return Response(data="lala", status=200)
+    return Response(data="minus", status=200)
 
 ## Spotify ##
 
@@ -221,7 +221,7 @@ def checkerThread():
                 if spotify.currentProgress(wike) != None and spotify.currentProgress(wike)['is_playing']:
                     addToQueue(wike)
                     popTop(wike)
-        time.sleep(5)
+        time.sleep(10)
 
 x = threading.Thread(target=checkerThread)
 x.start()

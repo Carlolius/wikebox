@@ -84,10 +84,11 @@ def addToQueue(userInstance):
     ccuri = json.dumps(curi['uri']) # Get just the compleat uri
     cccuri = ccuri[15:] # Cleans the not important part of uri
     rcccuri = cccuri.replace("\"", "") # Remove the quotation marks "
-    try: # Sometimes Spotify returns 404 if can't find the device, with try we dont get the error
+    try: # Sometimes Spotify returns 404 if can't find the device, so we try
         client.add_to_queue(rcccuri, None)
     except:
-        raise FileNotFoundError('Spotify error 404 not found')
+        pass
+        # raise FileNotFoundError('Spotify error 404 not found')
 
 # Start to play music
 def playMusic(device, userInstance):
@@ -141,9 +142,11 @@ def currentSong(userInstance):
         songPlaying.instance = userInstance  # The instance of the user comes as parameter
         songPlaying.save()
         return json.dumps(currentSong)
-    elif (currentSong == None) or (currentSong['is_playing'] == False):
+    elif (currentSong != None) and (currentSong['is_playing'] == False):
         SongPlayingNow.objects.filter(instance=userInstance).delete() # Cleans the SongPlayingNow when song changes
-        return json.dumps(None)
+        return json.dumps(currentSong)
+    else:
+        return json.dumps(currentSong) 
         
 
 # Search for a song

@@ -45,9 +45,10 @@ export class MusicPage implements OnInit {
 		this.currentSong();
 		this.showQueue();
 		this.spotifyareToken();
+		this.getDevices();
 		// Necessary checks for the backend
 		// Subscribe to an observable to get the data
-		this.check5 = interval(5000).subscribe(() => {
+		this.check5 = interval(10000).subscribe(() => {
 			this.getDevices();
 			this.currentSong();
 			this.showQueue();
@@ -184,8 +185,8 @@ export class MusicPage implements OnInit {
 	}
 
 	currentSong(){
-		this.apiService.spotifyCurrentSong();
 		this.showPlayingNow();
+		this.apiService.spotifyCurrentSong();
 	}
 
 }
