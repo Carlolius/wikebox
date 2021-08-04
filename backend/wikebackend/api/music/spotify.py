@@ -80,7 +80,7 @@ def chooseDevice(userInstance):
 # Add next song from LocalPlaylist to Spotify queue
 def addToQueue(userInstance):
     client = getClient(userInstance)
-    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first() # Get the uri of the next song
+    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-added_mode', '-votes', 'created').values('uri').first() # Get the uri of the next song
     ccuri = json.dumps(curi['uri']) # Get just the compleat uri
     cccuri = ccuri[15:] # Cleans the not important part of uri
     rcccuri = cccuri.replace("\"", "") # Remove the quotation marks "
@@ -93,7 +93,7 @@ def addToQueue(userInstance):
 # Start to play music
 def playMusic(device, userInstance):
     client = getClient(userInstance)
-    song = LocalPlaylist.objects.filter(instance=userInstance).order_by('-votes', 'created').values('uri').first()
+    song = LocalPlaylist.objects.filter(instance=userInstance).order_by('-added_mode', '-votes', 'created').values('uri').first()
     uriSongs = [song['uri']]
     client.start_playback(device_id = device, uris = uriSongs)
 

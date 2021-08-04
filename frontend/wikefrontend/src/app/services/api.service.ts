@@ -42,10 +42,9 @@ export class ApiService {
 		return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request});
 	}
 
-	/* queueSongs(): Observable<IEsongs[]>{ */
-	/* 	return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request}) */
-	/* 												.pipe(distinctUntilChanged((p:IEsongs[], q:IEsongs[]) => (JSON.stringify(p) === JSON.stringify(q)))); */
-	/* } */
+	isAdmin(){
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/isadmin/', {request: Request})
+	}
 
 	// Check if can connect with Spotify 
 	spotifyareToken(): Observable<any> {

@@ -14,6 +14,7 @@ urlpatterns = [
         # Next two lines make possible to use the viewsets for adding and update the databases
         path('', include(router.urls)),
         path('api-auth/', include('rest_framework.urls')),
+        path('isadmin/', views.isAdmin),
         path('token/', views.SpotifyGet, name='token' ),
         path('callback/', views.callBack),
         path('choosedevice/', views.chooseDevice),

@@ -28,8 +28,9 @@
 </ion-header>
 
 <ion-content>
-	<div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);">
-		<ion-row>
+	<!-- <div style="text-align:left;background-color:black;color:var(--ion-color-app);;padding-bottom:0.5%;border-bottom: 1px solid var(--ion-color-app);"> -->
+	<ion-grid>
+		<ion-row *ngIf=admin>
 			<ion-col>
 				<!-- Select playlists -->
 				<ion-item>
@@ -50,11 +51,10 @@
 			</ion-col>
 		</ion-row>
 
-		<ion-row>
-			<ion-col size="0.8">
-				<ion-button expand="full" (click)="playButton()"><ion-icon name="play-outline"></ion-icon></ion-button>
+		<ion-row class="ion-align-items-center ion-justify-content-center">
+			<ion-col *ngIf=admin size="0.8">
+				<ion-button expand="block" (click)="playButton()"><ion-icon name="play-outline"></ion-icon></ion-button>
 			</ion-col>
-				<ion-button expand="full" (click)="spotifyareToken()">Token?</ion-button>
 			<ion-col>
 				<div *ngFor="let current of currentPlaying ">{{current.title}} - {{current.artists}}</div>
 			</ion-col>
@@ -67,7 +67,7 @@
 				<ion-list *ngFor="let song of queueSongs">
 					<ion-item>
 						<ion-grid>
-							<ion-row >
+							<ion-row class="ion-align-items-center ion-justify-content-center">
 								<ion-col>
 									<ion-label text-wrap>
 										<h2>{{ song.title }}</h2>
@@ -95,6 +95,7 @@
 				</ion-list>
 			</ion-col>
 		</ion-row>
+	</ion-grid>
 
 		<!-- <ion-infinite-scroll threshold="100px" (ionInfinite)="infinitesongs($event)"> -->
 		<!-- 	<ion-infinite-scroll-content -->
@@ -103,5 +104,5 @@
 		<!-- 	</ion-infinite-scroll-content> -->
 		<!-- </ion-infinite-scroll> -->
 
-	</div>
+	<!-- </div> -->
 </ion-content>

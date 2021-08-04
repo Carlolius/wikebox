@@ -62,6 +62,18 @@ def areToken(request):
     are = spotify.areToken(request.user.userInstance)
     return HttpResponse(json.dumps(are))
 
+# Check if the user is the admin of the instance
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def isAdmin(request):
+    user = request.user.id
+    instanceAdmin = instance.objects.filter(url=request.user.userInstance.url).values('admin').get()
+    instanceAdmin = instanceAdmin['admin']
+    if user == instanceAdmin:
+        return Response(data=True, status=200)
+    else:
+        return Response(data=False, status=200)
+
 
 # Checks which song is playing now
 @api_view(['POST'])
@@ -76,11 +88,11 @@ def playingNow(request):
 # Pops the first song of the list if is the one playing
 def popTop(wike):
     current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
+    top = LocalPlaylist.objects.filter(instance=wike).order_by('-added_mode', '-votes', 'created').values('uri').first()
     if current != None:
         if current == top:
             res = "same"
-            LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').first().delete()
+            LocalPlaylist.objects.filter(instance=wike).order_by('-added_mode', '-votes', 'created').first().delete()
         else:
             res = "notSame"
     else:
@@ -97,11 +109,11 @@ def addToQueue(wike):
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
         changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
         if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
+            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-added_mode', '-votes', 'created').values('uri').first()
             global lastInQueue
             if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
                 spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', 'created').values('uri').first()
+                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-added_mode', '-votes', 'created').values('uri').first()
                 res = "Change"
             else:
                 res = "Already added"
@@ -116,7 +128,7 @@ def addToQueue(wike):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def queueSongs(request):
-    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', 'created').values('artists', 'title', 'votes', 'uri'))
+    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-added_mode', '-votes', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)
 
@@ -213,6 +225,8 @@ def playlistToLocalPlaylist(request):
     playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userInstance)
     return HttpResponse(playlistSongs)
 
+# Checks every time if have to change songs or something
+# it works in a different thread
 def checkerThread():
     while True:
         wikes = instance.objects.all()

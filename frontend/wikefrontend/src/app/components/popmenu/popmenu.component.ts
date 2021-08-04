@@ -20,7 +20,7 @@ export class PopmenuComponent implements OnInit {
   ngOnInit() {}
 
   logout(){
-	  this.popoverCtl.dismiss();
+	  this.popoverCtl.dismiss({logout: "True"});
 	  this.authService.logout();
 	  this.router.navigateByUrl('/home')
 

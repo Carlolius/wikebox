@@ -25,8 +25,8 @@ export class MusicPage implements OnInit {
 	deviceId:string
 	currentPlaying:any
 	userName:string
+	admin:any
 	check5:any 
-	check10:any
 	/* Meter por aquí variables del tipo */
 	/* limit_search: 50 */
 	/* offset_search: 0 */
@@ -42,10 +42,11 @@ export class MusicPage implements OnInit {
 
 	ngOnInit() {
 		this.userName = localStorage.getItem("username")
+		this.spotifyareToken();
+		this.checkAdmin();
+		this.getDevices();
 		this.currentSong();
 		this.showQueue();
-		this.spotifyareToken();
-		this.getDevices();
 		// Necessary checks for the backend
 		// Subscribe to an observable to get the data
 		this.check5 = interval(10000).subscribe(() => {
@@ -55,10 +56,11 @@ export class MusicPage implements OnInit {
 		})
 	}
 
-	ngOnDestroy() {
-		// When the page is closed unsubscribe to the checks
+	// Finish the subscription to the observable
+	endCheck() {
 		this.check5.next()
 		this.check5.complete()
+		this.check5.unsubscribe()
 	}
 
 	// Shows the obtain token popover
@@ -74,11 +76,18 @@ export class MusicPage implements OnInit {
 		this.apiService.spotifyareToken().subscribe(data => {
 			if(data != true){
 				// If there aren't token, stop the checks and ask to login in Spotify
+				this.check5.next()
 				this.check5.complete()
-				this.check10.complete()
 				this.tokenPopover()
 			}
 		});
+	}
+
+	// Checks if the user is admin or not
+	checkAdmin(){
+		this.apiService.isAdmin().subscribe(data => {
+			this.admin = data;
+		})
 	}
 
 	// When click in a search result
@@ -118,7 +127,9 @@ export class MusicPage implements OnInit {
 			 event: ev
 		 });
 		 await popover.present();
-		 await popover.onDidDismiss();
+		 const {data} = await popover.onDidDismiss();
+		 if (data)
+			 this.endCheck()
 	}
 
 	// Popover that shows results of search
@@ -142,7 +153,7 @@ export class MusicPage implements OnInit {
 	}
 
 	// Infinite scroll of songs
-	infinitesongs( event ){
+	infinitesongs(){
 		console.log( "Cargando siguientes..." )
 	}
 
