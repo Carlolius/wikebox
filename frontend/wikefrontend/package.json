@@ -27,7 +27,6 @@
     "angular": "*",
     "angular-jwt": "*",
     "core-js": "*",
-    "ionic": "*",
     "netmask": "*",
     "rxjs": "*",
     "tslib": "*",
