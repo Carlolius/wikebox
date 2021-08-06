@@ -25,7 +25,9 @@ SECRET_KEY = 'REMOVED'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        '192.168.1.106'
+        ]
 
 
 # Application definition
@@ -61,9 +63,9 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CORS at the top prevent rejected connection by other middleware
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware', # HTTPS
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -143,6 +145,6 @@ STATIC_URL = '/static/'
 # CORS allows clients to interact with apis in different domains
 CORS_ORIGIN_ALLOW_ALL = True
 
-# CORS_ORIGIN_WHITELIST = [
-#     "127.0.0.1:8100"
+# CORS_ALLOWED_ORIGINS = [
+#     "http://192.168.1.106",
 # ]

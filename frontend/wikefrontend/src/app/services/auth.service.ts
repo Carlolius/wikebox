@@ -22,7 +22,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 export class AuthService {
 	private _storage: Storage | null = null;
 
-	SERVER_ADDRESS: string = 'http://localhost:8000/';
+	SERVER_ADDRESS: string = 'http://192.168.1.106:8000/';
 	/* loggedIn = false; // not necessary */
 	token:any;
 	access:any;

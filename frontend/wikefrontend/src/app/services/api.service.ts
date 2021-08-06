@@ -14,7 +14,7 @@ import {IEsongs} from '../songs';
 
 export class ApiService {
 
-	private SERVER_ADDRESS: string = 'http://localhost:8000/';
+	private SERVER_ADDRESS: string = 'http://192.168.1.106:8000/';
 
 
 	constructor(
