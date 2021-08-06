@@ -12,7 +12,7 @@
 				<!-- Search bar and show results on popover -->
 				<ion-searchbar
 						[(ngModel)]="searchTerm"
-						[debounce]="600"
+						[debounce]="1000"
 						(ionChange)="searchChanged()"
 						(ionChange)="searchShowpop($event)"
 						placeholder="Search a song"
