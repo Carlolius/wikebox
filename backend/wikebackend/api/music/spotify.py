@@ -7,7 +7,7 @@ from django.core import serializers
 
 client_id = 'your_spotify_client_id'
 client_secret = 'REMOVED'
-redirect_uri = 'http://localhost:8100/callback/'
+redirect_uri = 'http://192.168.1.106:8100/callback/'
 scope = 'user-library-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, playlist-read-private'
 
 # Get client obtiene el cliente que necesita → token
