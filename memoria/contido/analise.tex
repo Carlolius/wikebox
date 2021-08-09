@@ -61,12 +61,12 @@ Hoxe en día podemos ver diferentes tipos de software comercial que reproduce gr
 \section{Análise}
 Para a creación deste proxecto se van desenvolver un frontend baseado en Ionic no que se amosarán todos os datos relacionados coas cancións que están na cola, o número de votos e a súa orde de reprodución. Tamén se vai realizar un backend en Django Rest Framework que nos permitirá a conexión do frontend coa API de Spotify e así levar a lóxica do proxecto a cabo. As funcións destacadas son as seguintes:
 \begin{itemize}
-	\item Creación dunha instancia.\\
-		Poderase crear unha instancia ou sesión onde se vai reproducir a música, será necesario facer a autenticación contra a API de Spotify cunha conta premium. Esta instancia pode interpretarse como sería o bar ou lugar de emprazamento dunha gramola física, pero por suposto que pode ser usado en oficinas, reunións particulares e calquera sitio onde a música teña cabida.
+	\item Creación dunha sesión.\\
+		Poderase crear unha sesión onde se vai reproducir a música, será necesario facer a autenticación contra a API de Spotify cunha conta premium. Esta sesión pode interpretarse como sería o bar ou lugar de emprazamento dunha gramola física, pero por suposto que pode ser usado en oficinas, reunións particulares e calquera sitio onde a música teña cabida.
 	\item Creación de usuarios.\\
-		Os usuarios poderán rexistrarse nas instancias, o primeiro en facelo terá o rol de administrador, deste xeito terán a posibilidade de engadir cancións a cola de reprodución e votar a orde destas.
+		Os usuarios poderán rexistrarse nas sesións, o primeiro en facelo terá o rol de administrador, deste xeito terán a posibilidade de engadir cancións a cola de reprodución e votar a orde destas.
 	\item Creación dunha cola de reprodución.\\
-		Os usuarios poderán engadir cancións a unha cola de reprodución xenérica para a instancia, a aplicación encargarase de que cando remate unha canción comece a reprodución da seguinte.
+		Os usuarios poderán engadir cancións a unha cola de reprodución xenérica para a sesión, a aplicación encargarase de que cando remate unha canción comece a reprodución da seguinte.
 	\item Posibilidade de facer votacións.\\
 		Na cola de reprodución aparecen o número de votos de cada canción e botóns que sirven para engadir ou substraer votos, a lista de reprodución estará ordenada por este número de votos e posteriormente por orden de chegada, coma sería nunha gramola habitual.
 	\item Poboar a cola de reprodución cunha lista xa creada.\\
@@ -98,7 +98,7 @@ Os requisitos son as necesidades funcionais que ten un produto para satisfacer o
 \subsection{Actores}
 No proxecto existen tres tipos de usuarios, usuarios sen rexistrar, usuarios rexistrados e administrador.
 \begin{itemize}
-	\item \textbf{Usuario sen rexistrar:} O usuario sen rexistrar ten acceso a páxina de inicio dende onde se pode crear unha nova instancia ou facer login.
+	\item \textbf{Usuario sen rexistrar:} O usuario sen rexistrar ten acceso a páxina de inicio dende onde se pode crear unha nova sesión ou facer login.
 	\item \textbf{Usuario rexistrado:} Os usuarios rexistrados poden engadir ver a cola de reprodución, buscar e engadir cancións e votar positiva ou negativamente as cancións.
-	\item \textbf{Usuario administrador:} O usuario administrador pode facer todo o que os usuarios rexistrados e ademais pode poboar a cola de reprodución con listas de reprodución de Spotify, tamén é o usuario que engade o token a instancia.
+	\item \textbf{Usuario administrador:} O usuario administrador pode facer todo o que os usuarios rexistrados e ademais pode poboar a cola de reprodución con listas de reprodución de Spotify, tamén é o usuario que engade o token a sesión.
 \end{itemize}
