@@ -36,6 +36,14 @@ A diferencia da arquitectura \textbf{\acrshort{MVC},} neste caso a parte do cont
 	\item \textbf{Template:} A \textbf{plantilla} é o compoñente diferenciador da arquitectura \acrshort{MVC}. A plantilla actúa como a capa de presentación, basicamente é o código \acrshort{HTML} que renderiza a información. O contido das plantillas pode ser tanto estático coma dinámico, poderíase comparar a vista na arquitectura MVC.
 \end{itemize}
 
+%source: hacker.io
+\begin{figure}[hp!]
+  \centering
+  \includegraphics[width=0.75\textwidth]{imaxes/mtv.png}
+  \caption{Model, Template, View.}
+  \label{fig:MTV}
+\end{figure}
+
 Como vemos a gran vantaxe das arquitecturas é a separación das responsabilidades dentro da aplicación, deste xeito se existen cambios nos datos (Modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademais de que o usuario non interactúa en ningún momento directamente cos datos.
 
 \subsection{Esquema xeral}
@@ -49,7 +57,7 @@ O frontend en Ionic permite o uso de diferentes framworks para o desenvolvemento
 \end{itemize}
 
 \subsection{Arquitectura}
-Coma indicamos anteriormente, Ionic segue o a arquitectura de \acrshort{MVC} no noso caso tan só utilizamos o modelo para a comprobación dos \acrshort{JWT} e para a transferencia de cancións dende o backend e recibir estas de forma correcta mediante un observable, para amosalo na vista. Na sección~\ref{} explícase o modelo do backend que é o realmente utilizado na aplicación.
+Coma indicamos anteriormente, Ionic segue o a arquitectura de \acrshort{MVC} no noso caso tan só utilizamos o modelo para a comprobación dos \acrshort{JWT} e para a transferencia de cancións dende o backend e recibir estas de forma correcta mediante un observable, para amosalo na vista. Na sección~\ref{sec:modelo} explícase o modelo do backend que é o realmente utilizado na aplicación.
 
 \subsection{Vista}
 A vista é a última capa da arquitectura do sistema é a capa que interactúa co usuario mostrándolle a información e enviando as peticións do usuario ao controlador. Ao tratarse dunha aplicación web, a vista exacútase nun navegador, ou nun dispositivo móbil coma \acrshort{PWA}, polo tanto son páxinas \acrshort{HTML} modificadas por JavaScript, codificado en TypeScript no noso caso grazas a Angular.\\
@@ -175,3 +183,8 @@ O controller é a capa intermedia da arquitecura, actúa coma comunicación entr
 \end{itemize}
 
 \section{Backend}
+Aínda que foi deseñado coa idea de publicar noticias dun xornal, Django é un dos frameworks mais populares hoxe en día, segue o principio (DRY, Don't Repeat Yourself) polo que evita a repetición de código innecesariamente. Está escrito en Python, que axuda a súa popularidade, ademáis como xa explicamos utiliza o a arquitectura \textbf{MVT} que destaca pola simpleza a hora de cambiar a forma de visualizar o contido.
+
+\subsection{Modelo}\label{sec:modelo}
+\subsection{Plantilla}
+\subsection{Vista}
