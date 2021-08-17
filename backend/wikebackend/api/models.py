@@ -29,7 +29,6 @@ class LocalPlaylist(models.Model):
     def __str__(self):
         return self.title
 
-# Tal vez modelo non necesario
 class SongPlayingNow(models.Model):
     id = models.BigAutoField(primary_key=True)
     artists = models.CharField(max_length=1000)
