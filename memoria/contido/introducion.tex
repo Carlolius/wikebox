@@ -1,40 +1,22 @@
 \chapter{Introdución}
 \label{chap:introducion}
 
-\lettrine{N}ESTE primeiro capítulo da memoria, se explica á motivación, se expoñen os obxectivos e se define á estrutura.
+\lettrine{N}ESTE primeiro capítulo da memoria, se explica á motivación, se expoñen os obxectivos e se define á estrutura.\bigskip
 
-\section{Motivación}
-Durante a décadas dos 60 e 70 a industria musical sufriu unha revolución, nunha gran parte dos lugares de restauración comezaron aparecer aparellos que permitían elixir as seguintes cancións no local, as gramolas. Coa dixitalización da música, as gramolas foron desaparecendo e nalgúns casos adaptándose os novos formatos e dixitalizandose. Nos nosos días, coas grandes facilidades que existen e a música na nube é moi complicado atopar un bar no que se permita elixir a seguinte canción, coma antes.
+Durante a décadas dos 60 e 70 a industria musical sufriu unha revolución, nunha gran parte dos lugares de restauración comezaron aparecer aparellos que permitían elixir as seguintes cancións no local, as gramolas. Coa dixitalización da música, as gramolas foron desaparecendo e en poucos casos adaptándose os novos formatos e dixitalizandose. Nos nosos días, coas múltiples plataformas que existen e a música na nube é moi complicado atopar un bar no que se permita elixir a seguinte canción, coma antes. Do mesmo xeito en calquera lugar onde soe música sempre hai alguén que quere engadir a súa canción a cola de reprodución, este pode ser un obxectivo sinxelo ou mais complicado dependendo de moitos factores. Con este proxecto tratamos de resolver estes problemas e dun xeito doado compartir os diferentes gustos musicais.
 
-\section{Obxetivo}
-O obxetivo principal de esto proxeto é crear unha gramola virtual baseada nun servidor no que tanto o administrador da gramola coma os usuarios dispoñan dunha interface o mais sinxela posible, facendo deste xento mais doada a súa utilización. 
+O obxectivo deste proxecto é crear unha aplicación web na que os usuarios poidan engadir as cancións que desexen a unha lista de reprodución compartida e votar polas súas favoritas. Deste xeito as cancións reprodúcense segundo a orde de chegada e segundo o seu número de votos. Polo tanto a idea é crear unha gramola virtual na que os usuarios non teñen que recorrer a ningún aparello, con calquera dispositivo con acceso a Interet deberían de ser capaces de conectarse a gramola e engadir cancións. Co propósito de facilitar o seu uso e desta maneira incrementar o número de usuarios crearemos a plataforma do xeito mais intuitivo posible para estes. Deste mesmo modo evitaremos interromper o uso normal do Spotify, é dicir, facendo que o usuario poida usar o seu cliente de \gls{Spotify} coma sempre e facendo que a aplicación engada as cancións a cola de reprodución tan so nos momentos necesarios. En canto a parte de reprodución usaremos o propio cliente de \gls{Spotify} mediante a súa propia \gls{API} deste xeito xestionaremos a música que vai soar, polo tanto poderá ser reproducida en calquera dispositivo que inclúa esta plataforma.
 
-\section{Estado da arte}
-\label{Estado da arte}
-Existen diferentes tipos de gramolas físicas, similares as antigas pero cun repertorio musical moi amplo e dotadas das maiores novidades. En canto a gramolas sen aparellos físicos controladas polos clientes dende os seus dispositivos, existe un mercado pequeno.
+Na parte técnica o obxectivo é crear un \gls{backend} en \Gls{django} Rest Framework onde xestionaremos as solicitudes a \gls{API} de \gls{Spotify}, e as propias peticións do noso \gls{frontend} en \Gls{ionic} que utiliza \gls{Angular} coma \gls{framework}, en canto a base de datos utilizaremos SQLite.
 
-\subsection*{TouchTunes}
-Expandida por Norte América e parte de Europa é a mais coñecida, dispón dun gran catálogo, sistema de adaptación da música ao local e diferentes ferramentas para o entretemento dos clientes. Ten un sistema de créditos que se poden consumir nos diferentes establecementos nos que está implantada a plataforma.
-\href{https://www.touchtunes.com}{Páxina oficial TouchTunes}
-
-\subsection*{AMI}
-Como directa competidora de TouchTunes, AMI entertainment comezou creando pianos nos que introducindo unha moeda podíase elixir algunha das cancións, posteriormente adicaronse a facer gramolas físicas e nos nosos días seguen coa dixitalización destas. Tamén funciona cun sistema de créditos pra facer soar a música que mais che gusta.
-\href{https://amientertainment.com}{Páxina oficial de AMI entertainment}
-
-\subsection*{Outloud}
-A diferenza das anteriores, esta aplicación está mais pensada pra uso particular, pódese descargar en dispositivos Android ou iOS e a través da rede local os usuarios poden xestionar a lista de reprodución.
-\href{https://outloud.dj/}{Páxina oficial Outloud}
-
-\subsection*{Raveberry}
-Este proxecto similar a Outloud está pensado pra ser usado dende unha RaspberryPi, o seu punto forte é a integración de multitude de servizos de transmisión de música e permitir os seus usuarios xestionaren a cola de reprodución dun xeito democrácito.
-\href{https://github.com/raveberry/raveberry/}{Repositorio de Raveberry en Gitub}
-
-\section{Obxetivos}
-O principal obxetivo do proxecto é crear unha aplicación web para xestionar unha gramola virtual. Preténdese que a interación dos usuarios seña o mais sinxela posible, permita crear unha cola de reproducción e escoitala en calqueira dispositivo con \Gls{Spotify}, para isto desenvolverase un \gls{frontend} e un \gls{backend} en \Gls{ionic} e \Gls{django} respectivamente.
-
-% \section{Estrutura da memoria}
-% Este documento estruturase en 6 capítulos.
-% \begin{itemize}
-% 	\item Neste primeiro capítulo.
-% 	\item No capítulo 2.
-% \end{itemize}
+\section*{Estrutura da memoria}
+Este documento estruturase en 6 capítulos.
+\begin{itemize}
+	\item Neste primeiro capítulo describese a motivación, e os obxectivos do proxecto.
+	\item No capítulo 2.
+	\item No capítulo 3.
+	\item No capítulo 4.
+	\item No capítulo 5.
+	\item No capítulo 6.
+	\item No capítulo 7.
+\end{itemize}
