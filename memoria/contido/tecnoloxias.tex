@@ -1,68 +1,109 @@
 \chapter{Tecnoloxías}
 \label{chap:tecnoloxias}
 
-\lettrine{N}ESTE segundo capítulo explicase as tecnoloxías utilizadas durante o proceso de desenvolvemento.
+\lettrine{N}ESTE segundo capítulo explicase as tecnoloxías utilizadas durante o proceso de desenvolvemento, as linguaxes utilizadas no proxecto xunto coas librarías, os frameworks e utilidades externas, por último explicarase o estado da arte respecto a nosa idea.
+
+\section{Ferramentas de desenvolvemento}
+
+Para a creación deste proxecto utilizouse unha estructura de desenvolvemento sinxela baseada na maior parte no terminal xa que este é moi versátil e lixeiro, a continuación describiremos as ferramentas que foron utilizadas e comentando as súas características principais.
+
+Comezando polo sistema operativo, utilizouse \textbf{Linux} todo o código do proxecto foi desenvolvido en máquinas con \textit{Arch Linux}, unha distribución moi lixeira acompañada dunha gran cantidade de aplicacións instalables directametne co seu xestor de paquetes \textit{Pacman}, tamén é unha das primeiras en recibir actualizacións de paquetes coma o \textit{Kernel}, ademáis conta con unha enorme comunidade que permite documentarse e solventar problemas rápidamente.
+
+Para e edición do código escollimos \textbf{NeoVim} trátase un editor de texto na terminal, creado para aumentar a eficiencia ao editar calqueira tipo de texto. É un fork de \textit{VIM}, e está deseñado facilitar o seu mantemento, a súa extensibilidade e usabilidade, alenta aos seus usuarios engadir contribucións. Aínda que non se trata dun \acrfull{IDE} grazas a comunidade existen múltiples complementos que fan o seu uso moi similar a un destes, pero sendo moito mais lixeiro en canto a recursos utilizados. Foi utilizado para o desenvolvemento do código e da memoria, \href{https://github.com/Carlolius/dots/tree/master/files/nvim}{aquí} pódese atopar a configuración utilizada aínda que permanece en constante cambio.
+
+Coma sistema de control de versións utilizamos \textbf{Git} é un sistema distribuido de código aberto, deseñado para manexar todo tipo de proxectos, caracterízase principalmente pola súa velocidade, rendemento, usabilidade e flexibilidade. Facilita de gran maneira o rexitro de cambios que se fan no código o que tamén permite o desenvolvemento de código de forma colaborativa.
+
+Para o aloxamento do proxecto, facilitando así a súa compartición e a copia de seguridade utilizouse \textbf{GitHub}, que é unha plataforma de desenvolvemento colectivo que utiliza o sistema de control de versións de \textit{Git}, utilizase principalmente para o control de versións e o almaceamento de código fonte.
+
+No apartado de probas utilizamos \textbf{Firefox developer edition} para comprobar o funcionamento da aplicación. Trátase dun dos navegadores mais utilizados, é de código libre e conta con unha comunidade que desenvolve unha gran cantidade de complementos. Nesta versión en concreto ponse énfase en facilitar o traballo aos desenvolvedores, xa que conta con características coma a visualización de cuadrículas \acrshort{CSS} ou un depurador para \textit{JavaScript}. Polo tanto pensamos que é o mais axeitado para o desenvolvemento de gran parte do frontend.
+
+No seu comezo era tan só unha extensión para o navegador, pero \textbf{Postman} agora é unha completa plataforma que permite a creación o uso de \gls{API}s de maneira mais sinxela, simplificando todos os pasos na creación destas, o que permite o seu desenvolvemento dunha forma máis rápida e mellor. No proxecto a utilizamos en lugar de \href{https://httpie.io/}{HTTPie} xa que se coñecía o seu funcionamento con anterioridade.
+
+Para a realización dos mockups do frontend, utilizamos \textbf{Figma} un editor de gráficos vectoriais, tamén e unha ferramenta de xeración de prototipos baseada na web, ainda que conta con aplicacións para o escritorio.
+
+Coa idea de controlar o tempo invertido e a xestión de tarefas utilizouse \textbf{Superproductivity} que é unha ferramenta de código libre deseñada precisamente para isto, permite levar un rexistro das tarefas e os tempos invertidos para cada unha de elas, ademáis de contar con integración coas principais plataformas de desenvolvemento colectivo coma \textit{Jira} ou \textit{GitHub} o que permite a asignación de tarefas ou "tickets" de forma doada. Por desgraza non se utilizou durante todo o proxecto e tan só ao final polo que non foi posible afinar os tempos empregados en total ao máximo.
+
+\section{Frameworks e librarías}
+No desenvolvemento do proxecto utilizamos pricipalmente dous \gls{framework}s para o \gls{frontend} e o \gls{backend} e unha libraría que nos facilita as peticións a \gls{API} de \gls{Spotify}, a continuación os describimos.
+
+Para o desenvolvemento do \gls{frontend} empregamos \textbf{Ionic} é \gls{framework} de código aberto que engloba un conxunto de ferramentas para o desenvolvemento de \acrfull{PWA}\footnote{Aplicacións, web progresivas}, enfócase na experiencia do usuario e no interface, proporcionando múltiples controles para xestionar as interacións. Unha das súas características mais chamativas é que permite co mesmo código a creación de aplicacións web, e aplicacións para os sistemas mais utilizados hoxe en día, \textit{iOS} e \textit{Android}. Escollimos esta plataforma debido a súa integración e a facilidade para desenvolver aplicacións web.
+
+\textit{Ionic} permite a integración con \textit{React}, \textit{Vue} e \textit{Angular} decantamonos por este último. \textbf{Angular} é un \gls{framework} baseado en compoñentes para a xeración de páxinas web escalables, está desenvolvido en \textit{TypeScript} e \textit{\acrshort{HTML}}, utiliza unha ampla gama de librarías que integran características coma as redireccións ou manexo de formularios. Decantámonos por este framework xa que é o que mais tempo leva funcionando en \textit{Ionic} e contén características coma os observables que facilitan a xestión das peticións ao backend.
+
+Na parte do \gls{backend} eliximos \textbf{\gls{django}}, trátase dun \gls{framework} de código aberto escrito en \textit{Python}. Na súa orixe foi creado para xestionar un xornal de noticias, facilita a creación de sitios webs complexos, pon énfase na reutilización da conectividade e a extensibilidade dos compoñentes e no desenvolvemento rápido. No noso caso utilizamos \textit{Django Rest Framework}, que contén características mais específicas para a creación de \gls{API}s RESTful o que permite a transferencia de información entre as interfaces e as bases de datos, precisamente é o axeitado para o noso \gls{backend}.
+
+Por último, referenete as liberías utilizamos \href{https://github.com/plamere/spotipy/}{\textbf{Spotipy}} é unha libraría de Python que permite a execución das consultas na \Gls{API} de \Gls{Spotify}. Ademáis tamén inclúe a xestión de \textit{tokens} para gardar as credenciais de acceso dos usuarios, polo tanto dunha forma doada podemos interactuar coa plataforma de música. Tivemos en conta outras librerías coma \href{https://github.com/felix-hilden/tekore}{Tekore} pero a descartamos por non contar con tanta documentación e non satisfacer as necesidades do mesmo xeito.
+
+\section{Linguaxes}
+Sendo este un proxecto que utiliza un backend e un frontend con varios frameworks foi necesaria a utilización de varias linguaxes de programación.
+
+Na parte do frontend para a visualización da aplicación utilizamos \textbf{\acrfull{HTML}} que é unha linguaxe de marcado, trátase dun estándar para documentos que se dexesen ver nun navegador, utilízase na maioría das páxinas webs xa que define a estrutura básica destas. En conxunto con outras tecnoloxías coma \acrfull{CSS} permite cambiar a apariencia ou con JavaScript podemos cambiar a súa funcionalidadee crear páxinas web dinámicas.
+
+Para editar o aspecto das páxinas web utilizamos un procesador de \acrshort{CSS} chamado \textbf{Sass}. É unha linguaxe de \textit{scripting} que permitenos xerar de forma automática follas de estilo, engadindo características que non contén \acrshort{CSS} e que son propias de linguaxes de programación coma poden ser as variables, funcións, selectores anidados, herencia\dots~Isto axúdanos a manter unha organización modular dos estilos, ademáis de que reduce o tempo de creación e mantemento do CSS.
+
+Coma explicábamos con anterioridade, \textbf{JavaScript} serve para engadir melloras no interface e dinamizar páxinas web. É unha linguaxe de programación dinámica de scripting, orientada a obxectos, permite engadir contido dinámico e interactivo as páxinas web. Normalmente executase no propio navegador e pode ser inxerido en calqueira parte do código \acrshort{HTML}. Aínda que é amplamante utilizado na web non é exclusivo, utilízase tamén no desenvolvemento de xogos ou por exemplo \textit{widgets}.
+
+Debido a que \textit{JavaScript} non é capaz de detectar erros, utilizamos \textbf{TypeScript} que é un superconxundo de \textit{JavaScript} deseñado para aplicacións extensas que a través dun compilador traducense a \textit{JavaScript}, engade tipos estáticos e obxectos baseados en clases, principalmente é usado para o desenvolvemento de aplicacións do lado do cliente.
+
+Na parte do backend utilizamos tan só \textbf{Python} xa que Django está escrito nesta linguaxe e todas as funcións que realizamos tamén. Trátase dunha linguaxe de programación interpretado, que fai fincapé na lexibilidade do código e utiliza a indentación para isto, do mesmo xeito tamén aposta pola modularidade e a reutilización do código, conta con un amplo repositorio de paquetes que extenden a súa funcionalidade de gran maneira. É unha linguaxe de alto nivel e multiparadigma xa que acepta tanto programación orientada a obxectos, imperativa e funcional. Tamén é un das linguaxes maior valuadas polos desenvolvedores.
+
+Para o menexo da base de datos \textit{Django} utiliza \textbf{SQL} que é unha linguaxe cun dominio específico, é usado para a administración, recuperación de bases de datos relacionais, particularmente útil usando modelos de datos. Unha das súas principais características é que usa álxebra relacional para efectuar as consultas, co fin de recuperar de forma sinxela información das bases de datos e para realizar cambios nela.
+
+Por último, para a realización da memoria utilizamos \textbf{\LaTeX} é un sistema de composición de textos de alta calidade. En xeral é usado para crear artigos e documentos técnicos e científicos aínda que pode utilizarse para todo tipo de textos. Segue a filosofía de separar a presentación e o contido, deste xeito os autores poden enfocarse no contido sen atender de forma simultanea a parte visual. Cando se prepara un documento o escritor especifica unha estructura lóxica utilizando conceptos simples coma capítulo, sección ou táboa, e \LaTeX~encargase do formato, de todos modos permite a edición do estilo aínda que sexa dunha forma separada.
+
+\section{Sistema de xestión de base de datos}
+Xa sabemos que \textit{Django} utiliza \textit{SQL} para o manexo das bases de datos, pero é necesaria una implementación dun sistema xestor, no noso caso \textbf{SQLite}. É unha libraría escrita en \textit{C} que implementa un motor de bases de datos SQL, lixeiro, rápido, autocontido e cunha implementación completa para SQL. É ideal para aplicacións que requiren unha instalación pequena e nas que a maioría das peticións son de tan só lectura.  No noso proxecto o usamos para almacenar tanto os usuarios, as sesións e as cancións.
+
+Debido a que \textit{SQLite} está deseñado para bases de datos lixeiras non ten un gran soporte de concurrencia. O que quere dicir que non sempre vai ser capaz de xestionar os interbloqueos entre diferentes fíos de proceso, polo tanto é posible que teñamos erros de bloqueo da base de datos e non sexa posible acceder os datos requeridos en canto o número de usuarios da plataforma sexa moi grande. Por sorte Django permite cambiar o xestor de bases de datos e isto poderíase facer se comezásemos a sufrir estes problemas debido a alta demanda de usuarios e poderíamos implementar outro motor coma podería ser \textit{mySQL} ou \textit{MariaDB} xa que estes manexan de mellor xeito os bloqueos.
+
+\section{APIs}
+A base deste proxecto é reproducir música e para isto necesitábamos obter a música dende algún lugar. Nos primeiros momentos ponderamos o uso de varias plataformas de música conxuntamente coma poderían ser \textit{YouTube}, \textit{Deezer} ou \textit{Apple Music} pero finalmente decantámonos por reproducir a música directamente na plataforma e facer modificacións na súa cola de reprodución o que facilitaría o funcionamento para os usuarios, para isto teríamos que escoller tan só unha. Escollemos \textit{Spotify} xa que conta con una enorme biblioteca musical e tamén é una plataforma que está moi afianzada, moitos locales tan só utilizan este servizo para toda a música que reproducen. Outra baza ao seu favor é a súa completa \gls{API} que permítenos xestionar case todas as funcionalidades que poderíamos utilizar nun dos seus clientes, coma son a procura ou a xestión de listas de reprodución aínda que notamos en falta algúnha funcionalidade coma é a consulta da cola de reprodución, xa que esta \gls{API} tan só permite engadir cancións a esta e ningunha outra acción o que podería ternos facilitado o traballo. Por último tamén nos axudou a escoller esta plataforma a súa ampla documentación específica para a \gls{API} que é moi detallada e conta con exemplos e incluso un cliente para facer probas.
+
+Aínda que poderíase utilizar a \textbf{API de Spotify} directamente, nos utilizamos unha librería de \textit{Python} chamada \textit{Spotipy}, xa que implementa todas as funcionalidades da \gls{API} e ademais facilita a obtención e gardado dos \textit{tokens} dos usuarios, contando tamén con unha documentación extensa explicando cada unha das súas funcións.
 
 \section{Estado da arte}
 \label{Estado da arte}
-Existen diferentes tipos de gramolas físicas, similares as antigas pero cun repertorio musical moi amplo e dotadas das maiores novidades. En canto a gramolas sen aparellos físicos controladas polos clientes dende os seus dispositivos, existe un mercado pequeno.
+Na actualidade existen diferentes tipos de gramolas, en xeral todas son dixitais e obteñen a información a través de Internet. Hai compañías que ofertan o servizo de obter un aparello físico para dispoñer nun local, e que alí os clientes poidan dun xeito similar a antigamente facer a súa elección musical. Do mesmo xeito existen outras solucións que están baseadas en aplicacións, dun xeito similar ao noso proxecto, os clientes poden conectarse a estación do lugar onde están e alí engadir cancións para a súa reprodución. Normalmente estas plataformas contan co seu propio reproductor de música e o seu própio catálogo, xeralmente bastante extenso pero non tanto coma calqueira servizo de música xa que contan coas cancións mais actuais e os clásicos. Non existe un mercado moi amplo aínda que destacan algúnhas aplicacións que se están comezando a implantar tanto nos Estados Unidos coma en Europa.
 
-\subsection*{TouchTunes}
-Expandida por Norte América e parte de Europa é a mais coñecida, dispón dun gran catálogo, sistema de adaptación da música ao local e diferentes ferramentas para o entretemento dos clientes. Ten un sistema de créditos que se poden consumir nos diferentes establecementos nos que está implantada a plataforma.
+Comezando polas gramolas físicas temos a compañía \textbf{TouchTunes} está expandida por Norte América e parte de Europa dispoñible en 75.000 bares é a mais coñecida con diferenza, dispón dun gran catálogo de música, sistema de adaptación da música ao local e diferentes ferramentas para o entretemento dos clientes. Dispoñen de 3 tipos de gramolas, duas de parede, unha que tan só sirve de reproductor \ref{fig:touchtunes_virtuo} e outra que contén mais funcionalidades coma o karaoke, unha última adaptable para axeitala o estilo do local coma por exemplo nun barril \ref{fig:touchtunes_fusion}. Todas funcionan con unha gran pantalla táctil, para facer a selección ainda que conta con unha aplicación móbil para este mesmo fin. Utiliza un sistema de créditos que se poden consumir nos diferentes establecementos nos que está implantada a plataforma, polo tanto o seu uso non é gratuíto.
 \href{https://www.touchtunes.com}{Páxina oficial TouchTunes}
 
-\subsection*{AMI}
-Como directa competidora de TouchTunes, AMI entertainment comezou creando pianos nos que introducindo unha moeda podíase elixir algunha das cancións, posteriormente adicaronse a facer gramolas físicas e nos nosos días seguen coa dixitalización destas. Tamén funciona cun sistema de créditos pra facer soar a música que mais che gusta.
+\begin{figure}[hp]
+  \caption{Gramolas de TouchTunes}
+  \centering
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/touchtunes_virtuo.png}
+    \caption{TouchTunes Virtuo}
+	\label{fig:touchtunes_virtuo}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/touchtunes_fusion.png}
+    \caption{TouchTunes Fusion}
+	\label{fig:touchtunes_fusion}
+  \end{subfigure}
+\end{figure}
+
+Como directa competidora de TouchTunes atopamos \textbf{AMI Entertainment}, comezou creando pianos nos que introducindo unha moeda podíase elixir algunha das cancións, posteriormente adicaronse a facer gramolas físicas e nos nosos días seguen coa dixitalización destas. Conta con uns 30.000 aparellos repartidos por todo o mundo. Ao igual que TouchTunes, tamén con 3 tipos de gramolas diferentes, moi similares as da súa máxima competidora pero inclúen unha de pé \ref{fig:ami_infinity}, similar a unha das gramolas antigas. Tamén conta con aplicacións móbil para engadir cancións e tamén funciona cun sistema de créditos pra facer soar a música que mais che gusta.
 \href{https://amientertainment.com}{Páxina oficial de AMI entertainment}
 
-\subsection*{Outloud}
-A diferenza das anteriores, esta aplicación está mais pensada pra uso particular, pódese descargar en dispositivos Android ou iOS e a través da rede local os usuarios poden xestionar a lista de reprodución.
+\begin{figure}[hp]
+  \caption{Gramola de Ami Entertainment}
+  \centering
+  \includegraphics[width=0.4\textwidth]{imaxes/ngx-infinity-ami.jpg}
+  \label{fig:ami_infinity}
+\end{figure}
+
+No apartado de aplicacións móbil que teñan unha funcionalidade similar a unha gramola atopamos \textbf{Jukestar} consiste en dúas aplicacións unha anfitrión e outra para os invitados, o anfitrión ten que conectar a súa conta de Spotify na aplicación e xerar unha festa despis compartir a festa cos seus invitados, estes poden incluír cancións ou votar polas da súa preferencia, todas estas características funcionan cun sistema de créditos de pago. É unha idea similar a da nosa aplicación, xa que utiliza Spotify para a reprodución de música pero necesita un cliente para o anfitrión e outro para os invitados o que complica o seu uso.
+\href{https://jukestar.mobi/}{Jukestar}
+
+Outra aplicación é \textbf{Outloud} permite a reprodución de música dende Spotify ou SoundCloud, a idea e a mesma, créase unha playlist que faría de sesión e os usuarios poden conectarse xa sexa dende un enlace de invitación ou buscando por lugares cercanos, despois poden engadir cancións e votar as que son mais do seu agrado, tamén permite o acceso dende a web sen necesidade de instalar a aplicación. Esta aplicación está mais pensada para o uso particular, pódese descargar en dispositivos Android ou iOS. Trátase dunha aplicación sinxela ademais de gratuíta
 \href{https://outloud.dj/}{Páxina oficial Outloud}
 
-\subsection*{Raveberry}
+Por outra banda, nos servizos baseados na web que non necesitan aplicacións está \textbf{Jukebox Today} tratase dun servizo web que permite crear sesións e compartila cos usuarios. Permite que a música se reproduzca de forma sincronizada en varios dispositivos ou controlar a reprodución dende calqueira dos que estéa activo, incluso conta con un chat. Obtén a música dende YouTube polo tanto o seu catálogo é tan amplo como o da plataforma. Aínda que podería funcionar coma unha gramola non é a súa idea principal, xa que todos os usuarios poden facer modificacións na lista de reprodución, trátase dun servizo gratuíto.
+\href{https://jukebox.today/}{Jukebox Today}
+
+Con funcionamento completamente diferente \textbf{Raveberry} é un proxecto no que se crea un servidor de gramola para ser instalado nunha RaspberryPi, dende ahí vaise reproducir a música e xestionar a cola de reprodución. Está baseado en Python e conta con unha gran cantidade de características, permite engadir cancións dende diferentes servizos coma Spotify, Youtube ou SoundCloud.
+
+
 Este proxecto similar a Outloud está pensado pra ser usado dende unha RaspberryPi, o seu punto forte é a integración de multitude de servizos de transmisión de música e permitir os seus usuarios xestionaren a cola de reprodución dun xeito democrácito.
 \href{https://github.com/raveberry/raveberry/}{Repositorio de Raveberry en Gitub}
-
-\section{Linguaxes}
-\subsection*{HTML}
-\acrfull{HTML} é unha linguaxe de marcado estándar, utilízase na maioría das páxinas webs xa que serve para crear a estrutura destas, en conxunto con JavaScript e \acrfull{CSS} permite cambiar a aparencia e a funcionalidade.
-\subsection*{JavaScript}
-JavaScript é unha linguaxe de programación interpretado, permite engadir contido dinámico e interactivo as páxinas web, pode ser inserido en calquera parte do código dunha páxina web.
-\subsection*{LaTeX}
-LaTeX é un sistema de composición de textos de alta calidade. En xeral é usado para crear artigos e documentos técnicos e científicos aínda que pode utilizarse para todo tipo de textos.
-\subsection*{Python}
-Trátase dunha linguaxe de programación interpretado, que fai fincapé na lexibilidade do código. É multiparadigma xa que acepta tanto programación orientada a obxectos, imperativa e funcional. 
-\subsection*{Sass}
-Linguaxe de folla de estilos en cascada, é unha linguaxe de script que é traducido a \acrfull{CSS} permite xerar de forma automática follas de estilo engadindo características propias de linguaxes de programación coma variables, funcións, etc.
-\subsection*{SQL}
-É unha linguaxe cun dominio específico, é usado para o deseño e mantemento de bases de datos relacionais, particularmente útil usando modelos de datos.
-\subsection*{TypeScript}
-TypeScript é unha liguaxe de programación libre e open source, trátase dun superconxunto de JavaScript, engade a estes tipos estáticos e obxectos baseados en clases, principalmente é usado para o desenvolvemento de aplicacións do lado do cliente.
-
-\section{Frameworks e librarías}
-\subsection*{Angular}
-Angular é un \gls{framework} para aplicacións web, está desenvolvido en TypeScript, utilízase pra crear aplicacións web dunha soa páxina, co obxectivo do aumento de aplicacións baseadas no navegador con capacidade Modelo Vista Controlador.
-\subsection*{Django}
-Django é outro \gls{framework}, baseado en Python, facilita a creación de sitios webs complexos, pon énfase na reutilización da conectividade e a extensibilidade dos compoñentes e no desenvolvemento rápido.
-\subsection*{Django REST framework}
-Baseado en Django, permite crear \Gls{API}s RESTful, o que permite a transferencia de información entre as interfaces e as bases de datos dunha maneira sinxela. Este framework o utilizamos para crear toda a lóxica do backend.
-\subsection*{Ionic}
-Ionic é framework que engloba un conxunto de ferramentas para o desenvolvemento de aplicacións webs progresivas que tamén permite exportar estas para a creación de aplicacións móbiles tanto para iOS coma Android. No proxecto é utilizado na parte do frontend.
-\subsection*{Spotipy}
-\href{https://github.com/plamere/spotipy/}{Spotipy} é unha libraría de Python que permite o acceso completo a \Gls{API} de \Gls{Spotify}, deste xeito é moito mais doado o traballo con ferramentas que utilizan esta plataforma musical.
-
-\section{Ferramentas de desenvolvemento}
-\subsection*{NeoVim}
-NeoVim é un editor de texto na terminal, é un fork de Vim e trata de mellorar este de xeito colaborativo, facendo mais doado o mantemento e maximizando a extensibilidade. Foi utilizado para o desenvolvemento do código e da memoria.
-\subsection*{Git}
-Git é un sistema de control de versións distribuido de código aberto, deseñado para manexar todo tipo de proxectos, caracterízase principalmente pola súa velocidade, rendemento, usabilidade e flexibilidade.
-\subsection*{Postman}
-É un programa que permite o deseño, o simulacro, a depuración e a realización de probas, monitorización e publicacións de APIs dende un único sitio. Neste proxecto usouse para a realización das probas da API do servizo.
-\subsection*{Figma}
-Figma é un editor vectorial baseado na web, serve para facer prototipos e no noso caso para a realización dos mockups.
-\section{Sistema de xestión de base de datos}
-\subsection*{SQLite}
-SQLite é un sistema de xestión de base de datos de código libre, é autocontido, non necesita servidor e transaccional. No noso proxecto o usamos para almacenar tanto os usuarios, as sesións e as cancións.
-\section{APIs}
-\subsection*{Spotify API}
-Para facilitar o desenvolvemento de aplicacións que se nutran das capacidades de Spotify, existe unha API que permítenos xestionar a maioría as funcionalidades da plataforma como poden ser a procura, a reprodución, a xestión de listas e demais, nos a utilizamos para estas na aplicación.
