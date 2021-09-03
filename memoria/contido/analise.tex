@@ -1,63 +1,41 @@
 \chapter{Análise}
 \label{chap:analise}
 
-\lettrine{N}ESTE terceiro capítulo se fará unha análise da viabilidade do proxecto e, expoñerase a metodoloxía a utilizar.
+\lettrine{N}ESTE segundo capítulo se fará unha análise da viabilidade do proxecto, deste xeito poderemos determinar se é posible que chegue a finalizarse con éxito. Posteriormente expoñeremos a metodoloxía de traballo utilizada para o desenvolvemento do proxecto.\bigbreak
 
-\section{Metodoloxía}
-A forma de traballo consistirá no estudo dos proxectos relacionados, para continuar coa análise, deseño e implementación e probas do proxecto. Utilizarase a metodoloxía Scrum para o desenvolvemento.
+Para determinar se o proxecto poderá acadar o seu obxetivo existen varios aspectos a analizar, o conxunto destes é a viabilidade do proxecto. En xeral para os proxectos software as áreas nas que recopilar información para determinar a viabilidade son: técnica, económica e de mercado, deste xeito pódese saber de meneira anticipada cal vai ser o custo aproximado do proxeto, o tempo que vai levar rematalo e cal é o impacto no mercado esperado, a continuación descríbense estes diferentes dominios.
 
-\section{Scrum}
-~\label{Scrum}
-Scrum~\gls{Scrum} é un proceso de desenvolvemento áxil. Permite un desenvolvemento rápido e por iteracións, permítenos inspeccionar o software creado e cambiar as preferencias de traballo no lugar dunha planificación e execución completa dende o principio. É un método no que se aplican de maneira regular un conxunto de boas prácticas para traballar de forma colaborativa e obter o mellor resultado posible. Os equipos organizasen entre eles para discutir as funcionalidades e a prioridade destas, deste xeito despois de cada iteración se pode facer unha demostración do produto nese momento.
+\section{Viabilidade económica}
+No análise económico teñense en conta tres custos principais, os custos en recursos humanos, en software e en hardware.
 
-\subsection{Roles}
-Os roles da metodoloxía son os seguintes:
-\begin{itemize}
-\item[--] Product Owner: é o encargado de fixar as metas do sprint e a priorización do Product Backlog. O seu obxectivo é que o produto maximice o seu valor.
-\item[--] Scrum Master: a súa responsabilidade é promover as prácticas Scrum, media entre o equipo de desenvolvemento e o Product Owner. Dirixe as reunións diarias e as revisións dos Sprints.
-\item[--] Equipo de desenvolvemento: organizanse para desenvolver o proxecto seguindo o Sprint Backlog.
-\end{itemize}
+Para os \textbf{recursos humanos}, téñense en conta a cantidade de persoas necesarias e o custo por hora de cada unha destas. Neste caso é unha soa persoa a encargada de facer o deseño, implementación e probas, tampouco é necesario ter en conta o custo por hora polo tanto non existe un custo real monetario en recursos humanos para a realización do proxeto.
 
-\subsection{Reunións}
-\begin{itemize}
-\item[--] Daily Scrum: tratase dunha reunión diaria duns 15 minutos de duración que fai o equipo de desenvolvemento, é dirixida polo Scrum Master e nela cada participante responde a 3 sinxelas preguntas. `Qué fixeches onte?´, `Qué vas facer hoxe?´, `Qué problemas atopaches?´, deste xeito pódese ver o estado actual do proxecto.
-~\label{scrum:daily}
-\item[--] Sprint Planning: nesta reunión se seleccionan as tarefas a realizar durante o Sprint, se fai unha estimación da súa duración e se obtén o Sprint Backlog, participan tanto o equipo de desenvolvemento coma o Scrum Master.
-~\label{scrum:planning}
-\item[--] Sprint Review: ao final de cada Sprint realizase esta reunión que ten como obxectivo presentar os traballos realizados neste, poden realizarse adaptacións do Product Backlog.
-~\label{scrum:review}
-\item[--] Sprint Retrospective: tamén se realiza ao final de cada sprint e ten como finalidade analizar o traballo realizado, as funcionalidades e as melloras.
-~\label{scrum:retrospective}
-\end{itemize}
-Unha vez rematadas tanto o Sprint Review e o Sprint Retrospective iniciase a planificación do seguinte Sprint Planning de forma cíclica.
+Os \textbf{recursos software} teñen en conta os custos do software utilizado para o desenvolvemento do proxecto. Neste proxecto utilizase software libre e gratuíto na maior medida posible, partindo do sistema operativo ata os frameworks e librarías, pasando polas ferramentas de desenvolvemento coma o editor de texto ou o navegador coma veremos mais adiante \ref{sec:ferramentas_desenvolvemento}, todo isto fai que os custos software neste proxecto sexan nulos, a excepción da necesidade de unha subscripción ao servizo \textit{premium} de Spotify. Na táboa~\ref{tab:spotify_plans} podemos observar os diferentes prezos do servizo, neste caso o plan elexido é o familiar polo tanto o custo mensual ascende a 2,67€ mensuais e aproximadamente de 14€ durante a realización do proxecto.
 
-\subsection{Artefactos Scrum}
-\begin{itemize}
-\item[--] Product Backlog: é a lista que recolle todos os requisitos do produto, ordenado de maior a menor prioridade. Trátase dunha lista dinámica xa que vai cambiando cos diferentes Sprints.
-~\label{scrum:productbacklog}
-\item[--] Sprint Backlog: agrupa en tarefas os elementos do Product Backlog seleccionados para o Sprint actual.
-~\label{scrum:sprintbacklog}
-\end{itemize}
+\begin{table}[tbp]
+	\label{tab:spotify_plans}
+	\caption{Custos dos plans de Spotify}
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		{\textbf{Nome}}             & Individual & Duo    & Familiar & Estudantes \\ \hline
+		{\textbf{Número de contas}} & 1          & 2      & 6        & 1          \\ \hline
+		{\textbf{Prezo mensual}}    & 9,99€      & 12,99€ & 15,99€   & 4,99€      \\ \hline
+		{\textbf{Prezo por conta}}  & 9,99€      & 6,50€  & 2,67€    & 4,99€      \\ \hline
+	\end{tabular}
+\end{table}
 
-\subsection{Scrum no proxecto}
-Neste proxecto, debido as diferencias coa realidade se fixeron modificacións da metodoloxía. Coma non hai un equipo de desenvolvemento, os roles de Scrum Master e o equipo de desenvolvemento foron manexados polo alumno e o rol de Product Owner polo director.\\
-Cada Sprint Planning tivo unha duración de aproximadamente dúas semanas, o Daily Scrum foi substituído por un repaso das tarefas realizadas e un diario de traballo e o Sprint Planning realizado de forma individual.\\
-Para a creación do Product Backlog se realizaron reunións ao principio do desenvolvemento para a concreción dos aspectos fundamentais da aplicación, foi cambiando co paso do tempo segundo as versións funcionais do produto.\\
-Os Sprint Backlog foron seleccionados polo alumno segundo as prioridades establecidas inicialmente, ademais de seguir unha orde lóxica de desenvolvemento de funcionalidades, dende as mais básicas ata as específicas.\\
-Tanto o Sprint Review coma o Sprint Rertospective reducidas debido a complexidade.
+En canto aos \textbf{recursos hardware}, non foi necesario adquirir ningún tipo de equipo, xa que para o desenvolvemento o único necesario é un ordenador con conexión a Internet. Sopesouse a idea de necesitar un servidor na nube para despregar a aplicación o completo, pero debido ao pequeno tamaño da aplicación poderíase recurrir a un servizo gratuíto se fose necesario.
 
-\section{Viabilidade}
-Nesta parte pasaremos a expoñer a análise de viabilidade do proxecto, algo esencial antes de comezar calquera tipo de proxecto xa que determinaremos se poderemos acadar a súa finalización satisfactoriamente.
-\subsection{Viabilidade económica}
-No desenvolvemento da maioría dos proxectos software existen tres custos principais, os custos en recursos humanos, en software e en hardware. \\
-Os recursos humanos neste caso ao ser unha soa persoa a encargada de facer o deseño, implementación e probas o custo é baixo, noutros proxectos onde hai mais persoas implicadas habería que ter en conta o custo por hora de cada unha das persoas involucradas.\\
-Con respecto aos recursos software neste proxecto utilizase software libre na maior medida posible, partindo do sistema operativo ata os frameworks e librarías, pasando polas ferramentas de desenvolvemento coma o editor de texto ou o navegador, todo isto fai que os custos software neste proxecto sexan nulos.\\
-En canto aos recursos hardware, para este proxecto non foi necesario adquirir nada, xa que o único necesario é un ordenador con conexión a Internet, podería ser necesario un servidor na nube para despregar a aplicación o completo, pero debido ao pequeno tamaño da aplicación poderíase recurrir a un servizo gratuíto se fose necesario.\\
-Polo tanto respecto a viabilidade económica podemos dicir que este proxecto é completamente factible xa que os custos vense moi reducidos polas características deste.
-\subsection{Viabilidade técnica}
-Como xa vimos, a maioría de software é altamente coñecido no mundo do desenvolvemento software e dispón de moita documentación, polo tanto a realización do proxecto non presenta unha dificultade técnica alta. Podemos afirmar entón que o proxecto tamén é viable tecnicamente.
-\subsection{Viabilidade do mercado}
-Hoxe en día podemos ver diferentes tipos de software comercial que reproduce gramolas virtuais para establecementos, estes atópanse algo implantados en Norte América e comezan a despregarse algo en Europa, en canto a software libre non hai opcións comerciais, tan só algúns proxectos para implementar de forma local, incluso Spotify ten unha función de crear unha sesión, pero que non é tan doado de utilizar. Non foron atopadas aplicacións similares de código aberto. Este software pode atoparse no apartado estado da arte~\ref{Estado da arte}. Por este motivo e os anteriores comentados podemos afirmar que este proxecto ten cabida no mercado, entón podemos consideralo coma viable.
+Polo tanto dedúcese que respecto a viabilidade económica este proxecto é completamente factible xa que os custos vense moi reducidos incluso os necesarios son asumibles xa que o servizo \textit{premium} de Spotify é algo que ten mais utilidades que o desenvolvemento.
+
+\section{Viabilidade técnica}
+A viabilidade técnica é a referente a o funcionamento do sistema, condiciona se as características tecnolóxicas permiten que o proxecto acade un fin exitoso. Neste caso o software escollido para o desenvolvemento ainda que sendo relativamente novo é altamente coñecido e empregado na creación de proxectos similares, ademáis se dispón de moita documentación e moi completa, incluso tutoriais específicos, o que facilita a realización do proxecto polo tanto non presenta unha dificultade técnica alta. Xuntando estes motivos, afirmase que o proxecto é viable tecnicamente.
+
+\section{Viabilidade do mercado}
+No apartado do estado da arte \ref{sec:estado_da_arte} verase que existen diferentes compañías que ofrecen software e hardware comercial que comercializan gramolas virtuais físicas para establecementos onde se pode engadir música directamente dende un aparello, estas compañías atópanse algo implantadas en Norte América e comezan a popularizarse algo en Europa. En canto a software libre non existen opcións comerciais que cumpran este fin dun xeito similar, e o que existe é tedioso de instalar e mais complexo para o administrador. Tan só hai algúns proxectos ou aplicacións móbil que de forma xeral crean unha gramola virtual de maneira local para que os usuarios poidan engadir cancións, incluso Spotify ten unha función de crear unha sesión para compartir con catro usuarios mais, pero que non é tan doado de utilizar en espazos mais grandes, xa que están plantexados para utilizar en pequenas reunións ou lugares con poucos usuarios. Non se atopou ningún proxecto que permita crear unha gramola virtual sen manter outra aplicación funcionando e seña distribuído de forma gratuíta. Por estes motivos podemos afirmar que este proxecto ten cabida no mercado, entón podemos consideralo coma viable.\bigbreak
+
+Poñendo en conxunto os análises de viabilidade pódese resumir que o proxecto ten cabida no mercado, é viable economicamente e técnicamente. Polo tanto dedúcese que o proxecto é viable e é probable que teña éxito no mercado.
 
 \section{Análise}
 Para a creación deste proxecto se van desenvolver un frontend baseado en Ionic no que se amosarán todos os datos relacionados coas cancións que están na cola, o número de votos e a súa orde de reprodución. Tamén se vai realizar un backend en Django Rest Framework que nos permitirá a conexión do frontend coa API de Spotify e así levar a lóxica do proxecto a cabo. As funcións destacadas son as seguintes:
@@ -103,3 +81,46 @@ No proxecto existen tres tipos de usuarios, usuarios sen rexistrar, usuarios rex
 	\item \textbf{Usuario rexistrado:} Os usuarios rexistrados poden engadir ver a cola de reprodución, buscar e engadir cancións e votar positiva ou negativamente as cancións.
 	\item \textbf{Usuario administrador:} O usuario administrador pode facer todo o que os usuarios rexistrados e ademais pode poboar a cola de reprodución con listas de reprodución de Spotify, tamén é o usuario que engade o token a sesión.
 \end{itemize}
+
+\section{Metodoloxía}
+A forma de traballo consistirá no estudo dos proxectos relacionados, para continuar coa análise, deseño e implementación e probas do proxecto. Utilizarase a metodoloxía Scrum para o desenvolvemento.
+
+\section{Scrum}
+~\label{Scrum}
+Scrum~\gls{Scrum} é un proceso de desenvolvemento áxil. Permite un desenvolvemento rápido e por iteracións, permítenos inspeccionar o software creado e cambiar as preferencias de traballo no lugar dunha planificación e execución completa dende o principio. É un método no que se aplican de maneira regular un conxunto de boas prácticas para traballar de forma colaborativa e obter o mellor resultado posible. Os equipos organizasen entre eles para discutir as funcionalidades e a prioridade destas, deste xeito despois de cada iteración se pode facer unha demostración do produto nese momento.
+
+\subsection{Roles}
+Os roles da metodoloxía son os seguintes:
+\begin{itemize}
+\item[--] Product Owner: é o encargado de fixar as metas do sprint e a priorización do Product Backlog. O seu obxectivo é que o produto maximice o seu valor.
+\item[--] Scrum Master: a súa responsabilidade é promover as prácticas Scrum, media entre o equipo de desenvolvemento e o Product Owner. Dirixe as reunións diarias e as revisións dos Sprints.
+\item[--] Equipo de desenvolvemento: organizanse para desenvolver o proxecto seguindo o Sprint Backlog.
+\end{itemize}
+
+\subsection{Reunións}
+\begin{itemize}
+\item[--] Daily Scrum: tratase dunha reunión diaria duns 15 minutos de duración que fai o equipo de desenvolvemento, é dirixida polo Scrum Master e nela cada participante responde a 3 sinxelas preguntas. `Qué fixeches onte?´, `Qué vas facer hoxe?´, `Qué problemas atopaches?´, deste xeito pódese ver o estado actual do proxecto.
+~\label{scrum:daily}
+\item[--] Sprint Planning: nesta reunión se seleccionan as tarefas a realizar durante o Sprint, se fai unha estimación da súa duración e se obtén o Sprint Backlog, participan tanto o equipo de desenvolvemento coma o Scrum Master.
+~\label{scrum:planning}
+\item[--] Sprint Review: ao final de cada Sprint realizase esta reunión que ten como obxectivo presentar os traballos realizados neste, poden realizarse adaptacións do Product Backlog.
+~\label{scrum:review}
+\item[--] Sprint Retrospective: tamén se realiza ao final de cada sprint e ten como finalidade analizar o traballo realizado, as funcionalidades e as melloras.
+~\label{scrum:retrospective}
+\end{itemize}
+Unha vez rematadas tanto o Sprint Review e o Sprint Retrospective iniciase a planificación do seguinte Sprint Planning de forma cíclica.
+
+\subsection{Artefactos Scrum}
+\begin{itemize}
+\item[--] Product Backlog: é a lista que recolle todos os requisitos do produto, ordenado de maior a menor prioridade. Trátase dunha lista dinámica xa que vai cambiando cos diferentes Sprints.
+~\label{scrum:productbacklog}
+\item[--] Sprint Backlog: agrupa en tarefas os elementos do Product Backlog seleccionados para o Sprint actual.
+~\label{scrum:sprintbacklog}
+\end{itemize}
+
+\subsection{Scrum no proxecto}
+Neste proxecto, debido as diferencias coa realidade se fixeron modificacións da metodoloxía. Coma non hai un equipo de desenvolvemento, os roles de Scrum Master e o equipo de desenvolvemento foron manexados polo alumno e o rol de Product Owner polo director.\\
+Cada Sprint Planning tivo unha duración de aproximadamente dúas semanas, o Daily Scrum foi substituído por un repaso das tarefas realizadas e un diario de traballo e o Sprint Planning realizado de forma individual.\\
+Para a creación do Product Backlog se realizaron reunións ao principio do desenvolvemento para a concreción dos aspectos fundamentais da aplicación, foi cambiando co paso do tempo segundo as versións funcionais do produto.\\
+Os Sprint Backlog foron seleccionados polo alumno segundo as prioridades establecidas inicialmente, ademais de seguir unha orde lóxica de desenvolvemento de funcionalidades, dende as mais básicas ata as específicas.\\
+Tanto o Sprint Review coma o Sprint Rertospective reducidas debido a complexidade.
