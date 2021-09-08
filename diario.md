@@ -419,3 +419,42 @@ Instruccións de instalación en servidor:
 * Crear virtualenv: python3 -m venv
 * Activar venv
 * Installar requeriments: pip3 install -r requeriments.txt
+
+**07/09/2021**  
+Orde da planificación:  
+REOrde:
+
+Inicial:
+    Aplicación en spotify developers
+    Creación do proxecto en django
+    Creación do proxecto en Ionic
+
+Backend:
+    Creación da api en Django
+    Xestión de usuarios en Django
+    Gardar no modelo de playlists as cancións
+    Conexión coa API de Spotify
+    Peticións de busqueda
+    Quitar a necesidade de ter a aplicación aberta
+
+Base de datos:
+    Creación do modelo songs e current song
+    Modelo de playlists a amosar
+    Modificación do modelo de usuario
+    Creación do modelo relacional da base de datos
+
+Frontend:
+    Servizo para comunicar Ionic coa nosa API
+    Xestión de usuarios en Ionic
+    Creación das páxinas de Rexistro e login
+    Selecionar device
+    Amosar canción que está a soar
+    Votos
+
+Conexión:
+    Xestión de usuarios usando JWT
+    Usuarios usuarios usuarios
+    Interceptor para o Token co refresh do token
+    Popover da busqueda
+    Autentificación en spotify no front
+    Peticións dende o front a nosa api
