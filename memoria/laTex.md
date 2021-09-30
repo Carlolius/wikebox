@@ -8,6 +8,8 @@
 * Xerar PDF: `latexmk -xelatex memoria_tfg.tex`
 * Rexenerar PDF cuando los ficheros cambian: `latexmk -xelatex -pvc memoria_tfg.tex`
 * Limpar ficheiros auxiliares: `latexmk -c`
+* Compilar biblografía: `bibtex memoria_tfg`
+* Compilar glosario: `makeglossaries memoria_tfg`
 
 ## Índice
 

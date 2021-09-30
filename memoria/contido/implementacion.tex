@@ -1,0 +1,302 @@
+\chapter{Implementación}
+\label{chap:implementación}
+
+\lettrine{N}{este} capítulo se explica o proceso de implementación as decisións importantes e os problemas atopados durante este.
+
+
+
+\subsection{Controller}
+O controller é a capa intermedia da arquitectura, actúa coma comunicación entre a vista e o modelo, no noso caso a maioría desta comunicación realizase no modelo, polo tanto moitas das instrucións na parte do controlador do frontend son peticións ao backend. Esta capa dividiuse en tres servizos que se describen a continuación:
+\begin{itemize}
+	\item \textbf{Api:} este servizo componse de chamadas a API creada no backend, destaca a utilización de observables para a recepción dos datos poñemos de exemplo a función \textit{queueSongs} \ref{code:queueSongs} que recibe no observable a lista de cancións que se atopan nese momento na cola para ser votadas. Tamén cabe destacar a función \textit{spotifyLoginUrl} \ref{code:spotifyLoginUrl} que abre unha nova pestana no navegador para que o usuario poida abrir a súa sesión en Spotify para posteriormente capturar en \textit{spotifyCallback} \ref{code:spotifyCallback} a url de resposta e gardar o token. En tódalas funcións envíase a request xa que permite saber cal é o usuario que está facer a petición, este é o motivo de que as funcións sexan post e non haxa ningún get.
+
+\begin{lstlisting}[language=javascript, label={code:queueSongs}]
+queueSongs(): Observable<IEsongs[]>{
+	return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/queuesongs/', {request: Request});
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, label={code:spotifyLoginUrl}]
+spotifyLoginUrl() {
+	this.httpClient.post(this.SERVER_ADDRESS + 'api/token/', {'request': Request}).subscribe((response) => {
+		window.open(response[0].url, '_self');
+	})
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, label={code:spotifyCallback}]
+	spotifyCallback() {
+		this.httpClient.post(this.SERVER_ADDRESS + 'api/callback/', {'url': window.location.href })
+	}
+\end{lstlisting}
+
+	\item \textbf{Auth:} o servizo de auth manexa a autenticación dos usuarios, usa \acrlong{JWT} para o control de acceso xa que permite a propagación de identidades e privilexios entre o provedor de información e o solicitante. Para o almacenamento dos \acrshort{JWT} utilizase \href{https://github.com/ionic-team/ionic-storage}{Ionic Storage} xa usa o mellor método para o gardado de datos en cada plataforma utilizada. A función de \textit{login} \ref{code:login} é unha mostra do uso do almacenamento do token usando o storage.
+
+\begin{lstlisting}[language=javascript, label={code:login}]
+login(username: String, password: String) {
+	this.user = username
+	return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {
+		"username": username, 
+		"password": password
+	})
+	.pipe(
+		tap(token => {
+			this.getInstance()
+			this.token = token;
+			this.storeJwtToken(this.token.access)
+			this.storeRefreshToken(this.token.refresh)
+			this.storeUser()
+			this.storeExpiration()
+			this.storage.set("token", this.token)
+			.then(
+				() => {
+					console.log('Token Stored');
+				},
+				error => console.error('Error storing item', error)
+			);
+			return token;
+		}),
+	);
+}
+\end{lstlisting}
+
+	\item \textbf{Interceptor:} para o uso de autenticación con \acrshort{JWT} é necesario engadir o token en cada unha das peticións ao backend \textit{intercept} \ref{code:intercept} é a función que se encarga de interceptar a petición, a función \textit{addToken} \ref{code:addToken} é a encargada de engadir o token a cabeceira. Para garantir a seguridade os tokens de acceso caducan cada 5 minutos polo tanto necesitamos renovalos co token de refresco como podemos observar a función \textit{handle401Error} \ref{code:handle401Error} renova o token cando se produce un erro de autenticación.
+\begin{lstlisting}[language=javascript, label={code:intercept}]
+intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+	if (this.authService.getJwtToken()) {
+		request = this.addToken(request, this.authService.getJwtToken());
+		console.log(request)
+	}
+
+	return next.handle(request).pipe(catchError(error => {
+		if (error instanceof HttpErrorResponse && error.status === 401) {
+			return this.handle401Error(request, next);
+		} else {
+			return throwError(error);
+		}
+	}));
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, label={code:addToken}]
+private addToken(request: HttpRequest<any>, token: string) {
+	return request.clone({
+		setHeaders: {
+			'Authorization': `Bearer \${token}`
+		}
+	});
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, label={code:handle401Error}]
+private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+	if (!this.isRefreshing) {
+		this.isRefreshing = true;
+		this.refreshTokenSubject.next(null);
+
+		return this.authService.refreshToken().pipe(
+			switchMap((token: any) => {
+				this.isRefreshing = false;
+				this.refreshTokenSubject.next(token.access);
+				return next.handle(this.addToken(request, token.access));
+			}));
+
+	} else {
+		return this.refreshTokenSubject.pipe(
+			filter(token => token != null),
+				take(1),
+			switchMap(access => {
+				return next.handle(this.addToken(request, access));
+			}));
+	}
+}
+\end{lstlisting}
+
+\end{itemize}
+
+\section{Backend}
+Aínda que foi deseñado coa idea de publicar noticias dun xornal, Django é un dos frameworks mais populares hoxe en día, segue o principio (DRY, Don't Repeat Yourself) \footnote{Non te repitas} polo que evita a repetición de código innecesariamente. Está escrito en Python, que axuda a súa popularidade, ademais como xa explicamos utiliza o a arquitectura \textbf{MTV} que destaca pola simpleza a hora de cambiar a forma de visualizar o contido.
+
+\subsection{Modelo}
+A capa modelo é a parte da aplicación que encapsula a lóxica de negocio cos accesos a base de datos. Nesta capa se almacea, modifica e eliminan os datos que manexa a aplicación. Na figura \ref{fig:database} pódense ver as entidades do modelo. A continuación detallase brevemente cada unha das entidades.
+\begin{itemize}
+	\item \textbf{Instance:} representa os datos das sesións, almacenase a lista de sesións que estean rexistradas na aplicación.
+	\item \textbf{LocalPlaylist:} representa a lista de cancións na cola das sesións.
+	\item \textbf{SongPlayingNow:} representa a canción que se está a reproducir nas sesións.
+	\item \textbf{CustomUser:} representa os usuarios da aplicación, é unha modificación do modelo User de Django adaptado para o proxecto
+\end{itemize}
+
+\subsection{Plantilla}
+Debido a que utilizamos Django coma backend non é necesario o uso da plantilla para amosar os datos, esta responsabilidade recae no Frontend.
+\subsection{Vista}
+Na arquitectura \acrshort{MTV} é a vista a encargada de executar a lóxica de negocio. Recibe as peticións dende o arquivo \textit{urls.py} e executa as accións necesarias, no noso caso dividimos as peticións entre as necesarias para administrar os usuarios e as relacionadas coa música, dividindo esta última de novo entre as peticións a nosa API e as da API de Spotify.
+\subsection*{User views:} debido a que utilizamos o modelo de usuario de Django modificado é este o encargado do manexo de case todas as peticións, nos tan só tivemos que engadir a obtención da sesión do usuario coma podemos ver en \ref{code:getInstance}.
+
+\begin{lstlisting}[language=python, label={code:getInstance}]
+@api_view(['POST'])
+def getInstance(request):
+    user = CustomUser.objects.filter(username=request.data['username']).values()
+    userInstance = user[0]['userInstance_id']
+    return Response(data=userInstance, status=200)
+\end{lstlisting}
+
+\subsection*{Api views:} as funcións explicadas a continuación son algunhas das mais destacables das solicitudes que se fan a xestión da nosa API, todas as peticións son de tipo POST debido a que sempre temos que saber cal é o usuario que fai a solicitude.
+\begin{itemize}
+    \item \textbf{PopTop} é a función encargada de borrar a primeira canción da lista se é a que está a soar.
+		\begin{lstlisting}[language=python, label={code:popTop}]
+def popTop(wike):
+    current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
+    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+    if current != None:
+    if current == top:
+        res = "same"
+        LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
+    else:
+        res = "notSame"
+    else:
+        res = "Not playing"
+    return res
+\end{lstlisting}
+
+    \item \textbf{AddToQueue} engade a seguinte canción a cola de reprodución de Spotify, comproba que falten menos de 30 segundos da canción que está a soar e engade a seguinte canción da lista local de cancións. Utiliza unha variable global xa que é necesario saber cal foi a última canción engadida para non engadila mais dunha vez.
+		\begin{lstlisting}[language=python, label={code:addToQueue}]
+lastInQueue = None # Global var for keep the last song added to the queue
+def addToQueue(wike):
+    totalTime = SongPlayingNow.objects.filter(instance=wike).values('duration').first() # Get the total duration of the song
+    nowTime = spotify.currentProgress(wike) # Get the progress of the song
+    if (totalTime != None) and (nowTime != None): # Check that there are a song playing
+        totalTime = totalTime['duration']
+        nowTime = timedelta(milliseconds=nowTime['progress_ms'])
+        changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
+        if changeTime > totalTime:
+            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+            global lastInQueue
+            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
+                spotify.addToQueue(wike)
+                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+                res = "Change"
+            else:
+                res = "Already added"
+        else:
+            res = "No change"
+    else:
+        res = "No playing"
+
+    return res
+\end{lstlisting}
+
+	\item \textbf{VoteP} é a función de votación, permite ao usuario engadir un voto novo a canción elixida.
+		\begin{lstlisting}[language=python, label={code:voteP}]
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def voteP(request):
+    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
+    N = N+1
+    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
+    return Response(data="plus", status=200)
+\end{lstlisting}
+	\item \textbf{CheckerThread} para implementar a funcionalidade de que o administrador non teña que ter a páxina da aplicación aberta e as comprobacións para detectar se a canción vaise acabar ou se ten que borrar a seguinte, creamos unha función que executa ditas comprobacións cada 10 segundos. Esta función execútase nun fío paralelo, xa que Django ten que poder responder ao resto das peticións e desta forma evitamos o bloqueo.
+		\begin{lstlisting}[language=python, label={code:checkerThread}]
+def checkerThread():
+    while True:
+        wikes = instance.objects.all()
+        for wike in wikes:
+            if spotify.areToken(wike):
+                if spotify.currentProgress(wike) != None and spotify.currentProgress(wike)['is_playing']:
+                    addToQueue(wike)
+                    popTop(wike)
+        time.sleep(10)
+
+x = threading.Thread(target=checkerThread)
+x.start()
+\end{lstlisting}
+\end{itemize}
+\subsection*{Spotify views:} o conxunto seguinte de funcións son as relacionadas coas peticións a API de Spotify, algunhas son simplemente a petición directamente, por isto só amosamos as mais destacables.
+\begin{itemize}
+	\item \textbf{Amanager} esta función é a encargada de xerar o xestor de autenticación de Spotify.
+		\begin{lstlisting}[language=python, label={code:amanger}]
+def amanager(userInstance):
+    instance = str(userInstance)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
+    return auth_manager
+\end{lstlisting}
+   \item \textbf{ChooseDevice} permite ao administrador elixir en que dispositivo quere que se reproduza a música no caso de que haxa mais de un.
+	   \begin{lstlisting}[language=python, label={code:chooseDevice}]
+def chooseDevice(userInstance):
+    client = getClient(userInstance)
+    devices = client.devices()
+    devices = devices['devices']
+    devicesDict = {}
+    # If no active devices send no active devices
+    if len(devices) >= 1:
+        for i in range(len(devices)):
+            devicesDict[i] = {
+                    'id': devices[i]['id'],
+                    'name': devices[i]['name']
+                    }
+    else:
+        devicesDict[0] = {
+                'id': "No id",
+                'name': "No active devices"
+                }
+        
+    devicesJson = json.dumps(devicesDict)
+    return devicesJson
+\end{lstlisting}
+   \item\textbf{AddToQueue} engade a seguinte canción a cola de reprodución de Spotify.
+	   \begin{lstlisting}[language=python, label={code:spotifyAddToQueue}]
+def addToQueue(userInstance):
+    client = getClient(userInstance)
+    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-added_mode', '-votes', 'created').values('uri').first() # Get the uri of the next song
+    ccuri = json.dumps(curi['uri'])
+    cccuri = ccuri[15:]
+    rcccuri = cccuri.replace("\"", "")
+    try:
+        client.add_to_queue(rcccuri, None)
+    except:
+        pass
+\end{lstlisting}
+    \item\textbf{Search} fai a procura das cancións para o usuario.
+    	\begin{lstlisting}[language=python, label={code:search}]
+    def search(search, userInstance):
+        client = getClient(userInstance)
+        searchResponse = client.search(search, limit=10) # Retuns a 'dict' of songs
+        cleanlist = searchResponse['tracks']['items'] # Gets the important part of the response
+        # Creates a dictionary and populates it with the responses
+        songList = {}
+        for i in range(len(cleanlist)):
+            songList[i] = {
+                    'song': cleanlist[i]['name'],
+                    'artists': cleanlist[i]['artists'][0]['name'],
+                    'uri': cleanlist[i]['uri']
+                    }
+        songJson = json.dumps(songList) # Convert the dictionary to a json
+        return songJson
+\end{lstlisting}
+
+    \item\textbf{SearchToLocalPlaylist} engade a canción seleccionada ao modelo de datos.
+    	\begin{lstlisting}[language=python, label={code:SearchToLocalPlaylist}]
+def searchToLocalPlaylist(songUri, userInstance):
+    client = getClient(userInstance)
+    playlist = LocalPlaylist()  # Assign the model
+    searchedSong = client.track(songUri)
+    playlist.pk = None  # The pk is assigned automatically, this is needed for that
+    artists = searchedSong['artists']  # Loop in the artist if there are more than one
+    string = ""
+    for j in range(len(artists)):
+        string += artists[j]['name']
+        if j+1 != len(artists):
+            string += ", "  # Separate the artist names
+    playlist.artists = string
+    playlist.title = searchedSong['name']
+    playlist.duration = datetime.timedelta(milliseconds = searchedSong['duration_ms'])
+    playlist.uri = searchedSong['uri']
+    playlist.created = datetime.datetime.now()
+    playlist.added_mode = "search"
+    playlist.instance = userInstance  # The instance of the user comes as parameter
+    playlist.save()
+    return json.dumps(searchedSong)
+\end{lstlisting}
+\end{itemize}
+

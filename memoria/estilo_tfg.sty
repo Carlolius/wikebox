@@ -132,14 +132,14 @@
 \fancyfoot[CE,CO]{\thepage}
 \setlength{\headheight}{14pt}
 
-\usepackage{everypage}
+% \usepackage{everypage}
 \makeatletter
-\AddEverypageHook{%
-  \ifthenelse{\(\value{page}>80\) \AND \(\NOT \equal{\@chapapp}{\appendixname}\)}
-             {\message{Estilo TFG warning: sobrepasado o límite de 80 páxinas antes dos apéndices!}
-              \fancyfoot[CE,CO]{\color{red} \hrulefill PÁXINA EXTRA \hrulefill \thepage{} \hrulefill PÁXINA EXTRA \hrulefill}}
-             {\fancyfoot[CE,CO]{\thepage}}
-}
+% \AddEverypageHook{%
+%   \ifthenelse{\(\value{page}>80\) \AND \(\NOT \equal{\@chapapp}{\appendixname}\)}
+%              {\message{Estilo TFG warning: sobrepasado o límite de 80 páxinas antes dos apéndices!}
+%               \fancyfoot[CE,CO]{\color{red} \hrulefill PÁXINA EXTRA \hrulefill \thepage{} \hrulefill PÁXINA EXTRA \hrulefill}}
+%              {\fancyfoot[CE,CO]{\thepage}}
+% }
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

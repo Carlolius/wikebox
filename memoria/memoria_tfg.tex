@@ -55,6 +55,7 @@
  % Preliminares do documento            %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\pagenumbering{gobble}
  \include{portada/portada}
  \paxinaenbranco
  \dedicatoria{Para todas as persoas que desexan escoitar a súa canción favorita.} % escribe neste comando o teu texto de dedicatoria
@@ -88,6 +89,7 @@
  \include{contido/tecnoloxias}
  \include{contido/planificacion}
  \include{contido/deseno}
+ \include{contido/implementacion}
 % \include{contido/demo}
 %\include{contido/...}
  \include{contido/conclusions}
@@ -101,11 +103,11 @@
  % \include{anexos/adicional}
 %\include{anexos/...}
 
- \printglossary[type=\acronymtype,title=\nomeglosarioacronimos]
- \printglossary[title=\nomeglosariotermos]
+ \printglossary[type=\acronymtype,title=\nomeglosarioacronimos,nonumberlist]
+ \printglossary[title=\nomeglosariotermos,nonumberlist]
 
- \bibliographystyle{IEEEtranN}
- \bibliography{bibconfig,bibliografia/bibliografia}
+ \bibliographystyle{IEEEtran}
+ \bibliography{bibliografia/bibliografia}
  \cleardoublepage
  
 \end{document}
