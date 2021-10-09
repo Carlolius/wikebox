@@ -1,9 +1,64 @@
 \chapter{Implementación}
 \label{chap:implementación}
 
-\lettrine{N}{este} capítulo se explica o proceso de implementación as decisións importantes e os problemas atopados durante este.
+\lettrine{N}{este} capítulo explicase o proceso de implementación, as decisións importantes durante este, os problemas atopados e as súas solucións.
 
+\section{Estrutura do proxecto}
+Na seguinte figura~\ref{fig:estrutura_xeral} amósase a estrutura xeral do proxecto e a súa xerarquía de cartafoles. Debido a que o proxecto conta con un backend e un frontend existen dúas partes na estrutura ben diferenciadas, primeiro descríbese a estrutura do backend e a continuación a do frontend.\medbreak
 
+A estrutura principal do backend é similar a dos proxectos \textit{Django}, conta cun proxecto chamado \textit{Wikebackend} e dúas aplicacións, unha chamada \textit{users} que é a encargada da xestión dos usuarios e a outra \textit{api} que é a que xestiona as peticións recibidas e as enviadas a API de Spotify. 
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.3\textwidth]{imaxes/estrutura_xeral.png}
+  \caption{Estrutura do proxecto}
+  \label{fig:estrutura_xeral}
+\end{figure}
+
+\begin{itemize}
+	\item \textbf{Wikebackend}\smallbreak
+		Garda os arquivos de configuración de Django, entre eles as opcións en \textit{settings.py}. Neste arquivo se almacean aspectos básicos da configuración, coma son as apps utilizadas, o método de autenticación, o tipo de base de datos, a linguaxe, configuración da zona horaria\dots~ Nesta parte da estrutura tamén se almacea a redirección de urls principal no arquivo \textit{urls.py} este redirixe as peticións que recibe aos ficheiros axeitados. 
+	\item \textbf{Api}\smallbreak
+		Trátase da parte principal do proxecto, é a parte encargada de gran parte da lóxica de este, encárgase de xestionar as peticións recibidas e devolver as respostas axeitadas. Tamén contén as peticións necesarias para a interación coa API de Spotify.
+	\item \textbf{Users}\smallbreak
+		É a aplicación que xestiona os usuarios, contén as modificacións para a adaptación do modelo de usuarios ao proxecto e as funcións que teñen que ver con estes.
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.3\textwidth]{imaxes/estrutura_backend.png}
+  \caption{Estrutura do backend}
+  \label{fig:estrutura_backend}
+\end{figure}
+
+Respecto ao frontend a estrutura segue a distrubición xeral dos proxectos en \textit{Ionic} dentro do cartafol \textit{src} atopamos a todo o código do proxecto, describese a estrutura a continuación.
+
+\begin{itemize}
+	\item \textbf{App}\smallbreak
+		Contén toda a lóxica do frontend, ao igual que no backend esta é unha app dentro do proxecto que conta con caracterísiticas únicas dentro deste. Ademáis de almacear as páxinas, tamén contén os servizos, os modelos e os compoñentes utilizados.
+	\item \textbf{Assets}\smallbreak
+		Neste cartafol gárdanse todos os recursos, tales coma poderían ser clips de son, vídeos ou imaxes, que é o caso do proxecto, deste xeito facilitase a orde e o acceso a este tipo de recursos.
+	\item \textbf{Environments}\smallbreak
+		Ao igual que moitos outros ferramentas de desenvolvemento, Ionic contén configuracións específicas para o traballo en produción e en desenvolvemento, o que facilita o cambio dun entorno a outro cando se queren facer modificacións, estes arquivos gárdanse no cartafol environments.
+	\item \textbf{Theme}\smallbreak 
+		Almacea as variables corresponedentes a folla de estilo, garda as cores principais para axeitar todo o proxecto a un tema en concreto e non ter que introducir as cores por separado en canda sexan necesarias.
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.3\textwidth]{imaxes/estrutura_frontend.png}
+  \caption{Estrutura do frontend}
+  \label{fig:estrutura_frontend}
+\end{figure}
+
+A continuación describese en profundidade as partes mais extensas que son a aplicación \textbf{api} no backend e a \textbf{app} no frontend:
+
+\textbf{Api} é parte do backend, consta dos arquivos xerales dunha aplicación Django, \textit{urls.py} e o arquivo encargado de xestionar as peticións e executar as funcións de \textit{views.py}. En \textit{models.py} como o seu nome indica defínense os modelos, neste caso as sesións, as cancións que se están a reproducir e as da cola, para facilitar o almaceamento de datos nos modelos utilizanse os serializadores, definidos no arquivo \textit{serializers.py}. Tamén conta cun ficheiro tan só para as peticións a api de Spotify chamado \textit{spotify.py} este é utilizado nas fucincións das vistas.
+
+\textbf{App} forma parte do frontend, e como xa vimos contén a maior parte do código de este, está formado principalmente polas páxinas web as que os usuarios terán acceso, pódense ver na sección~\ref{sec:paxinas_front}, estas contan cos seus módulos e as súas propias follas de estilos.\smallbreak
+Para o correcto funcionamento das páxinas son necesarios os servizos, incluídos tamén neste apartado da estrutura, son os principais encargados de realizar as peticións ao backend, están divididos entre os xerales de api, autenticación e o interceptor, encargado de engadir as cabeceiras para o correcto funcionamento dos \acrshort{JWT}.\smallbreak
+Os compoñentes tamén forman parte de este apartado, son bloques que conteñen funcionalidades específicas, neste caso son utilizados para amosar información en ventanas emerxentes é o caso para os resultados das búsquedas ou a obtención do token de autentificación de Spotify.\smallbreak
+Por último tamén se inclúen pequenos modelos utilizados para a transferencia de información, deste xeito dita información pódese xestionar como un bloque, neste caso son utilizados para a autenticación dos usuarios, o almaceamento dos tokens e as cancións.
 
 \subsection{Controller}
 O controller é a capa intermedia da arquitectura, actúa coma comunicación entre a vista e o modelo, no noso caso a maioría desta comunicación realizase no modelo, polo tanto moitas das instrucións na parte do controlador do frontend son peticións ao backend. Esta capa dividiuse en tres servizos que se describen a continuación:
