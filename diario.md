@@ -458,3 +458,40 @@ Conexión:
     Popover da busqueda
     Autentificación en spotify no front
     Peticións dende o front a nosa api
+
+
+
+## Desenvolvemento real do proxecto breve un apaño para leer mellor o resume este.
+
+Primeiro creouse a aplicación de backend, con arquivo de "requeriments" e unha app chapada api para a xestión da lóxica do proxecto.
+Implementase o principio do modelo de "song.py".
+Mirouse como funcionan os serializadores, para a traducción de datos de cara ó modelo.
+Carga de datos no modelo de cancións, compróbase dende o navegador.
+Proba de o uso de tekore (libraría para a  API de Spotify).
+Creación do frontend en Ionic.
+Varios días co problema de cargar a páxina en Ionic por problemas de actualización de versións non funcionaba `ionViewDidLoad` hai que usar `ngOnInit`.
+
+Aprendizaxe dun pouco de programación reactiva, para o uso de observables.
+Xestión CRUD dos usuarios.
+Cambio de tekore a spotify.
+Obtención do cliente de spotify.
+Creación de búsquedas de cancións.
+Creación do poboamento de playlists.
+Popover para a obtención de información.
+Creación do modelo das sesións.
+Modelo relacional. wike, user, groups (de django), playlist.
+Modificación do modelo de usuario para engadir a instancia.
+Mellora das peticións usando ben os observables.
+Páxina de nova instancia no front.
+
+Resolución de problemas de CORS no backend, engadindo ao middleware o paquete cors.
+Resolución de problemas de CORS no frontend, creando un interceptor e tal e cual.
+Documentación da xestión de usuarios. SEGURIDADE, diferentes posibilidades que se estudaron: authentication con token, con session almaceando en cookies.
+Creación dos usuarios en django. Úsase unha libraría que axuda con JWT en django.
+Login no frontend. Creación do servizo para a comunicación co backend, usando ionic storage
+Implementación de JWT. Pásar o token do backend ao front e almacealo neste.
+Refresh co token de refresh do token de autentificación.
+Creación do interceptor no frontend.
+Refresh funcionando realmente.
+Reparación do tema do refresh, agora gardase cando vai caducar o token e se está caducado pide facer login outra vez, se non está caducado envía o refresh.
+Cando se quere facer login é necesario permitir que o fagan usuarios non autenticados, simplemente quitando IsAuthenticated nas funcións necesarias.
