@@ -31,7 +31,7 @@ A estrutura principal do backend é similar a dos proxectos \textit{Django}, con
   \label{fig:estrutura_backend}
 \end{figure}
 
-Respecto ao frontend a estrutura segue a distribución xeral dos proxectos en \textit{Ionic} dentro do cartafol \textit{src} atopamos a todo o código do proxecto, describese a estrutura a continuación.
+Respecto ao frontend a estrutura segue a distribución xeral dos proxectos en \textit{Ionic} dentro do cartafol \textit{src} atopamos a todo o código do proxecto, descríbese a estrutura a continuación.
 
 \begin{itemize}
 	\item \textbf{App}\smallbreak
@@ -63,12 +63,12 @@ Por último tamén se inclúen pequenos modelos utilizados para a transferencia 
 \section{Percorrido das peticións}
 As peticións na aplicación seguen un percorrido a través dos ficheiros similar en todos os casos, segundo o tipo de solicitude os servizos e os ficheiros finais que as reciben varían. A continuación explícase o percorrido que seguiría unha procura dunha canción para posiblemente ser engadida a lista de reprodución, tamén pódese observar unha infografía desta mesma petición na figura~\ref{fig:wikebox_flow}.
 \begin{enumerate}
-	\item Para comezar, o usuario interactúa co frontend en \textit{music.page.html}, neste caso realiza unha procura na barra de búsqueda, ao facer unha modificación no texto actívase o método \textit{searchChanged}.
+	\item Para comezar, o usuario interactúa co frontend en \textit{music.page.html}, neste caso realiza unha procura na barra de procura, ao facer unha modificación no texto actívase o método \textit{searchChanged}.
 	\item O método atópase en \textit{music.page.ts} que é o controlador da páxina \textit{music}. Fai unha petición ao servizo encargado de xestionar todo o relacionado coa música.
 	\item A petición chega a \textit{api.service.ts} que encárgase de interactuar co backend, coa axuda dun observable faise unha petición a dirección \textit{/api/search/} cando se obteñan os resultados estes serán actualizados.
-	\item Recíbese no backend a petición, todas pasan polo ficheiro \textit{urls.py} xenérico para posteriormente ser redirixidas ao fixeiro co mesmo nome pero de cada app, neste caso \textit{api}.
+	\item Recíbese no backend a petición, todas pasan polo ficheiro \textit{urls.py} xenérico para posteriormente ser redirixidas ao ficheiro co mesmo nome pero de cada app, neste caso \textit{api}.
 	\item Unha vez redirixida a petición pásase ao ficheiro \textit{views.py} que contén todas as funcións encargadas de xestionar a api entre elas \textit{search} que fai a solicitude a \textit{spotify.py} o ficheiro que inclúe todas as funcións relacionadas con Spotify.
-	\item Nesta última función chamada \textit{search} faise a petición a través da libraría \textit{spotipy} ao api de Spotify, o resultado é almaceado nun diccionario de Python.
+	\item Nesta última función chamada \textit{search} faise a petición a través da libraría \textit{spotipy} ao api de Spotify, o resultado é almacenado nun dicionario de Python.
 	\item Por último as respostas son recibidas en forma inversa da anteriormente descrita e as cancións obtidas no resultado da procura son amosadas nun cadro listas para ser engadidas na playlist.
 \end{enumerate}
 
@@ -94,10 +94,10 @@ Tamén existe a opción de utilizar paquetes de terceiros con diferentes método
 Estudáronse estes métodos e concluíuse que o mais axeitado sería o uso de sesións ou tokens. A autenticación por sesións non sería axeitada para a comunicación entre o backend e o frontend debido a que está pensada para o seu uso en clientes \textit{AJAX} que funcionan no mesmo contexto que a propia páxina web, polo tanto a elección final é utilizar un sistema de autenticación por tokens. Novamente existen dúas eleccións, o uso de \textbf{OAuth} ou \textbf{\acrshort{JWT}}. Aínda que a autenticación con OAuth podería ser moi axeitada declinouse debido a intención de simplificar o máximo, aínda que cabe destacar que nun futuro sería unha opción a contemplar xa que permitiría unificar as contas de usuarios entre sesións.\smallbreak
 Finalmente a opción elixida foi o uso de \acrshort{JWT}, existen paquetes de terceiros para facilitar o manexo de \acrshort{JWT} con Django, o mais coñecido é \textit{SimpleJWT}~\cite{simpleJWT} que xera un token de acceso con unha caducidade de 5 minutos e un de refresco con caducidade para 24 horas. No caso de Ionic foi necesaria a creación dun \textit{interceptor} que é o encargado tanto de engadir o token as cabeceiras nas peticións, coma de facer a comprobación de se é necesario renovar o token de acceso cada vez que recibe unha nova petición.\smallbreak
 O funcionamento é sinxelo, cando se produce unha autenticación satisfactoria no backend este devolve un token de refresco e outro de acceso que é almacenado no frontend, posteriormente cando é necesario facer unha nova petición ao backend estando o usuario xa autenticado o interceptor é o encargado de engadir o token de acceso a dita solicitude. Algúns dos problemas que se tiveron que resolver foron o manexo dos tokens de refresco sen estar o usuario autenticado, xa que é necesario evitar recibir erros de autenticación.\medbreak
-Finalmente para concluír o apartado de seguridade explícase o sistema utilizado para o almacenamento dos tokens no frontend. Debido a que os tokens son transmitidos en texto plano o seu almacenamento non é crítico e non é necesario facer ningún tipo de encriptación, polo tanto os tokens almacenanse igual que o resto dos datos na aplicación, utilizando o paquete de Ionic, \textit{storage-angular} que permite gardar os datos na caché do navegador. No caso de que fose necesario Ionic ofrece un paquete premium, de pago, chamado \textit{Ionic secure storage} que permite o cifrado dos datos almacenados utilizando unha base de datos.
+Finalmente para concluír o apartado de seguridade explícase o sistema utilizado para o almacenamento dos tokens no frontend. Debido a que os tokens son transmitidos en texto plano o seu almacenamento non é crítico e non é necesario facer ningún tipo de encriptación, polo tanto os tokens almacenase igual que o resto dos datos na aplicación, utilizando o paquete de Ionic, \textit{storage-angular} que permite gardar os datos na caché do navegador. No caso de que fose necesario Ionic ofrece un paquete premium, de pago, chamado \textit{Ionic secure storage} que permite o cifrado dos datos almacenados utilizando unha base de datos.
 
 \section{Desenvolvemento}
-Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o deseño, debido a falta de coñecementos que se foron acadando ao longo do proceso realizáronse cambios tanto no desempeño das funcións coma na lóxica do funcionamento. Por estas razóns o proceso de implementación foi diferente ao primeiramente deseñado, algo habitual que sucede cando se utiliza unha metodoloxía de desenvolvemento áxil coma é Scrum. A continuación afondarase sobre o desenvolvemento do proxecto comezando pola parte visual e introducindo as partes de código mais relevantes a vez que se detallan os problemas xurdidos e as solucións aplicadas.
+Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o deseño, debido a falta de coñecementos, que se foron acadando ao longo do proceso realizáronse cambios tanto no desempeño das funcións coma na lóxica do funcionamento. Por estas razóns o proceso de implementación foi diferente ao primeiramente deseñado, algo habitual que sucede cando se utiliza unha metodoloxía de desenvolvemento áxil coma é Scrum. A continuación afondarase sobre o desenvolvemento do proxecto comezando pola parte visual e introducindo as partes de código mais relevantes a vez que se detallan os problemas xurdidos e as solucións aplicadas.
 
 \subsection{Frontend}
 
@@ -124,28 +124,28 @@ Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o des
 	\end{subfigure}
 \end{figure}%
 
-Sendo a primeira idea crear unha aplicación para o funcionamento da gramola, pensouse que para facer mais doado o seu uso e tamén evitar a descarga de aplicacións, era mellor a creación dunha aplicación web. Ademáis estas son perfectamente adaptables ao tamaño da pantalla do dispositivo, nas figuras~\ref{fig:wikebox_sizes} podemos ver capturas da páxina de música en diferentes dispositivos, a adaptación as diferentes resolucións de pantalla faise mediante \Gls{bootstrap} xa incluido en Angular. Trátase da páxina na que desexablemente os usuarios van pasar a maior parte do tempo xa que é onde se amosa a información necesaria para o funcionamento e tamén a cola de reprodución, a continuación explícanse os elementos contidos na páxina, cabe destacar que é a vista do administrador xa que inclúe mais opcións.
+Sendo a primeira idea crear unha aplicación para o funcionamento da gramola, pensouse que para facer mais doado o seu uso e tamén evitar a descarga de aplicacións, era mellor a creación dunha aplicación web. Ademais estas son perfectamente adaptables ao tamaño da pantalla do dispositivo, nas figuras~\ref{fig:wikebox_sizes} podemos ver capturas da páxina de \textbf{música} en diferentes dispositivos, a adaptación as diferentes resolucións de pantalla faise mediante \Gls{bootstrap} xa incluído en Angular. Trátase da páxina na que desexablemente os usuarios van pasar a maior parte do tempo xa que é onde se amosa a información necesaria para o funcionamento e tamén a cola de reprodución, a continuación explícanse os elementos contidos na páxina, cabe destacar que é a vista do administrador xa que inclúe mais opcións.
 
 \begin{itemize}
 	\item \textbf{Reproducindo agora}\smallbreak
 		Na parte superior esquerda atópase o nome da canción que se está a reproducir nese intre mais o nome do artista. No caso de que non haxa ningunha canción reproducíndose nese intre tamén se indica. A función que permite obter estes datos é un observable que realiza unha petición a API e formatea os resultados utilizando o modelo de \textit{songs}.
 
-\begin{lstlisting}[language=javascript, label={code:playingNow}]
+\begin{lstlisting}[language=javascript, label={code:playingNow}, caption={api.service.ts}]
 playingNow(): Observable<IEsongs[]>{
 	return this.httpClient.post<IEsongs[]>(this.SERVER_ADDRESS + 'api/playingnow/', {request: Request});
 }
 \end{lstlisting}
 
 	\item \textbf{Seleción playlist}\smallbreak
-		Opción exclusiva para os administradores. Permite seleccionar unha lista de reproducción das gardadas polo usuario na plataforma de Spotify, o propósito é que os usuarios poidan visualizar cancións cando accedan a plataforma sen ter o administrador que engadir cancións de unha en unha, ademáis de poder determinar un xénero musical para que os usuarios comecen a facer votacións nas súas cancións favoritas.
+		Opción exclusiva para os administradores. Permite seleccionar unha lista de reprodución das gardadas polo usuario na plataforma de Spotify, o propósito é que os usuarios poidan visualizar cancións cando accedan a plataforma sen ter o administrador que engadir cancións de unha en unha, ademais de poder determinar un xénero musical para que os usuarios comecen a facer votacións nas súas cancións favoritas.
 
 	\item \textbf{Selección dispositivo}\smallbreak
-		Opción exclusiva para os administradores. Debido a que Spotify é multidispositivo póde darse o caso de que a aplicación se atope aberta en mais dun de eles a vez, o que complicaría o proceso de reprodución xa que por defecto a gramola funciona dende o dispositivo no que se reproduzca música. Para evitar estes problemas permítese ao administrador seleccionar un dos dispositivos que se atopen conectados nese momento para facer a reprodución.
+		Opción exclusiva para os administradores. Debido a que Spotify é multidispositivo pode darse o caso de que a aplicación se atope aberta en mais dun de eles a vez, o que complicaría o proceso de reprodución xa que por defecto a gramola funciona dende o dispositivo no que se está a reproducir música. Para evitar estes problemas permítese ao administrador seleccionar un dos dispositivos que se atopen conectados nese intre.
 
 	\item \textbf{Barra de procura}\smallbreak
-		Ao facer click sobre a barra pódese escribir un termo a procurar, este termo se transfire a Spotify e se amosan os resultados proporcionados por este, polo tanto pódese facer unha procura tanto por nome de canción como por nome de artista, quedan excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer click nun destes resultados a canción engádese a lista de reproducción, en~\ref{code:searchpop} podemos ver o código que executa o compoñente ao recibir os resultados da procura. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en Ionic como podemos ver en~\ref{code:searchresultpop}.
+		Ao facer clic sobre a barra pódese escribir un termo a procurar, este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reproducción, en~\ref{code:searchpop} podemos ver o código que executa o compoñente ao recibir os resultados da procura. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML} como podemos ver en~\ref{code:searchresultpop}.
 		
-\begin{lstlisting}[language=javascript, label={code:searchpop}]
+\begin{lstlisting}[language=javascript, label={code:searchpop}, caption={musig.page.ts}]
 async searchShowpop( ev: any ) {
 	const popover = await this.searchPopover.create({
 		component: SearchresultpopComponent, 
@@ -166,7 +166,7 @@ async searchShowpop( ev: any ) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=html, label={code:searchresultpop}]
+		\begin{lstlisting}[language=html, label={code:searchresultpop}, caption={music.page.html}]
 <ion-list>
 	<ion-item *ngFor="let item of (results | async);" (click)="onClick(item.value.uri)">
 		<ion-label>
@@ -178,19 +178,191 @@ async searchShowpop( ev: any ) {
 \end{lstlisting}
 
 	\item \textbf{Lista de reproducción}\smallbreak
-		Trátase da parte da páxina onde se amosan as cancións na orde que se van a reproducir, ademais de poder ver o título da canción tamén se amosa o artista e ao seu carón o número de votos realizados polos usuarios, isto permite ordear as cancións segundo a preferencia dos usuarios. Os atributos polos que se ordea esta lista son os seguintes segundo a súa importancia: forma na que se engadiu, número de votos, momento no que se engadiu. Esta lista é gardada na base de datos da API, o que fai que os resultados sexan case instantáneos e se obteñen cun observable.
+		Trátase da parte da páxina onde se amosan as cancións na orde que se van reproducir, ademais de poder ver o título da canción tamén amosase o artista e ao seu carón o número de votos realizados polos usuarios, isto permite ordenar as cancións segundo a preferencia dos usuarios. Os atributos polos que se ordena esta lista son os seguintes segundo a súa importancia: forma na que se engadiu, número de votos e momento no que se engadiu. Esta lista é gardada na base de datos da API, o que fai que os resultados sexan case instantáneos e se obteñen cun observable. Tamén se inclúe un botón que permite aos usuarios engadir un voto a canción seleccionada.
 
 	\item \textbf{Menú opcións}\smallbreak
 		Como o seu nome indica, trátase dun menú depregable onde existen diferentes opcións para os usuarios como pode ser a de pechar a sesión facendo \textit{Logout}.
 \end{itemize}
 
-Unha vez descrita a páxina principal procedemos a desgranar as demáis, que sen ter tantas opcións conteñen partes moi importantes da aplicación.
+Unha vez descrita a páxina principal procédese a desgranar as demais, que sen ter tantas opcións conteñen partes moi importantes da aplicación. Tanto a páxina de \textbf{session} coma a de \textbf{rexistro} son as encargadas de rexistrar unha nova sesión e os novos usuarios. Ámbalas dúas conteñen un formulario de rexistro sinxelo no que hai que rexistrar na sesión tan só hai que introducir o nome de esta e para un usuario tanto o nome de usuario coma un contrasinal. En~\ref{code:sessionForm} pódese observar o formulario de rexistro de sesións.
 
-Home
-Session / register
-Login
-Callback
+\begin{lstlisting}[language=html, label={code:sessionForm}, caption={session.page.html}]
+<form #form="ngForm" (ngSubmit)="session(form)" method="post">
+	<ion-item style="margin-top:10%">
+		<ion-input name="instance" type="text" placeholder="Session" ngModel required></ion-input>
+	</ion-item>
+</form>
+\end{lstlisting}
 
+Aínda que son similares, a páxina de rexistro de usuarios contén unha peculiaridade, os usuarios teñen que estar rexistrados nunha sesión, e en xeral estes van realizar o rexistro a través dun enlace proporcionado cunha forma similar a: \lstinline{www.wikebox.com/sessionName/register} polo tanto o usuario quedará rexistrado como pertencente a sesión \textit{sessionName}. Para introducir o nome da sesión no rexistro e que non sexa o usuario o encargado de introducilo captúrase directamente dende a url utilizando o método \textit{ngOnInit} como vemos en~\ref{code:sessionCapture}. Este método execútase despois de cargar a páxina unha vez Angular finaliza a inicialización do compoñente, garda o nome da sesión e despois o pasa ao formulario de rexistro.
+
+\begin{lstlisting}[language=javascript, label={code:sessionCapture}, caption={register.page.ts}]
+ngOnInit() {
+	this.mySession = this.activatedRoute.snapshot.paramMap.get('mySession');
+}
+\end{lstlisting}
+
+Como estas funcións pertencen a partes distintas a súa comunicación co backend realizase dende diferentes servizos, o rexistro da sesión se controla a través do \textit{service.api} e o rexistro do usuario dende \textit{auth.service}, en~\ref{code:registerUser} pódese ver como se realiza esta última petición.
+
+\begin{lstlisting}[language=javascript, label={code:registerUser}, caption={auth.service.ts}]
+register(username: String, password: String, mySession:string) {
+	console.log("Welcome: "+username)
+	return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
+		username: username,
+		password: password,
+		userSession: mySession
+	})
+}
+\end{lstlisting}
+
+Respecto a páxina de \textbf{login}, de novo é unha páxina sinxela que consta dun formulario no que os usuarios poden acceder a gramola. Do mesmo xeito que no método~\ref{code:sessionCapture} captúrase o nome da instancia para facer a redirección do usuario a súa sesión correspondente. No caso de que o usuario non estea accedendo a aplicación a través da url da súa sesión o que sería \lstinline{www.wikebox.com/login} é necesario facer unha redirección automática a páxina de home para coñecer a sesión e abrir correspondente, no código~\ref{code:loginForm} amosase como é realizado.
+
+\begin{lstlisting}[language=javascript, label={code:loginForm}, caption={login.page.ts}]
+login(form){
+	this.authService.login(form.value.username, form.value.password).subscribe(()=>{
+		if (this.mySession != null){
+			this.router.navigate([this.mySession + '/home'])
+		}
+		else
+			this.router.navigateByUrl('home')
+	});
+}
+\end{lstlisting}
+
+Dende a propia páxina de login, tamén é posible acceder a páxina de rexistro, tendo en conta o caso de que un novo usuario acceda a esta erroneamente e desexe rexistrarse, neste caso é necesario que o botón redirixa a páxina de rexistro correcta, para o que é necesario coñecer a instancia onde se quere realizar o rexistro a cal pode ser que non estea dispoñible, neste caso notifícase ao usuario que necesita coñecer o nome da sesión.
+
+Probablemente a páxina menos vista polos usuarios sexa a de \textbf{callback}, a súa función é a de facer a captura do token enviado por Spotify, polo tanto tan só é útil para os administradores. O funcionamento é completamente automático, unha vez realizada a autenticación na plataforma de Spotify esta redirixe ao usuario a páxina de callback, de novo facendo uso do método \textit{ngOnInit} faise unha petición ao backend para facer o almacenamento do token e posteriormente redirixir ao usuario.
+
+\begin{lstlisting}[language=javascript, label={code:callbackInit}, caption={callback.page.ts}]
+ngOnInit() {
+  	this.apiService.spotifyCallback();
+  	if (localStorage.getItem("session") != null) {
+  		this.router.navigate([localStorage.getItem("session") + '/home'])
+  	}
+}
+\end{lstlisting}
+
+Por último falarase sobre a primeira páxina que visualizan os usuarios, trátase da páxina de \textbf{home} esta tan só contén as instrucións para que os novos usuarios saiban de que trata a aplicación e brevemente explícase como facer uso desta. A páxina de home tamén é a encargada de realizar diferentes redireccións segundo os usuarios estean xa conectados, se coñeza a súa instancia ou non o código~\ref{code:homeRedirect} amosa como é dita redirección.
+
+\begin{lstlisting}[language=javascript, label={code:homeRedirect}, caption={home.page.ts}]
+ngOnInit() {
+	if (localStorage.getItem("session") != null) {
+		this.router.navigate([localStorage.getItem("session") + '/home'])
+	}
+	this.userName = localStorage.getItem("username")
+	this.sessionName = localStorage.getItem("session")
+	if (this.isLoggedIn && localStorage.getItem("session") != null){
+		this.router.navigate([localStorage.getItem("session") + '/music'])
+	}
+}
+\end{lstlisting}
+
+Unha vez rematada a explicación das diferentes páxinas que existen no proxecto, procederase a explicar os servizos necesarios para o resto do funcionamento do frontend.
+
+\textbf{Api service} é servizo é o encargado de xestionar todas as peticións que se fan ao backend, todas elas son peticións de tipo \textit{post} debido a que é necesario saber sempre cal é o usuario que está a realizar as peticións, cada unha destas funcións comunicase co backend a través das urls alí definidas e cando reciben a resposta a amosan no lugar correspondente, algunhas destas respostas necesitan ser formateadas tanto para amosalas en lista ou como sexa necesario por exemplo~\ref{code:choosedevice}.
+
+\begin{lstlisting}[language=javascript, label={code:choosedevice}, caption={api.service.ts}]
+spotifyChooseDevice(){
+	return this.httpClient
+	.post(this.SERVER_ADDRESS + 'api/choosedevice/', {'request': Request})
+	.pipe(
+		map(results => Object
+				.keys(results)
+				.map(key => ({value: results[key]}))
+			 ),
+	);
+}
+\end{lstlisting}
+
+\textbf{Auth service} como o seu nome indica, trátase do servizo encargado de xestionar a autenticación dos usuarios no frontend, realizar o login, comprobar os permisos\dots~Aínda que a xestión dos usuarios faise no backend, tanto o rexistro como a xeración dos tokens, é necesario contar con un sistema no frontend para realizar a verificación.\smallbreak
+O rexistro realiza unha petición ao backend para a creación dun novo usuario nunha instancia. A función de login utiliza \textit{angular storage} para almacenar os datos necesarios no navegador, estes son o nome do usuario, o token de acceso e o de refresco que son recibidos dende o backend cando se realiza o login pódese ver a función de login en~\ref{code:authLogin}
+
+\begin{lstlisting}[language=javascript, label={code:authLogin}, caption={auth.service.ts}]
+login(username: String, password: String) {
+	this.user = username
+	return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {
+		"username": username, 
+		"password": password
+	})
+	.pipe(
+		tap(token => {
+			this.storeJwtToken(this.token.access)
+			this.storeRefreshToken(this.token.refresh)
+			this.storeUser()
+			this.storeExpiration()
+			.then(
+				() => {
+					console.log('Token Stored');
+				},
+				error => console.error('Error storing item', error)
+			);
+			return token;
+		}),
+	);
+}
+\end{lstlisting}
+
+Unha vez almacenados estes datos considérase que o usuario está conectado, xa que ao facer a desconexión son borrados, tamén tense en conta que o token de refresco non estea expirado, isto se calcula ao gardalo engadindo un período de validez de 24 horas no código~\ref{code:storeExpiration} pódese ver como se almacena estando o tempo de expiración en milisegundos.
+
+\begin{lstlisting}[language=javascript, label={code:storeExpiration}, caption={auth.service.ts}]
+private storeExpiration() {
+	localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000))
+}
+\end{lstlisting}
+
+Referente a caducidade dos tokens é necesario prestar atención ao servizo de interceptor, é o encargado de engadir o token as cabeceiras das peticións, pero tamén é o que fai a solicitude de actualizar os tokens xa expirados para os usuarios que aínda están conectados. O token de acceso ten unha caducidade de 5 minutos e para renovalo é necesario ter o token de refresco, facendo unha petición con este token obtense un novo de acceso, este procedemento é invisible para o usuario a función encargada de isto é \textit{refreshToken}~\ref{code:refreshToken}.
+
+\begin{lstlisting}[language=javascript, label={code:refreshToken}, caption={auth.service.ts}]
+refreshToken() {
+	return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
+		'refresh': this.getRefreshToken()
+	}).pipe(tap((tokens: AuthResponse) => {
+		this.storeJwtToken(tokens.access);
+	}));
+}
+\end{lstlisting}
+
+Aínda que esta é so unha das funcións deste servizo é unha das mais complicadas xa que é necesario permitir a solicitude de un token de acceso a usuarios que non teñen acceso xa, tan só teñen o token de refresco e isto dificulta o funcionamento. A función que intercepta as peticións é~\ref{code:intercept} esta comproba todas as peticións \acrshort{HTTP} e engade o token cando é posible, no caso de recibir un erro de autenticación 401 chama a función \textit{handle401Error}~\ref{code:handle401} que trata de obter novamente o token de acceso e se é satisfactorio realiza novamente a petición.
+
+\begin{lstlisting}[language=javascript, label={code:intercept}, caption={interceptor.service.ts}]
+intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+	if (this.authService.getJwtToken()) {
+		request = this.addToken(request, this.authService.getJwtToken());
+		console.log(request)
+	}
+	return next.handle(request).pipe(catchError(error => {
+		if (error instanceof HttpErrorResponse && error.status === 401) {
+			return this.handle401Error(request, next);
+		} else {
+			return throwError(error);
+		}
+	}));
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, label={code:handle401}, caption={interceptor.service.ts}]
+private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+	if (!this.isRefreshing) {
+		this.isRefreshing = true;
+		this.refreshTokenSubject.next(null);
+
+		return this.authService.refreshToken().pipe(
+			switchMap((token: any) => {
+				this.isRefreshing = false;
+				this.refreshTokenSubject.next(token.access);
+				return next.handle(this.addToken(request, token.access));
+			}));
+
+	} else {
+		return this.refreshTokenSubject.pipe(
+			filter(token => token != null),
+				take(1),
+			switchMap(access => {
+				return next.handle(this.addToken(request, access));
+			}));
+	}
+}
+\end{lstlisting}
 
 \subsection{Controller}
 O controller é a capa intermedia da arquitectura, actúa coma comunicación entre a vista e o modelo, no noso caso a maioría desta comunicación realizase no modelo, polo tanto moitas das instrucións na parte do controlador do frontend son peticións ao backend. Esta capa dividiuse en tres servizos que se describen a continuación:

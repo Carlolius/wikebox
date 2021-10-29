@@ -35,6 +35,7 @@ export class LoginPage implements OnInit {
 				this.router.navigateByUrl('home')
 		});
 	}
+	// Esta función non parece que faga ben as redireccións.
 	newuser(){
 		if (this.myInstance != null) {
 			this.router.navigate([this.myInstance + '/register'])
