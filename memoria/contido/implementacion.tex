@@ -126,8 +126,9 @@ Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o des
 
 Sendo a primeira idea crear unha aplicación para o funcionamento da gramola, pensouse que para facer mais doado o seu uso e tamén evitar a descarga de aplicacións, era mellor a creación dunha aplicación web. Ademais estas son perfectamente adaptables ao tamaño da pantalla do dispositivo, nas figuras~\ref{fig:wikebox_sizes} podemos ver capturas da páxina de \textbf{música} en diferentes dispositivos, a adaptación as diferentes resolucións de pantalla faise mediante \Gls{bootstrap} xa incluído en Angular. Trátase da páxina na que desexablemente os usuarios van pasar a maior parte do tempo xa que é onde se amosa a información necesaria para o funcionamento e tamén a cola de reprodución, a continuación explícanse os elementos contidos na páxina, cabe destacar que é a vista do administrador xa que inclúe mais opcións.
 
+~\label={sec:musicPage}
 \begin{itemize}
-	\item \textbf{Reproducindo agora}\smallbreak
+	\item {Reproducindo agora}\smallbreak
 		Na parte superior esquerda atópase o nome da canción que se está a reproducir nese intre mais o nome do artista. No caso de que non haxa ningunha canción reproducíndose nese intre tamén se indica. A función que permite obter estes datos é un observable que realiza unha petición a API e formatea os resultados utilizando o modelo de \textit{songs}.
 
 \begin{lstlisting}[language=javascript, label={code:playingNow}, caption={api.service.ts}]
@@ -136,14 +137,14 @@ playingNow(): Observable<IEsongs[]>{
 }
 \end{lstlisting}
 
-	\item \textbf{Seleción playlist}\smallbreak
+	\item \textbf{Selección playlist}\smallbreak
 		Opción exclusiva para os administradores. Permite seleccionar unha lista de reprodución das gardadas polo usuario na plataforma de Spotify, o propósito é que os usuarios poidan visualizar cancións cando accedan a plataforma sen ter o administrador que engadir cancións de unha en unha, ademais de poder determinar un xénero musical para que os usuarios comecen a facer votacións nas súas cancións favoritas.
 
 	\item \textbf{Selección dispositivo}\smallbreak
 		Opción exclusiva para os administradores. Debido a que Spotify é multidispositivo pode darse o caso de que a aplicación se atope aberta en mais dun de eles a vez, o que complicaría o proceso de reprodución xa que por defecto a gramola funciona dende o dispositivo no que se está a reproducir música. Para evitar estes problemas permítese ao administrador seleccionar un dos dispositivos que se atopen conectados nese intre.
 
 	\item \textbf{Barra de procura}\smallbreak
-		Ao facer clic sobre a barra pódese escribir un termo a procurar, este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reproducción, en~\ref{code:searchpop} podemos ver o código que executa o compoñente ao recibir os resultados da procura. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML} como podemos ver en~\ref{code:searchresultpop}.
+		Ao facer clic sobre a barra pódese escribir un termo a procurar, este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reprodución, en~\ref{code:searchpop} podemos ver o código que executa o compoñente ao recibir os resultados da procura. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML} como podemos ver en~\ref{code:searchresultpop}.
 		
 \begin{lstlisting}[language=javascript, label={code:searchpop}, caption={musig.page.ts}]
 async searchShowpop( ev: any ) {
@@ -184,7 +185,7 @@ async searchShowpop( ev: any ) {
 		Como o seu nome indica, trátase dun menú depregable onde existen diferentes opcións para os usuarios como pode ser a de pechar a sesión facendo \textit{Logout}.
 \end{itemize}
 
-Unha vez descrita a páxina principal procédese a desgranar as demais, que sen ter tantas opcións conteñen partes moi importantes da aplicación. Tanto a páxina de \textbf{session} coma a de \textbf{rexistro} son as encargadas de rexistrar unha nova sesión e os novos usuarios. Ámbalas dúas conteñen un formulario de rexistro sinxelo no que hai que rexistrar na sesión tan só hai que introducir o nome de esta e para un usuario tanto o nome de usuario coma un contrasinal. En~\ref{code:sessionForm} pódese observar o formulario de rexistro de sesións.
+Unha vez descrita a páxina principal procédese a debullar as demais, que sen ter tantas opcións conteñen partes moi importantes da aplicación. Tanto a páxina de \textbf{session} coma a de \textbf{rexistro} son as encargadas de rexistrar unha nova sesión e os novos usuarios. Ámbalas dúas conteñen un formulario de rexistro sinxelo no que hai que rexistrar na sesión tan só hai que introducir o nome de esta e para un usuario tanto o nome de usuario coma un contrasinal. En~\ref{code:sessionForm} pódese observar o formulario de rexistro de sesións.
 
 \begin{lstlisting}[language=html, label={code:sessionForm}, caption={session.page.html}]
 <form #form="ngForm" (ngSubmit)="session(form)" method="post">
@@ -366,7 +367,7 @@ private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
 
 \subsection{Backend}
 Unha vez introducido o funcionamento do frontend pásase a explicar de forma similar o funcionamento do backend. Como xa explicouse, contén dúas aplicacións, unha encargada do control de usuarios chamada \textit{users} e outra chamada \textit{api} que é a encargada de facer o resto de funcións, tanto as peticións a API de Spotify como as modificacións dos datos no modelo etc.\smallbreak
-O modelo é a estrutura onde se almacean os datos da aplicación, Django por defecto utiliza \textit{\Gls{SQLite}} como base de datos, decidiuse manter esta librería para o manexo dos datos xa que as suas características principais son a eficiencia, simplicidade e independencia, o que quere dicir que é axeitado para sistemas pequenos onde non se reciben moitas peticións diarias ademais ten un pequeno uso de recursos. Existen catro táboas diferentes no modelo unha é a que xestiona os usuarios rexistrados e as outras tres serven para o manexo dos datos, comezaremos explicando estas últimas.\smallbreak
+O modelo é a estrutura onde se almacenan os datos da aplicación, Django por defecto utiliza \textit{\Gls{SQLite}} como base de datos, decidiuse manter esta librería para o manexo dos datos xa que as súas características principais son a eficiencia, simplicidade e independencia, o que quere dicir que é axeitado para sistemas pequenos onde non se reciben moitas peticións diarias, ademais ten un pequeno uso de recursos. Existen catro táboas diferentes no modelo unha é a que xestiona os usuarios rexistrados e as outras tres serven para o manexo dos datos, comezaremos explicando estas últimas.\smallbreak
 
 \begin{itemize}
 	\item \textbf{Session} almacea as diferentes sesións que os usuarios poden crear para reproducir música en conxunto. Contén un identificador único que é o nome da sesión, este tamén se utiliza na url para que os usuarios poidan acceder, un nome modificable, a ruta onde se garda o token de acceso a Spotify e como chave foránea o nome do usuario administrador.
@@ -381,7 +382,7 @@ class session(models.Model):
         return self.name
 \end{lstlisting}
 
-	\item \textbf{LocalPlaylist} garda as diferentes listas de reprodución que existen nas sesións, está relacionada con estas a traves dunha chave foránea, contén para cada canción os datos típicos de estas como son o o título, o artista e a duración, tamén almacea o identificador único en Spotify chamado \textit{uri}. Os demáis campos que se almacean serven para realizar a ordenación das cancións dentro da lista, primeiro por votos, depois pola forma de ser engadida, isto quere dicir se foi cargada dende unha lista ou engadida a través da búsqueda e por último a órde cronolóxica.
+	\item \textbf{LocalPlaylist} garda as diferentes listas de reprodución que existen nas sesións, está relacionada con estas a través dunha chave foránea, contén para cada canción os datos típicos de estas como son o título, o artista e a duración, tamén almacena o identificador único en Spotify chamado \textit{uri}. Os demais campos que se almacenan serven para realizar a ordenación das cancións dentro da lista, primeiro por votos, depois pola forma de ser engadida, isto quere dicir se foi cargada dende unha lista ou engadida a través da procura e por último a orde cronolóxica.
 
 \begin{lstlisting}[language=python, label={code:modelLocalPlaylist}, caption={api/models.py}]
 class LocalPlaylist(models.Model):
@@ -398,25 +399,63 @@ class LocalPlaylist(models.Model):
         return self.title
 \end{lstlisting}
 
-	\item \textbf{SongPlayingNow} o outro modelo que utilízase para a a xestión das cancións almacea o estado da sesión, garda a canción que se está a reproducir nese intre, esto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha reducción do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sessión a que pertence.
+	\item \textbf{SongPlayingNow} o outro modelo que utilízase para a xestión das cancións almacena o estado da sesión, garda a canción que se está a reproducir nese intre, isto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha redución do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sesión a que pertence.
 
-	\item \textbf{CustomUser} Django contén un sistema de xestión de usuarios, aínda que é bastante completo como é lóxico non é posible que se adapte por completo as necesidades de cada proxecto, por isto permíte facer modificacións sobre este para engadir campos ou quitalos, deste xeito o funcionamento da xestión de usuarios está creada e tan só é necesario adaptalo. Neste caso retirouse o campo de email, xa que non é necesario e engadiuse o de sesión para poder facer as relacións, ademais cambiouse a chave primaria ao nome do usuario xa que antes este atributo pertencía ao email.
+	\item \textbf{CustomUser} Django contén un sistema de xestión de usuarios, aínda que é bastante completo como é lóxico non é posible que se adapte totalmente as necesidades de cada proxecto, por isto permite facer modificacións sobre este para engadir campos ou quitalos, deste xeito o funcionamento da xestión de usuarios está creada e tan só é necesario adaptalo. Neste caso retirouse o campo de email, xa que non é necesario e engadiuse o de sesión para poder facer as relacións, ademais cambiouse a chave primaria ao nome do usuario xa que antes este atributo pertencía ao email.
+
+\begin{lstlisting}[language=python, label={code:modelCustomUser}, caption={users/model.py}]
+class CustomUser(AbstractUser):
+    id = models.AutoField(primary_key=True)
+    userSession = models.ForeignKey("api.session", on_delete=models.CASCADE, null=True, blank=True)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['userInstance']
+    objects = CustomUserManager()
+    def __str__(self):
+        return self.username
+\end{lstlisting}
 \end{itemize}
 
-Sabendo agora como é a implementación do modelo, pásase a explicar o funcionamento lóxico do backend, en Django este código almacéase nas chamadas \textit{views} que reciben as peticións dende o arquivo \textit{urls}. Existe un aquivo \textit{urls} para todo o backend que posteriormente desvia as peticións a cada un dos arquivos \textit{urls} de cada unha das aplicacións pódese ver na figura~\ref{fig:wikebox_flow}.\smallbreak
-A aplicación de Django encargada de xestionar os usuarios contén as modificacións mínimas, xa que proporcionase unha lóxica xa creada e adaptada para ser modificada. Engadiuse a libraría \textit{Rest Framework Simplejwt} que é a encargada de xerar os tokens de acceso para os usuarios.\smallbreak
-A outra aplicación que exite chamada \textit{api} é a encargada de todo o funcionamento da gramola, inclúe todas as peticións para a xestión das canción e o manexo destas a través da API de Spotify. Os pasos principais que se executan son os seguintes:
+Sabendo agora como é a implementación do modelo, pásase a explicar o funcionamento lóxico do backend, en Django este código almacénase nas chamadas \textit{views} que reciben as peticións dende o arquivo \textit{urls}. Existe un arquivo \textit{urls} para todo o backend que posteriormente desvía as peticións a cada un dos arquivos \textit{urls} de cada unha das aplicacións, pódese ver na figura~\ref{fig:wikebox_flow}.\smallbreak
+A aplicación de Django encargada de xestionar os usuarios contén as modificacións mínimas, xa que proporcionase unha lóxica xa creada e adaptada para ser modificada no código~\ref{code:userSerializer} pódese ver as modificacións realizadas no modelo de usuario a través do serializador. Tamén engadiuse a libraría \textit{Rest Framework Simplejwt} que é a encargada de xerar os tokens de acceso para os usuarios, non é necesaria configuración de esta.\smallbreak
+
+\begin{lstlisting}[language=python, label={code:userSerializer}, caption={users/model.py}]
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'userInstance', 'password']
+        extra_kwargs = {
+                'password': {'write_only': True, 'required': True},
+                'userInstance': {'required': True}
+                }
+    def create(self, validated_data):
+        uInstance = instance.objects.filter(name=validated_data['userInstance']).get() 
+        # Check if there are an admin at the instance if there aren't first one it's admin.
+        try:
+            # No admin
+            haveAdmin = instance.objects.filter(name=validated_data['userInstance'], admin=None).get()
+            user = User.objects.create_admin(**validated_data)
+            user.userInstance = uInstance
+            # Updates the instance admin to user
+            instance.objects.filter(name=validated_data['userInstance']).update(admin=user)
+        except:
+            # Already admin
+            user = User.objects.create_user(**validated_data)
+            user.userInstance = uInstance
+        return user
+\end{lstlisting}
+
+A outra aplicación que existe chamada \textit{api} é a encargada de todo o funcionamento da gramola, inclúe todas as peticións para a xestión das canción e o manexo destas a través da API de Spotify. Os pasos principais que se executan son os seguintes:
 
 \begin{enumerate}
-	\item Comprobar se falta mais de 30 segundos para que remate a canción que está soando, función \textit{addToQueue}~\ref{code:addToQueue}.
+	\item Comprobar se falta mais de 30 segundos para que remate a canción que está soando. Función \textit{addToQueue}~\ref{code:addToQueue}.
 	\item Se faltan mais, non se fai nada.
-	\item Se non, a seguínte canción que está na lista de reprodución engadese a cola de Spotify.
-	\item Compróbase se a canción que está a soar é a mesma que a primeira na lista de reprodución, función \textit{popTop}~\ref{code:popTop}.
+	\item Se non, a seguinte canción que está na lista de reprodución engádese a cola de Spotify.
+	\item Compróbase se a canción que está a soar é a mesma que a primeira na lista de reprodución. Función \textit{popTop}~\ref{code:popTop}.
 	\item Se non, non se fai nada.
 	\item Se sí, borrase a canción da lista de reprodución.
 \end{enumerate}
 
-Deste xeito conséguese utilizar a gramola sen interromper o uso normal de Spotify xa que o usuario que teña acceso pode seguir utilizandoa como de costume tan só vese afectado cando faltan menos de 30 segundos para o remate da canción.
+Deste xeito conséguese utilizar a gramola sen interromper o uso normal de Spotify xa que o usuario que teña acceso pode seguir utilizándoa como de costume tan só vese afectado cando faltan menos de 30 segundos para o remate da canción.
 
 \begin{lstlisting}[language=python, label={code:addToQueue}, caption={api/views.py}]
 lastInQueue = None # Global var for keep the last song added to the queue
@@ -458,7 +497,7 @@ def popTop(wike):
     return res
 \end{lstlisting}
 
-Unha das características que diferencian esta aplicación de outras similares é a de non necesitar ningún sistema a parte que se encargue de facer as comprobacións, engadir cancións a cola e demáis, isto é grazas a función \textit{checkerThread} esta encárgase de facer unha comprobación cada 10 segundos en cada unha das sesións que están a reproducir música que comproba se é necesario engadir unha nova canción a cola, para isto é necesaria a creación dun fío paralelo xa que de outro xeito non sería posible admitir mais peticións porque dita función bloquearía o resto, pódese ver o código da función en~\ref{code:checkerThread}. 
+Unha das características que diferencian esta aplicación de outras similares é a de non necesitar ningún sistema a parte que se encargue de facer as comprobacións, engadir cancións a cola e demais, xa que isto realízase no propio backend. A función \textit{checkerThread} encárgase de facer unha comprobación cada 10 segundos, en cada unha das sesións que están a reproducir música, comproba se é necesario engadir unha nova canción a cola, para isto é necesaria a creación dun fío paralelo xa que de outro xeito non sería posible admitir mais peticións porque dita función bloquearía o resto, pódese ver o código da función en~\ref{code:checkerThread}. 
 
 \begin{lstlisting}[language=python, label={code:checkerThread}, caption={views.py}]
 def checkerThread():
@@ -475,172 +514,31 @@ x = threading.Thread(target=checkerThread)
 x.start()
 \end{lstlisting}
 
+As demais funcións incluídas no arquivo views da api son necesarias para a obtención dos datos e o almacenamento. Tamén se inclúen as chamadas a funcións específicas en relación a API de Spotify que se atopan nun arquivo diferente que se situado en \textit{backend/api/music/spotify.py} isto inclúe tanto as funcións que permiten o acceso a api coma as que permiten atopar cancións, engadilas a base de datos, reproducir... A continuación especifícanse, estas funcións forman parte da lóxica da páxina de música que se describiu na sección~\ref{sec:musicPage}.
 
+Tanto a selección dunha playlist coma a selección de dispositivos é similar, faise unha petición a API de Spotify, e os resultados almacenanse nun dicionario que é transformado a JSON para devolvelo ao frontend. O código seguinte~\ref{code:getPlaylists} amosa como se obteñen as playlists dos usuarios.
 
-
-
-\section{Backend}
-Aínda que foi deseñado coa idea de publicar noticias dun xornal, Django é un dos frameworks mais populares hoxe en día, segue o principio (DRY, Don't Repeat Yourself) \footnote{Non te repitas} polo que evita a repetición de código innecesariamente. Está escrito en Python, que axuda a súa popularidade, ademais como xa explicamos utiliza o a arquitectura \textbf{MTV} que destaca pola simpleza a hora de cambiar a forma de visualizar o contido.
-
-\subsection{Modelo}
-A capa modelo é a parte da aplicación que encapsula a lóxica de negocio cos accesos a base de datos. Nesta capa se almacea, modifica e eliminan os datos que manexa a aplicación. Na figura \ref{fig:database} pódense ver as entidades do modelo. A continuación detallase brevemente cada unha das entidades.
-\begin{itemize}
-	\item \textbf{Instance:} representa os datos das sesións, almacenase a lista de sesións que estean rexistradas na aplicación.
-	\item \textbf{LocalPlaylist:} representa a lista de cancións na cola das sesións.
-	\item \textbf{SongPlayingNow:} representa a canción que se está a reproducir nas sesións.
-	\item \textbf{CustomUser:} representa os usuarios da aplicación, é unha modificación do modelo User de Django adaptado para o proxecto
-\end{itemize}
-
-\subsection{Plantilla}
-Debido a que utilizamos Django coma backend non é necesario o uso da plantilla para amosar os datos, esta responsabilidade recae no Frontend.
-\subsection{Vista}
-Na arquitectura \acrshort{MTV} é a vista a encargada de executar a lóxica de negocio. Recibe as peticións dende o arquivo \textit{urls.py} e executa as accións necesarias, no noso caso dividimos as peticións entre as necesarias para administrar os usuarios e as relacionadas coa música, dividindo esta última de novo entre as peticións a nosa API e as da API de Spotify.
-\subsection*{User views:} debido a que utilizamos o modelo de usuario de Django modificado é este o encargado do manexo de case todas as peticións, nos tan só tivemos que engadir a obtención da sesión do usuario coma podemos ver en \ref{code:getInstance}.
-
-\begin{lstlisting}[language=python, label={code:getInstance}]
-@api_view(['POST'])
-def getInstance(request):
-    user = CustomUser.objects.filter(username=request.data['username']).values()
-    userInstance = user[0]['userInstance_id']
-    return Response(data=userInstance, status=200)
-\end{lstlisting}
-
-\subsection*{Api views:} as funcións explicadas a continuación son algunhas das mais destacables das solicitudes que se fan a xestión da nosa API, todas as peticións son de tipo POST debido a que sempre temos que saber cal é o usuario que fai a solicitude.
-\begin{itemize}
-    \item \textbf{PopTop} é a función encargada de borrar a primeira canción da lista se é a que está a soar.
-		\begin{lstlisting}[language=python, label={code:popTop}]
-def popTop(wike):
-    current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
-    if current != None:
-    if current == top:
-        res = "same"
-        LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
-    else:
-        res = "notSame"
-    else:
-        res = "Not playing"
-    return res
-\end{lstlisting}
-
-    \item \textbf{AddToQueue} engade a seguinte canción a cola de reprodución de Spotify, comproba que falten menos de 30 segundos da canción que está a soar e engade a seguinte canción da lista local de cancións. Utiliza unha variable global xa que é necesario saber cal foi a última canción engadida para non engadila mais dunha vez.
-		\begin{lstlisting}[language=python, label={code:addToQueue}]
-lastInQueue = None # Global var for keep the last song added to the queue
-def addToQueue(wike):
-    totalTime = SongPlayingNow.objects.filter(instance=wike).values('duration').first() # Get the total duration of the song
-    nowTime = spotify.currentProgress(wike) # Get the progress of the song
-    if (totalTime != None) and (nowTime != None): # Check that there are a song playing
-        totalTime = totalTime['duration']
-        nowTime = timedelta(milliseconds=nowTime['progress_ms'])
-        changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
-        if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
-            global lastInQueue
-            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
-                spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
-                res = "Change"
-            else:
-                res = "Already added"
-        else:
-            res = "No change"
-    else:
-        res = "No playing"
-
-    return res
-\end{lstlisting}
-
-	\item \textbf{VoteP} é a función de votación, permite ao usuario engadir un voto novo a canción elixida.
-		\begin{lstlisting}[language=python, label={code:voteP}]
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def voteP(request):
-    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
-    N = N+1
-    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
-    return Response(data="plus", status=200)
-\end{lstlisting}
-	\item \textbf{CheckerThread} para implementar a funcionalidade de que o administrador non teña que ter a páxina da aplicación aberta e as comprobacións para detectar se a canción vaise acabar ou se ten que borrar a seguinte, creamos unha función que executa ditas comprobacións cada 10 segundos. Esta función execútase nun fío paralelo, xa que Django ten que poder responder ao resto das peticións e desta forma evitamos o bloqueo.
-		\begin{lstlisting}[language=python, label={code:checkerThread}]
-def checkerThread():
-    while True:
-        wikes = instance.objects.all()
-        for wike in wikes:
-            if spotify.areToken(wike):
-                if spotify.currentProgress(wike) != None and spotify.currentProgress(wike)['is_playing']:
-                    addToQueue(wike)
-                    popTop(wike)
-        time.sleep(10)
-
-x = threading.Thread(target=checkerThread)
-x.start()
-\end{lstlisting}
-\end{itemize}
-\subsection*{Spotify views:} o conxunto seguinte de funcións son as relacionadas coas peticións a API de Spotify, algunhas son simplemente a petición directamente, por isto só amosamos as mais destacables.
-\begin{itemize}
-	\item \textbf{Amanager} esta función é a encargada de xerar o xestor de autenticación de Spotify.
-		\begin{lstlisting}[language=python, label={code:amanger}]
-def amanager(userInstance):
-    instance = str(userInstance)
-    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
-    return auth_manager
-\end{lstlisting}
-   \item \textbf{ChooseDevice} permite ao administrador elixir en que dispositivo quere que se reproduza a música no caso de que haxa mais de un.
-	   \begin{lstlisting}[language=python, label={code:chooseDevice}]
-def chooseDevice(userInstance):
+\begin{lstlisting}[language=python, label={code:getPlaylists}, caption={spotify.py}]
+def getPlaylists(userInstance):
     client = getClient(userInstance)
-    devices = client.devices()
-    devices = devices['devices']
-    devicesDict = {}
-    # If no active devices send no active devices
-    if len(devices) >= 1:
-        for i in range(len(devices)):
-            devicesDict[i] = {
-                    'id': devices[i]['id'],
-                    'name': devices[i]['name']
-                    }
-    else:
-        devicesDict[0] = {
-                'id': "No id",
-                'name': "No active devices"
+    user = client.current_user()
+    dictPlaylists = client.user_playlists(user['id'])
+    nextresult = dictPlaylists['next']
+    dictPlaylists = dictPlaylists['items']
+    playlists = {}
+    for i in range(len(dictPlaylists)):
+        playlists[i] = {
+                'playlist': dictPlaylists[i]['name'],
+                'playlistId': dictPlaylists[i]['id']
                 }
-        
-    devicesJson = json.dumps(devicesDict)
-    return devicesJson
-\end{lstlisting}
-   \item\textbf{AddToQueue} engade a seguinte canción a cola de reprodución de Spotify.
-	   \begin{lstlisting}[language=python, label={code:spotifyAddToQueue}]
-def addToQueue(userInstance):
-    client = getClient(userInstance)
-    curi = LocalPlaylist.objects.filter(instance=userInstance).order_by('-added_mode', '-votes', 'created').values('uri').first() # Get the uri of the next song
-    ccuri = json.dumps(curi['uri'])
-    cccuri = ccuri[15:]
-    rcccuri = cccuri.replace("\"", "")
-    try:
-        client.add_to_queue(rcccuri, None)
-    except:
-        pass
-\end{lstlisting}
-    \item\textbf{Search} fai a procura das cancións para o usuario.
-    	\begin{lstlisting}[language=python, label={code:search}]
-    def search(search, userInstance):
-        client = getClient(userInstance)
-        searchResponse = client.search(search, limit=10) # Retuns a 'dict' of songs
-        cleanlist = searchResponse['tracks']['items'] # Gets the important part of the response
-        # Creates a dictionary and populates it with the responses
-        songList = {}
-        for i in range(len(cleanlist)):
-            songList[i] = {
-                    'song': cleanlist[i]['name'],
-                    'artists': cleanlist[i]['artists'][0]['name'],
-                    'uri': cleanlist[i]['uri']
-                    }
-        songJson = json.dumps(songList) # Convert the dictionary to a json
-        return songJson
+    playlists['nextresult'] = nextresult
+    playlistsJson = json.dumps(playlists)
+    return playlistsJson
 \end{lstlisting}
 
-    \item\textbf{SearchToLocalPlaylist} engade a canción seleccionada ao modelo de datos.
-    	\begin{lstlisting}[language=python, label={code:SearchToLocalPlaylist}]
+Para a procura de cancións cando o usuario introduce a procura esta pásase ao API de Spotify, o resultado almacenase nun dicionario que é devolto ao frontend para ser amosado nun popover. Unha vez seleccionada a canción esta tense que engadir a base de datos isto faise co código de~\ref{code:searchToLocalPlaylist} que obtén os datos da canción, e gárdanse na \textit{LocalPlaylist}.
+
+\begin{lstlisting}[language=python, label={code:searchToLocalPlaylist}, caption={spotify.py}]
 def searchToLocalPlaylist(songUri, userInstance):
     client = getClient(userInstance)
     playlist = LocalPlaylist()  # Assign the model
@@ -662,7 +560,43 @@ def searchToLocalPlaylist(songUri, userInstance):
     playlist.save()
     return json.dumps(searchedSong)
 \end{lstlisting}
-\end{itemize}
 
-\section{Instruccións de execución}
+Por último explícase como é o proceso da obtención do token sobre o API de Spotify, para facilitar todo o proceso úsase a librería externa Spotipy~\cite{spotipy}.
 
+\begin{enumerate}
+	\item Xerase un manager de autenticación, neste hai que almacenar os datos de acceso da aplicación en Spotify, isto é un identificador de cliente e unha clave, ademais dos scopes e a url de callback. Este manager é utilizado para autenticar as peticións que se fan a API de Spotify coa app creada en Spotify.
+
+\begin{lstlisting}[language=python, label={code:amanager}, caption={spotify.py}]
+client_id = 'identificador cliente'
+client_secret = 'clave cliente'
+redirect_uri = 'http://192.168.1.101:8100/callback/'
+scope = 'user-library-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, playlist-read-private'
+
+def amanager(userInstance):
+    instance = str(userInstance)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
+    return auth_manager
+\end{lstlisting}
+
+	\item Posteriormente obtense o cliente, que é identificado a través do manager.
+	\item Para obter o token de autenticación primeiro búscase se xa está gardado, se é así aquí remata o proceso.
+	\item Se non se atopa o token en caché, abrese a páxina de autenticación de Spotify. O usuario introduce as súas credenciais de acceso a Spotify e automáticamente se redirixe a páxina de callback~\ref{code:getUrl} de novo na aplicación da gramola.
+
+\begin{lstlisting}[language=python, label={code:getUrl}, caption={spotify.py}]
+def getUrl(userInstance):
+    auth_manager = amanager(userInstance)
+    authUrl = auth_manager.get_authorize_url()
+    return authUrl
+\end{lstlisting}
+
+	\item Na páxina de callback captúrase o código de autorización na url e finalmente obtense o token.
+
+\begin{lstlisting}[language=python, label={code:callback}, caption={spotify.py}]
+def callBackUrl(authCode, userInstance):
+    auth_manager = amanager(userInstance)
+    authCode = auth_manager.parse_response_code(authCode)
+    token = auth_manager.get_access_token(code=authCode,as_dict=False)
+    return token
+\end{lstlisting}
+
+\end{enumerate}
