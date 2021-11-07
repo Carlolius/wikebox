@@ -7,7 +7,7 @@ Durante a décadas dos 60 e 70 a industria musical sufriu unha revolución, nunh
 
 O obxectivo deste proxecto é crear unha aplicación web na que os usuarios poidan engadir as cancións que desexen a unha lista de reprodución compartida e votar polas súas favoritas. Deste xeito as cancións reprodúcense segundo a orde de chegada e segundo o seu número de votos. Polo tanto a idea é crear unha gramola virtual na que os usuarios non teñen que recorrer a ningún aparello, con calquera dispositivo con acceso a Interet deberían de ser capaces de conectarse a gramola e engadir cancións. Para realizar a reprodución de música usase o cliente de \gls{Spotify} que se controla mediante a súa propia \gls{API} deste xeito se xestiona a música que vai soar, polo tanto poderá ser reproducida en calquera dispositivo que teña un cliente desta plataforma. Evítase interromper o uso normal do Spotify, é dicir, facendo que o usuario poida usar o seu cliente de \gls{Spotify} coma sempre e facendo que a aplicación engada as cancións a cola de reprodución tan so nos momentos necesarios. Co propósito de facilitar o seu uso e desta maneira incrementar o número de usuarios creouse a plataforma do xeito mais intuitivo posible para estes.
 
-Na parte técnica o obxectivo é crear una \gls{PWA}, é dicir unha aplicación creada coas tecnoloxías web, que funciona en calqueira tipo de navegador compatible. A aplicación constará dun \gls{backend} en \Gls{Django} Rest Framework, que será o encargado de xestionar as solicitudes a \gls{API} de \gls{Spotify}, e manexar as propias peticións do noso \gls{frontend} en \Gls{Ionic} que utiliza \gls{Angular} coma \gls{framework}, en canto a base de datos utilizaremos SQLite para o almaceamento dos usuarios e as listas de reprodución.
+Na parte técnica o obxectivo é crear una \gls{PWA}, é dicir unha aplicación creada coas tecnoloxías web, que funciona en calqueira tipo de navegador compatible. A aplicación constará dun \gls{backend} en \Gls{Django} Rest Framework~\cite{Django}, que será o encargado de xestionar as solicitudes a \gls{API} de \gls{Spotify}, e manexar as propias peticións do noso \gls{frontend} en \Gls{Ionic}~\cite{ionic5} que utiliza \gls{Angular}~\cite{angular5} coma \gls{framework}, en canto a base de datos utilizaremos SQLite para o almaceamento dos usuarios e as listas de reprodución.
 
 \section{Obxectivos}
 O proxecto pretende crear unha plataforma de creación de listas de reprodución de música de forma colaborativa dunha forma similar a unha gramola e a reprodución destas mediante un cliente de Spotify. Os obxetivos funcionais son os seguintes:
@@ -29,10 +29,10 @@ Do mesmo xeito expoñemos os obxetivos non funcionais:
 Este documento estruturase en 7 capítulos.
 \begin{itemize}
 	\item Neste primeiro capítulo describese a motivación, e os obxectivos do proxecto.
-	\item No capítulo segundo, contén o análise de viabilidade do proxecto.
+	\item O capítulo segundo, contén o análise de viabilidade do proxecto.
 	\item No capítulo terceiro explícanse as tecnoloxías utilizadas durante o proceso de desenvolvemento.
-	\item No capítulo 4.
-	\item No capítulo 5.
-	\item No capítulo 6.
-	\item No capítulo 7.
+	\item O cuarto capítulo inclúe a planificación do proxecto, a metodoloxía usada e os custos.
+	\item No capítulo quinto descríbese o deseño inicial da aplicación e as ferramentas utilizadas.
+	\item No sexto capítulo fálase da implementación realizada.
+	\item O derradeiro capítulo contén as conclusións e o traballo futuro.
 \end{itemize}

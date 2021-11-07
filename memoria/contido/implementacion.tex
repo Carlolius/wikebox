@@ -126,7 +126,6 @@ Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o des
 
 Sendo a primeira idea crear unha aplicación para o funcionamento da gramola, pensouse que para facer mais doado o seu uso e tamén evitar a descarga de aplicacións, era mellor a creación dunha aplicación web. Ademais estas son perfectamente adaptables ao tamaño da pantalla do dispositivo, nas figuras~\ref{fig:wikebox_sizes} podemos ver capturas da páxina de \textbf{música} en diferentes dispositivos, a adaptación as diferentes resolucións de pantalla faise mediante \Gls{bootstrap} xa incluído en Angular. Trátase da páxina na que desexablemente os usuarios van pasar a maior parte do tempo xa que é onde se amosa a información necesaria para o funcionamento e tamén a cola de reprodución, a continuación explícanse os elementos contidos na páxina, cabe destacar que é a vista do administrador xa que inclúe mais opcións.
 
-~\label={sec:musicPage}
 \begin{itemize}
 	\item {Reproducindo agora}\smallbreak
 		Na parte superior esquerda atópase o nome da canción que se está a reproducir nese intre mais o nome do artista. No caso de que non haxa ningunha canción reproducíndose nese intre tamén se indica. A función que permite obter estes datos é un observable que realiza unha petición a API e formatea os resultados utilizando o modelo de \textit{songs}.
@@ -514,7 +513,7 @@ x = threading.Thread(target=checkerThread)
 x.start()
 \end{lstlisting}
 
-As demais funcións incluídas no arquivo views da api son necesarias para a obtención dos datos e o almacenamento. Tamén se inclúen as chamadas a funcións específicas en relación a API de Spotify que se atopan nun arquivo diferente que se situado en \textit{backend/api/music/spotify.py} isto inclúe tanto as funcións que permiten o acceso a api coma as que permiten atopar cancións, engadilas a base de datos, reproducir... A continuación especifícanse, estas funcións forman parte da lóxica da páxina de música que se describiu na sección~\ref{sec:musicPage}.
+As demais funcións incluídas no arquivo views da api son necesarias para a obtención dos datos e o almacenamento. Tamén se inclúen as chamadas a funcións específicas en relación a API de Spotify que se atopan nun arquivo diferente que se situado en \textit{backend/api/music/spotify.py} isto inclúe tanto as funcións que permiten o acceso a api coma as que permiten atopar cancións, engadilas a base de datos, reproducir... A continuación especifícanse, estas funcións forman parte da lóxica da páxina de música.
 
 Tanto a selección dunha playlist coma a selección de dispositivos é similar, faise unha petición a API de Spotify, e os resultados almacenanse nun dicionario que é transformado a JSON para devolvelo ao frontend. O código seguinte~\ref{code:getPlaylists} amosa como se obteñen as playlists dos usuarios.
 
