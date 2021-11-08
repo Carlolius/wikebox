@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-	myInstance = null;
+	mySession = null;
 
 	constructor(
 		private  authService:  AuthService,
@@ -19,17 +19,17 @@ export class LoginPage implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.myInstance = this.activatedRoute.snapshot.paramMap.get('myInstance');
-		/* console.log(this.myInstance) */
-		/* if (this.myInstance != null) { */
-		/* 	this.router.navigate([this.myInstance + '/home']) */
+		this.mySession = this.activatedRoute.snapshot.paramMap.get('mySession');
+		/* console.log(this.mySession) */
+		/* if (this.mySession != null) { */
+		/* 	this.router.navigate([this.mySession + '/home']) */
 		/* } */
 	}
 	login(form){
 		this.authService.login(form.value.username, form.value.password).subscribe((res)=>{
 			// A redirección do router debería de ser a instancia do propio usuario
-			if (this.myInstance != null){
-				this.router.navigate([this.myInstance + '/home'])
+			if (this.mySession != null){
+				this.router.navigate([this.mySession + '/home'])
 			}
 			else
 				this.router.navigateByUrl('home')
@@ -37,10 +37,10 @@ export class LoginPage implements OnInit {
 	}
 	// Esta función non parece que faga ben as redireccións.
 	newuser(){
-		if (this.myInstance != null) {
-			this.router.navigate([this.myInstance + '/register'])
+		if (this.mySession != null) {
+			this.router.navigate([this.mySession + '/register'])
 		} else {
-			this.router.navigateByUrl("instance")
+			this.router.navigateByUrl("session")
 		}
 	}
 }

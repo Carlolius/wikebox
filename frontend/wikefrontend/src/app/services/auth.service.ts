@@ -29,7 +29,7 @@ export class AuthService {
 	refresh:any;
 	data:any;
 	user:any;
-	instance:any;
+	session:any;
 
 	constructor(
 		private httpClient: HttpClient,
@@ -59,13 +59,13 @@ export class AuthService {
 			return true;
 		}
 
-	getInstance() {
-		this.httpClient.post(this.SERVER_ADDRESS + 'users/getinstance/', {"username": this.user})
+	getSession() {
+		this.httpClient.post(this.SERVER_ADDRESS + 'users/getsession/', {"username": this.user})
 		.subscribe(data => {
-			const instance = JSON.stringify(data)
-			const unquoted = instance.replace(/['"]+/g, '');
-			this.instance = unquoted;
-			this.storeInstance(unquoted)})
+			const session = JSON.stringify(data)
+			const unquoted = session.replace(/['"]+/g, '');
+			this.session = unquoted;
+			this.storeSession(unquoted)})
 	}
 
 	// Login
@@ -79,7 +79,7 @@ export class AuthService {
 		})
 		.pipe(
 			tap(token => {
-				this.getInstance()
+				this.getSession()
 				this.token = token;
 				this.storeJwtToken(this.token.access)
 				this.storeRefreshToken(this.token.refresh)
@@ -99,12 +99,12 @@ export class AuthService {
 
 	// Register
 
-	register(username: String, password: String, myInstance:string) {
+	register(username: String, password: String, mySession:string) {
 		console.log("Welcome: "+username)
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
 			username: username,
 			password: password,
-			userInstance: myInstance
+			userSession: mySession
 		})
 	}
 
@@ -118,7 +118,7 @@ export class AuthService {
 		/* localStorage.removeItem("refresh"); */
 		/* localStorage.removeItem("expiration"); */
 		/* localStorage.removeItem("username"); */
-		/* localStorage.removeItem("instance"); */
+		/* localStorage.removeItem("session"); */
 		localStorage.clear()
 		// this.navCtrl.navigateRoot('/home');
 	}
@@ -174,8 +174,8 @@ export class AuthService {
 		localStorage.setItem("username", this.user)
 	}
 
-	private storeInstance(data:any) {
-		localStorage.setItem("instance", data)
+	private storeSession(data:any) {
+		localStorage.setItem("session", data)
 	}
 
 	

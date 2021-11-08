@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
 
-	myInstance = null;
+	mySession = null;
 	
 	constructor(
 		private  authService:  AuthService,
@@ -19,11 +19,11 @@ export class RegisterPage implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.myInstance = this.activatedRoute.snapshot.paramMap.get('myInstance');
+		this.mySession = this.activatedRoute.snapshot.paramMap.get('mySession');
 	}
 	register(form) {
-    this.authService.register(form.value.username, form.value.password, this.myInstance).subscribe((res)=>{
-			this.router.navigateByUrl(this.myInstance + '/login');
+    this.authService.register(form.value.username, form.value.password, this.mySession).subscribe((res)=>{
+			this.router.navigateByUrl(this.mySession + '/login');
 		});
 	}
 

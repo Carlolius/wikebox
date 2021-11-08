@@ -18,7 +18,7 @@ export class HomePage implements OnInit {
 
 	data = '';
 	userName: string;
-	instanceName: string;
+	sessionName: string;
 
 	constructor(
 		private authService: AuthService,
@@ -30,13 +30,13 @@ export class HomePage implements OnInit {
 	){ }
 
 	ngOnInit() {
-		if (localStorage.getItem("instance") != null) {
-			this.router.navigate([localStorage.getItem("instance") + '/home'])
+		if (localStorage.getItem("session") != null) {
+			this.router.navigate([localStorage.getItem("session") + '/home'])
 		}
 		this.userName = localStorage.getItem("username")
-		this.instanceName = localStorage.getItem("instance")
-		if (this.isLoggedIn && localStorage.getItem("instance") != null){
-			this.router.navigate([localStorage.getItem("instance") + '/music'])
+		this.sessionName = localStorage.getItem("session")
+		if (this.isLoggedIn && localStorage.getItem("session") != null){
+			this.router.navigate([localStorage.getItem("session") + '/music'])
 		}
 	}
 
@@ -44,8 +44,8 @@ export class HomePage implements OnInit {
 		this.router.navigateByUrl("home")
 	}
 
-	goToInstance() {
-		this.router.navigateByUrl("instance")
+	goToSession() {
+		this.router.navigateByUrl("session")
 	}
 
 	goToLogin() {

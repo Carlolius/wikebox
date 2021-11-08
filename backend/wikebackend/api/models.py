@@ -5,7 +5,7 @@ from django import utils
 from datetime import datetime
 
 # Create your models here.
-class instance(models.Model):
+class session(models.Model):
     # id = models.BigAutoField(primary_key=True)
     url = models.CharField(max_length=1000, primary_key=True)
     name = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class LocalPlaylist(models.Model):
     votes = models.IntegerField(default=0)
     created = models.DateTimeField(default=datetime.now, blank=True)
     added_mode = models.CharField(max_length=50)  # Added during search or during playlist load
-    instance = models.ForeignKey(instance, on_delete=models.DO_NOTHING)
+    session = models.ForeignKey(session, on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.title
 
@@ -36,6 +36,6 @@ class SongPlayingNow(models.Model):
     duration = models.DurationField(default=None)
     # uri = models.CharField(max_length=200, unique=True)
     uri = models.CharField(max_length=200)
-    instance = models.ForeignKey(instance, on_delete=models.DO_NOTHING)
+    session = models.ForeignKey(session, on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.title

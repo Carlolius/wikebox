@@ -26,8 +26,8 @@ export class ApiService {
 		return this.httpClient.get(this.SERVER_ADDRESS);
 	}
 
-	registerInstance(instance: String) {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/instanceregister/', {urlInstance: instance})
+	RegisterSession(session: String) {
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/sessionregister/', {urlSession: session})
 	}
 
 	voteP(song:string){

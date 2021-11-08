@@ -3,11 +3,11 @@ import { Router } from  "@angular/router";
 import { ApiService } from '../../services/api.service'
 
 @Component({
-  selector: 'app-instance',
-  templateUrl: './instance.page.html',
-  styleUrls: ['./instance.page.scss'],
+  selector: 'app-session',
+  templateUrl: './session.page.html',
+  styleUrls: ['./session.page.scss'],
 })
-export class InstancePage implements OnInit {
+export class SessionPage implements OnInit {
 
   constructor(
 		private  apiService: ApiService,
@@ -17,8 +17,8 @@ export class InstancePage implements OnInit {
   ngOnInit() {
   }
 
-	instance(form) {
-    this.apiService.registerInstance(form.value.instance).subscribe((res)=>{
+	session(form) {
+    this.apiService.RegisterSession(form.value.session).subscribe((res)=>{
 			this.router.navigateByUrl(res + '/register');
 		});
 	}

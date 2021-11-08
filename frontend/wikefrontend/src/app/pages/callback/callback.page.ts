@@ -16,8 +16,8 @@ export class CallbackPage implements OnInit {
 
   ngOnInit() {
 		this.apiService.spotifyCallback();
-		if (localStorage.getItem("instance") != null) {
-			this.router.navigate([localStorage.getItem("instance") + '/home'])
+		if (localStorage.getItem("session") != null) {
+			this.router.navigate([localStorage.getItem("session") + '/home'])
 		}
   }
 

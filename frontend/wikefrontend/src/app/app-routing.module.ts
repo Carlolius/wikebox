@@ -10,12 +10,12 @@ const routes: Routes = [
 		loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
 	},
 	{
-		path: ':myInstance/home',
+		path: ':mySession/home',
 		loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
 			canActivate: [AuthService]
 	},
 	{
-		path: ':myInstance/register',
+		path: ':mySession/register',
 		loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
 	},
 	{
@@ -23,7 +23,7 @@ const routes: Routes = [
 		loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
 	},
 	{
-		path: ':myInstance/login',
+		path: ':mySession/login',
 		loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
 	},
 	{
@@ -32,13 +32,13 @@ const routes: Routes = [
 			canActivate: [AuthService]
 	},
 	{
-		path: ':myInstance/music',
+		path: ':mySession/music',
 		loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule),
 			canActivate: [AuthService] /* Engadir mais Guards para comprobar que a instancia é a que é. */
 	},
 	{
-		path: 'instance',
-		loadChildren: () => import('./pages/instance/instance.module').then( m => m.InstancePageModule)
+		path: 'session',
+		loadChildren: () => import('./pages/session/session.module').then( m => m.SessionPageModule)
 	},
 ];
 

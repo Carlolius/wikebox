@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
 from api.music import spotify
-from api.models import instance, LocalPlaylist
+from api.models import session, LocalPlaylist
 
 from datetime import datetime, timedelta
 import json
@@ -45,13 +45,13 @@ class LocalPlaylistViewSet(viewsets.ModelViewSet):
     queryset = LocalPlaylist.objects.all()
     serializer_class = LocalPlaylistSerializer
 
-# Register new instance
+# Register new session
 @api_view(['POST'])
-def RegisterInstance(request):
-    name = re.sub(r'\W+', '', request.data['urlInstance'])
-    newInstance = instance.objects.create(
+def RegisterSession(request):
+    name = re.sub(r'\W+', '', request.data['urlSession'])
+    newSession = session.objects.create(
             url=name,
-            name=request.data['urlInstance']
+            name=request.data['urlSession']
             )
     return Response(data=name, status=200)
 
@@ -59,17 +59,17 @@ def RegisterInstance(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def areToken(request):
-    are = spotify.areToken(request.user.userInstance)
+    are = spotify.areToken(request.user.userSession)
     return HttpResponse(json.dumps(are))
 
-# Check if the user is the admin of the instance
+# Check if the user is the admin of the session
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def isAdmin(request):
     user = request.user.id
-    instanceAdmin = instance.objects.filter(url=request.user.userInstance.url).values('admin').get()
-    instanceAdmin = instanceAdmin['admin']
-    if user == instanceAdmin:
+    sessionAdmin = session.objects.filter(url=request.user.userSession.url).values('admin').get()
+    sessionAdmin = sessionAdmin['admin']
+    if user == sessionAdmin:
         return Response(data=True, status=200)
     else:
         return Response(data=False, status=200)
@@ -79,7 +79,7 @@ def isAdmin(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def playingNow(request):
-    playing = list(SongPlayingNow.objects.filter(instance=request.user.userInstance).values('artists', 'title'))
+    playing = list(SongPlayingNow.objects.filter(session=request.user.userSession).values('artists', 'title'))
     if not playing:
         playing = [{'artists': 'song', 'title': 'No playing'}]
     jplaying = json.dumps(playing)
@@ -87,12 +87,12 @@ def playingNow(request):
     
 # Pops the first song of the list if is the one playing
 def popTop(wike):
-    current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+    current = SongPlayingNow.objects.filter(session=wike).values('uri').first()
+    top = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
     if current != None:
         if current == top:
             res = "same"
-            LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
+            LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').first().delete()
         else:
             res = "notSame"
     else:
@@ -102,18 +102,18 @@ def popTop(wike):
 # Adds the next song to the queue
 lastInQueue = None # Global var for keep the last song added to the queue
 def addToQueue(wike):
-    totalTime = SongPlayingNow.objects.filter(instance=wike).values('duration').first() # Get the total duration of the song
+    totalTime = SongPlayingNow.objects.filter(session=wike).values('duration').first() # Get the total duration of the song
     nowTime = spotify.currentProgress(wike) # Get the progress of the song
     if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
         changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
         if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+            adding = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
             global lastInQueue
             if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
                 spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+                lastInQueue = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
                 res = "Change"
             else:
                 res = "Already added"
@@ -128,24 +128,24 @@ def addToQueue(wike):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def queueSongs(request):
-    songs = list(LocalPlaylist.objects.filter(instance=request.user.userInstance).order_by('-votes', '-added_mode', 'created').values('artists', 'title', 'votes', 'uri'))
+    songs = list(LocalPlaylist.objects.filter(session=request.user.userSession).order_by('-votes', '-added_mode', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def voteP(request):
-    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
+    N = LocalPlaylist.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
     N = N+1
-    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
+    LocalPlaylist.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
     return Response(data="plus", status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def voteN(request):
-    N = LocalPlaylist.objects.values_list('votes', flat=True).get(instance=request.user.userInstance, uri=request.data['uri'])
+    N = LocalPlaylist.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
     N = N-1
-    LocalPlaylist.objects.filter(instance=request.user.userInstance).filter(uri=request.data['uri']).update(votes=N)
+    LocalPlaylist.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
     return Response(data="minus", status=200)
 
 ## Spotify ##
@@ -154,7 +154,7 @@ def voteN(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def SpotifyGet(request):
-    url = spotify.getUrl(request.user.userInstance)
+    url = spotify.getUrl(request.user.userSession)
     resp = "[{\"url\":" + "\"" + url + "\"" + "}]"
     return HttpResponse(resp)
 
@@ -163,8 +163,8 @@ def SpotifyGet(request):
 @permission_classes([IsAuthenticated])
 def callBack(request):
     authCode = request.data['url']
-    spotify.callBackUrl(authCode, request.user.userInstance)
-    info = spotify.userinfo(request.user.userInstance)
+    spotify.callBackUrl(authCode, request.user.userSession)
+    info = spotify.userinfo(request.user.userSession)
     resp = "[{\"url\":" + "\"" + info + "\"" + "}]"
     return HttpResponse(resp)
 
@@ -173,7 +173,7 @@ def callBack(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def getPlaylists(request):
-    playlists = spotify.getPlaylists(request.user.userInstance)
+    playlists = spotify.getPlaylists(request.user.userSession)
     return HttpResponse(playlists)
 
 # Search for a song
@@ -183,7 +183,7 @@ def search(request):
     search = request.data['search']
     # Necessary for when you delete all the chars in the search bar, avoids empty request
     if search != '':
-        songs = spotify.search(request.data['search'], request.user.userInstance)
+        songs = spotify.search(request.data['search'], request.user.userSession)
         # resp = "[{\"song\":" + "\"" + songs + "\"" + "}]"
         return HttpResponse(songs)
     else:
@@ -193,28 +193,28 @@ def search(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def currentSong(request):
-    currentPlaying = spotify.currentSong(request.user.userInstance)
+    currentPlaying = spotify.currentSong(request.user.userSession)
     return Response(data=currentPlaying, status=200)
 
 # Select device where music plays
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def chooseDevice(request):
-    devices = spotify.chooseDevice(request.user.userInstance)
+    devices = spotify.chooseDevice(request.user.userSession)
     return HttpResponse(devices)
 
 # Start to play
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def playMusic(request):
-    spotify.playMusic(request.data['device'], request.user.userInstance)
+    spotify.playMusic(request.data['device'], request.user.userSession)
     return Response(data=None, status=200)
 
 # Add a searched song to playlist given the song uri
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def searchToLocalPlaylist(request):
-    searchToPlaylist = spotify.searchToLocalPlaylist(request.data['songUri'], request.user.userInstance)
+    searchToPlaylist = spotify.searchToLocalPlaylist(request.data['songUri'], request.user.userSession)
     return HttpResponse(searchToPlaylist)
 
 # Add songs to LocalPlaylist given the playlist uri
@@ -222,14 +222,14 @@ def searchToLocalPlaylist(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def playlistToLocalPlaylist(request):
-    playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userInstance)
+    playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userSession)
     return HttpResponse(playlistSongs)
 
 # Checks every time if have to change songs or something
 # it works in a different thread
 def checkerThread():
     while True:
-        wikes = instance.objects.all()
+        wikes = session.objects.all()
         for wike in wikes:
             if spotify.areToken(wike):
                 if spotify.currentProgress(wike) != None and spotify.currentProgress(wike)['is_playing']:

@@ -20,7 +20,7 @@ urlpatterns = [
         path('choosedevice/', views.chooseDevice),
         path('currentplaying/', views.currentSong),
         path('areToken/', views.areToken),
-        path('instanceregister/', views.RegisterInstance),
+        path('sessionregister/', views.RegisterSession),
         path('playingnow/', views.playingNow),
         path('playlists/', views.getPlaylists),
         path('playlisttolocalplaylist/', views.playlistToLocalPlaylist),

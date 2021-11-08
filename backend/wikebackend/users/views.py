@@ -15,7 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 @api_view(['POST'])
-def getInstance(request):
+def getSession(request):
     user = CustomUser.objects.filter(username=request.data['username']).values()
-    userInstance = user[0]['userInstance_id']
-    return Response(data=userInstance, status=200)
+    userSession = user[0]['userSession_id']
+    return Response(data=userSession, status=200)
