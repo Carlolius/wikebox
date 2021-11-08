@@ -427,15 +427,15 @@ class UserSerializer(serializers.ModelSerializer):
                 'userInstance': {'required': True}
                 }
     def create(self, validated_data):
-        uInstance = instance.objects.filter(name=validated_data['userInstance']).get() 
+        uInstance = instance.objects.filter(name= validated_data['userInstance']).get() 
         # Check if there are an admin at the instance if there aren't first one it's admin.
         try:
             # No admin
-            haveAdmin = instance.objects.filter(name=validated_data['userInstance'], admin=None).get()
+            haveAdmin = instance.objects.filter(name= validated_data['userInstance'], admin=None).get()
             user = User.objects.create_admin(**validated_data)
             user.userInstance = uInstance
             # Updates the instance admin to user
-            instance.objects.filter(name=validated_data['userInstance']).update(admin=user)
+            instance.objects.filter(name= validated_data['userInstance']).update(admin=user)
         except:
             # Already admin
             user = User.objects.create_user(**validated_data)
@@ -459,18 +459,18 @@ Deste xeito conséguese utilizar a gramola sen interromper o uso normal de Spoti
 \begin{lstlisting}[language=python, label={code:addToQueue}, caption={api/views.py}]
 lastInQueue = None # Global var for keep the last song added to the queue
 def addToQueue(wike):
-    totalTime = SongPlayingNow.objects.filter(instance=wike).values('duration').first() # Get the total duration of the song
+    totalTime = SongPlayingNow.objects.filter(instance=wike) .values('duration').first() # Get the total duration of the song
     nowTime = spotify.currentProgress(wike) # Get the progress of the song
     if (totalTime != None) and (nowTime != None): # Check that there are a song playing
         totalTime = totalTime['duration']
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
         changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
         if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+            adding = LocalPlaylist.objects.filter(instance=wike) .order_by('-votes', '-added_mode', 'created').values('uri').first()
             global lastInQueue
             if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
                 spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+                lastInQueue = LocalPlaylist.objects.filter(instance=wike) .order_by('-votes', '-added_mode', 'created').values('uri').first()
                 res = "Change"
             else:
                 res = "Already added"
@@ -483,12 +483,12 @@ def addToQueue(wike):
 
 \begin{lstlisting}[language=python, label={code:popTop}, caption={api/views.py}]
 def popTop(wike):
-    current = SongPlayingNow.objects.filter(instance=wike).values('uri').first()
-    top = LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+    current = SongPlayingNow.objects. filter(instance=wike).values('uri').first()
+    top = LocalPlaylist.objects. filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
     if current != None:
         if current == top:
             res = "same"
-            LocalPlaylist.objects.filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
+            LocalPlaylist.objects. filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
         else:
             res = "notSame"
     else:
