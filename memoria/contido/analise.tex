@@ -1,16 +1,138 @@
 \chapter{Análise}
 \label{chap:analise}
 
-\lettrine{N}{este} segundo capítulo se fará unha análise da viabilidade do proxecto, deste xeito poderemos determinar se é posible que chegue a finalizarse con éxito.\bigbreak
+\lettrine{N}{este} segundo capítulo exponse o estado da arte no ámbito das gramolas dixitais. Tamén se fará unha análise da viabilidade do proxecto, deste xeito poderemos determinar se é posible que chegue a finalizarse con éxito.
 
+\section{Estado da arte}
+\label{sec:estado_da_arte}
+Na actualidade existen diferentes tipos de gramolas, en xeral todas son dixitais e obteñen a información a través de Internet. Hai compañías que ofertan o servizo de obter un aparello físico para dispoñer nun local, e que alí os clientes poidan dun xeito similar a antigamente facer a súa elección musical. Do mesmo xeito existen outras solucións que están baseadas en aplicacións, dun xeito similar ao noso proxecto, os clientes poden conectarse á estación do lugar onde están e alí engadir cancións para a súa reprodución. Normalmente estas plataformas contan co seu propio reprodutor de música e o seu propio catálogo, xeralmente bastante extenso pero non tanto coma calquera servizo de música xa que contan coas cancións mais actuais e os clásicos. Non existe un mercado moi amplo aínda que destacan algunhas aplicacións que se están comezando a implantar tanto nos Estados Unidos coma en Europa.\bigskip
+
+Comezando polas gramolas físicas temos a compañía \textbf{TouchTunes}~\cite{touchTunes} que está expandida por Norte América e parte de Europa. Dispoñible en 75.000 bares é a mais coñecida con diferenza, dispón dun gran catálogo de música, sistema de adaptación da música ao local e diferentes ferramentas para o entretemento dos clientes. Oferta de 3 tipos de gramolas, dúas de parede, unha que tan só sirve de reprodutor (figura \ref{fig:touchtunes_virtuo}) e outra que contén mais funcionalidades coma o karaoke, unha última adaptable para axeitala o estilo do local coma por exemplo nun barril (figura \ref{fig:touchtunes_fusion}). Todas funcionan con unha gran pantalla táctil para facer a selección, aínda que conta con unha aplicación móbil para este mesmo fin. Utiliza un sistema de créditos que se poden consumir nos diferentes establecementos nos que está implantada a plataforma, polo tanto o seu uso non é gratuíto.
+
+\begin{figure}[hp!]
+  \caption{TouchTunes}
+  \centering
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/touchtunes_virtuo.png}
+    \caption{TouchTunes Virtuo}
+	\label{fig:touchtunes_virtuo}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/touchtunes_fusion.png}
+    \caption{TouchTunes Fusion}
+	\label{fig:touchtunes_fusion}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.2\textwidth}
+	  \includegraphics[width=\textwidth]{imaxes/touchtunes_app.png}
+	  \caption{Aplicación móbil}
+	  \label{fig:touchtunes_app}
+  \end{subfigure}
+\end{figure}
+
+Como directa competidora de TouchTunes atopamos \textbf{AMI Entertainment}~\cite{amiEntertainment}. Comezou creando pianos nos que introducindo unha moeda podíase elixir algunha das cancións, posteriormente adicaronse a facer gramolas físicas e nos nosos días seguen coa dixitalización destas. Conta con uns 30.000 aparellos repartidos por todo o mundo. Ao igual que TouchTunes, tamén con 3 tipos de gramolas diferentes, moi similares as da súa máxima competidora pero inclúen unha de pé (figura \ref{fig:ami_infinity}), similar a unha das gramolas antigas. Tamén conta con aplicación móbil para engadir cancións, e tamén funciona cun sistema de créditos pra facer soar a música que mais che gusta.
+
+\begin{figure}[hp!]
+  \caption{Ami Entertainment}
+  % \centering
+  \begin{subfigure}[c]{0.3\textwidth}
+	\includegraphics[width=\textwidth]{imaxes/ngx-infinity-ami.jpg}
+	\caption{NGX Infinity}
+	\label{fig:ami_infinity}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.5\textwidth}
+	\includegraphics[width=\textwidth]{imaxes/ami_app.png}
+	\caption{Aplicación móbil}
+	\label{fig:ami_app}
+  \end{subfigure}
+\end{figure}
+
+No apartado de aplicacións móbil que teñan unha funcionalidade similar a unha gramola atopamos \textbf{Jukestar}~\cite{jukestar}, consiste en dúas aplicacións unha anfitrioa (figura \ref{fig:jukestar_host}) e outra para os invitados (figura \ref{fig:jukestar_jukebox}), o anfitrión ten que conectar a súa conta de Spotify na aplicación e xerar unha festa despois compartir a festa cos seus invitados, estes poden incluír cancións ou votar polas da súa preferencia, estas características funcionan cun sistema de créditos de pago (figura \ref{fig:jukestar_request}). É unha idea similar a da nosa aplicación, xa que utiliza Spotify para a reprodución de música pero necesita un cliente para o anfitrión e outro para os invitados o que complica o seu uso.
+
+\begin{figure}[hp!]
+  \caption{Jukestar App}
+  \centering
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/jukestar_jukebox.png}
+    \caption{Jukestar gramola}
+	\label{fig:jukestar_jukebox}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/jukestar_request.png}
+    \caption{Solicitude de nova canción}
+	\label{fig:jukestar_request}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/jukestar_host.png}
+    \caption{Aplicación anfitrión}
+	\label{fig:jukestar_host}
+  \end{subfigure}
+\end{figure}
+
+Outra aplicación similar é \textbf{Outloud}~\cite{outloud} permite a reprodución de música dende Spotify, SoundCloud e incluso Apple Music para os trebellos compatibles. A idea é similar, créase unha playlist que fai de sesión e os usuarios poden conectarse xa sexa dende un enlace de invitación ou buscando por lugares próximos. Posteroirmente poden engadir cancións e votar as que son mais do seu agrado, tamén permite o acceso dende a web sen necesidade de instalar a aplicación. Unha característica que inclúe e non existe noutras aplicacións é a posibilidade de proporcionar información da sesión nunha pantalla central (figura \ref{fig:outloud_screen}), nesta inclúense as seguintes cancións, as cancións acabadas de ser engadidas e incluso quen son os usuarios que reciben mais votos nas súas cancións. Esta aplicación está pensada para usala en calquera lugar: vodas, ximnasios, lugar de traballo, festas particulares, reunións con amigos\dots~ pódese descargar en dispositivos Android ou iOS. Trátase dunha aplicación sinxela ademais de ser gratuíta, o único problema que podemos observar é que a aplicación necesita estar funcionando no dispositivo no que soa a música.
+
+\begin{figure}[hp!]
+  \caption{Outloud App}
+  \centering
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/outloud_app.png}
+    \caption{Aplicación de Outloud}
+	\label{fig:outloud_app}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.6\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/outloud_screen.png}
+    \caption{Modo pantalla central}
+	\label{fig:outloud_screen}
+  \end{subfigure}
+\end{figure}
+
+\textbf{Jukebox Today}~\cite{jukeboxToday}, tratase dun servizo web que permite crear sesións e compartilas cos usuarios, non é necesaria unha aplicación como nos servizos anteriores. Permite que a música se reproduza de forma sincronizada en varios dispositivos ou controlar a reprodución dende calquera dos que estea activo, incluso conta con un sala de conversación para os usuarios. Obtén a música dende YouTube polo tanto o seu catálogo é tan amplo como o da plataforma. Aínda que podería funcionar coma unha gramola non é a súa idea principal, xa que todos os usuarios poden facer modificacións na lista de reprodución ou poñer a pausa, trátase dun servizo gratuíto.
+
+\begin{figure}[hp!]
+	\caption{Captura dunha sala en Jukebox Today}
+	\centering
+	\includegraphics[width=1\textwidth]{imaxes/jukebox_today.png}
+	\label{fig:jukebox_today}
+\end{figure}
+
+Con funcionamento completamente diferente \textbf{Raveberry}~\cite{raveberry} é un proxecto no que se instala nunha RaspberryPi un servidor musical multiusuario, é dicir, unha gramola. Contén unha interface intuitiva para a solicitude de cancións e cambiar a orde de acordo coa puntuación que os usuarios fan. Soporta as plataformas de YouTube, Spotify e SoundCloud, incluso permite engadir arquivos locais. Está baseado en Python e contida no repositorio \textit{PyPI} e tamén dispoñible en \textit{Docker} polo tanto é instalable en múltiples dispositivos aínda que é nunha RaspberryPi é onde se poden desfrutar a maioría das súas características que son moitas e moi ben pensadas. Citamos as mais destacadas que converten a Raveberry nun gran proxecto:
+\begin{itemize}
+	\item \textbf{Streaming remoto:} permite reproducir música sincronizada noutros dispositivos.
+	\item \textbf{Bluetooth:} pódese conectar a RaspberryPi a un altofalante Bluetooth que permite evitar os cables.
+	\item \textbf{Hotspot:} creación dun punto Wifi no que os usuarios pódense conectar para usar a aplicación ou acceso a internet.
+	\item \textbf{Roles de usuario:} permite engadir permisos a certos usuarios, por exemplo o control da reprodución.
+	\item \textbf{Interface gráfica:} o administrador pode elixir a configuración desexada nunha cómoda interface.
+	\item \textbf{Shareberry:} é unha aplicación complementaria que permite engadir cancións directamente dende o teléfono móbil.
+	\item \textbf{Visualización de pantalla:} usando a aplicación cava, pódense ver as frecuencias de música nunha pantalla conectada \ref{fig:raveberry_visual}.
+	\item \textbf{Visualización de son:} pódese engadir dispositivos LED e Raveberry fará que funcionen ao ritmo da música.
+\end{itemize}
+Para o funcionamento de algunhas destas características é necesaria a inclusión de algún hardware adicional para o que o proxecto xa está preparado. Por exemplo unha antena Wifi para a compartición da conexión, a integración dunha tarxeta de son para a mellora da calidade do son ou as luces LED que son controladas polos protocolos \textit{i2c} e \textit{spi}. Contén ademais, unha ampla documentación que fai que a súa instalación básica sexa moi sinxela e trátase dun proxecto de código aberto polo tanto gratuíto.
+
+\begin{figure}[hp!]
+  \caption{Raveberry Server}
+  \centering
+  \begin{subfigure}[c]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/raveberry_logo.png}
+    \caption{Visualización de pantalla}
+	\label{fig:raveberry_visual}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{imaxes/raveberry_interface.png}
+    \caption{Interface}
+	\label{fig:raveberry_interface}
+  \end{subfigure}
+\end{figure}
+
+Estes son os proxectos que atopamos cun funcionamento similar ao noso traballo, ningún destes cumpre todos os nosos requisitos aínda que varios aproximase a ideas similares. Por exemplo \textit{Outloud} necesita unha aplicación aberta polo tanto no caso de esta estar pechada o servizo deixaría de funcionar, desta forma se dificulta o uso para o administrador. Destes traballos obtivemos ideas que poden ser implementadas no noso proxecto e poden engadir funcionalidades interesantes para o usuario final.
+
+\section{Viabilidade}
 Para determinar se o proxecto poderá acadar o seu obxectivo existen varios aspectos a analizar, o conxunto destes é a viabilidade do proxecto. En xeral para os proxectos software as áreas nas que recompilar información para determinar a viabilidade son: técnica, económica, legal e de mercado, deste xeito pódese saber de maneira anticipada cal vai ser o custo aproximado do proxecto, o tempo necesario para rematalo e cal é o impacto no mercado esperado, a continuación descríbense estes diferentes dominios.
 
-\section{Viabilidade económica}
+\subsection{Viabilidade económica}
 No análise económico téñense en conta tres custos principais, os custos en recursos humanos, en software e en hardware.
 
-Para os \textbf{recursos humanos}, téñense en conta a cantidade de persoas necesarias e o custo por hora de cada unha destas. Neste caso é unha soa persoa a encargada de facer o deseño, implementación e probas, tampouco é necesario ter en conta o custo por hora polo tanto non existe un custo real monetario en recursos humanos para a realización do proxecto.
+Para os \textbf{recursos humanos}, téñense en conta a cantidade de persoas necesarias e o custo por hora de cada unha destas. Neste caso é unha soa persoa a encargada de facer o deseño, implementación e probas. O custo total aproximado é de 460 horas repartidas entre documentación, desenvolvemento, e probas. Na táboa~\ref{tab:custos_humanos} pódese ver en detalle.
 
-Os \textbf{recursos software} teñen en conta os custos do software utilizado para o desenvolvemento do proxecto. Neste proxecto utilizase software libre e gratuíto na maior medida posible, partindo do sistema operativo ata os frameworks e librarías, pasando polas ferramentas de desenvolvemento coma o editor de texto ou o navegador coma veremos mais adiante \ref{sec:ferramentas_desenvolvemento}, todo isto fai que os custos software neste proxecto sexan nulos, a excepción da necesidade de unha subscrición ao servizo \textit{premium} de Spotify. Na táboa~\ref{tab:spotify_plans} podemos observar os diferentes prezos do servizo, neste caso o plan elixido é o familiar polo tanto o custo mensual ascende a 2,67 € mensuais e aproximadamente de 14 € durante a realización do proxecto.
+Os \textbf{recursos software} teñen en conta os custos do software utilizado para o desenvolvemento do proxecto. Neste proxecto utilízase software libre e gratuíto na maior medida posible, partindo do sistema operativo ata os frameworks e librarías, pasando polas ferramentas de desenvolvemento coma o editor de texto ou o navegador coma veremos mais adiante \ref{sec:ferramentas_desenvolvemento}, todo isto fai que os custos software neste proxecto sexan nulos, a excepción da necesidade de unha subscrición ao servizo \textit{premium} de Spotify. Na táboa~\ref{tab:spotify_plans} podemos observar os diferentes prezos do servizo, neste caso o plan elixido é o familiar polo tanto o custo mensual ascende a 2,67 € mensuais e aproximadamente de 14 € durante a realización do proxecto.
 
 \begin{table}[tbp]
 	\caption{Custos dos plans de Spotify}
@@ -29,104 +151,13 @@ En canto aos \textbf{recursos hardware}, non foi necesario adquirir ningún tipo
 
 Polo tanto dedúcese que respecto a viabilidade económica este proxecto é completamente factible xa que os custos vense moi reducidos incluso os necesarios son asumibles xa que o servizo \textit{premium} de Spotify é algo que ten mais utilidades que o desenvolvemento.
 
-\section{Viabilidade técnica}
-A viabilidade técnica é a referente a o funcionamento do sistema, condiciona se as características tecnolóxicas permiten que o proxecto acade un fin exitoso. Neste caso o software escollido para o desenvolvemento aínda que sendo relativamente novo é altamente coñecido e empregado na creación de proxectos similares. Ademais dispóñense de moita documentación e moi completa, incluso titoriais específicos, o que facilita a realización do proxecto polo tanto non presenta unha dificultade técnica alta. Xuntando estes motivos, afirmase que o proxecto é viable tecnicamente.
+\subsection{Viabilidade técnica}
+A viabilidade técnica é a referente a o funcionamento do sistema, condiciona se as características tecnolóxicas permiten que o proxecto acade un fin exitoso. Neste caso o software escollido para o desenvolvemento aínda que sendo relativamente novo é altamente coñecido e empregado na creación de proxectos similares. Ademais disponse de moita documentación e moi completa, incluso titoriais específicos, o que facilita a realización do proxecto, polo tanto non presenta unha dificultade técnica alta. Respecto ao uso de Spotify como plataforma de reprodución observase que a API é bastante completa, pero non contén peticións para manexar as cancións da cola de reprodución, polo que incrementará a dificultade. Xuntando estes motivos, afírmase que o proxecto é viable tecnicamente.
 
-\section{Viabilidade legal}
-A nivel legal habería que ter en conta os lugares onde se reproduza a música, debido a que isto non é posible controlalo e non existen uns termos e condicións do uso da aplicación non se poden ter en conta. Si que é importante prestar atención aos termos da plataforma da que se recolectan as cancións, neste caso especifícase claramente que Spotify é para uso persoal e non comercial polo que quedaría excluído o uso coma gramola nun bar, aínda que se fai referencia a este uso non é real xa que estaría prohibido. Polo tanto considerando que é o usuario final o que decide onde vai a utilizar a plataforma, non se considera que exista un problema legal de uso nin que a aplicación incumpra os termos e condicións de uso de Spotify.
+\subsection{Viabilidade legal}
+A nivel legal habería que ter en conta os lugares onde se reproduza a música, isto non é posible controlalo xa que é o usuario final o responsable, polo non se ten en conta. Si que é importante prestar atención aos termos e condicións de uso da plataforma da que se recolectan as cancións, neste caso especifícase claramente que Spotify é para uso persoal e non comercial polo que quedaría excluído o uso coma gramola nun bar. Polo tanto considerando que é o usuario final o que decide onde vai a utilizar a plataforma, non se considera que exista un problema legal de uso nin que a aplicación incumpra os termos e condicións de uso de Spotify.
 
-\section{Viabilidade do mercado}
-No apartado do estado da arte \ref{sec:estado_da_arte} verase que existen diferentes compañías que ofrecen software e hardware comercial que comercializan gramolas virtuais físicas para establecementos onde se pode engadir música directamente dende un aparello, estas compañías atópanse algo implantadas en Norte América e comezan a popularizarse algo en Europa. En canto a software libre non existen opcións comerciais que cumpran este fin dun xeito similar, e o que existe é tedioso de instalar e mais complexo para o administrador. Tan só hai algúns proxectos ou aplicacións móbiles que de forma xeral crean unha gramola virtual de maneira local para que os usuarios poidan engadir cancións, incluso Spotify ten unha función de crear unha sesión para compartir con catro usuarios mais, pero que non é tan doado de utilizar en espazos mais grandes, xa que están pensados para utilizar en pequenas reunións ou lugares con poucos usuarios. Non se atopou ningún proxecto que permita crear unha gramola virtual sen manter outra aplicación funcionando e sexa distribuído de forma gratuíta. Por estes motivos pódese afirmar que este proxecto ten cabida no mercado, entón pode ser consideralo coma viable.\bigbreak
+\subsection{Viabilidade do mercado}
+No apartado do estado da arte \ref{sec:estado_da_arte} verase que existen diferentes compañías que ofrecen software e hardware comercial que comercializan gramolas virtuais físicas para establecementos onde se pode engadir música directamente dende un aparello. Estas compañías atópanse algo implantadas en Norte América e comezan a popularizarse en Europa. En canto a software libre, non existen opcións comerciais que cumpran este fin dun xeito similar, e o que existe é tedioso de instalar e máis complexo para o administrador. Tan só hai algúns proxectos ou aplicacións móbiles que de forma xeral crean unha gramola virtual de maneira local para que os usuarios poidan engadir cancións. Incluso Spotify ten unha función de crear unha sesión para compartir con catro usuarios mais, pero que non é tan doado de utilizar en espazos mais grandes, xa que está plantexada para utilizar en pequenas reunións ou lugares con poucos usuarios. Non se atopou ningún proxecto que permita crear unha gramola virtual sen manter outra aplicación funcionando que ademáis sexa distribuído de forma gratuíta. Por estes motivos pódese afirmar que este proxecto ten cabida no mercado, entón pode ser consideralo coma viable.\bigbreak
 
-Poñendo en conxunto as distintas análises de viabilidade pódese resumir que o proxecto ten cabida no mercado, é viable economicamente e tecnicamente. Polo tanto dedúcese que o proxecto é viable e é posible que teña éxito no mercado.
-
-\section{Análise}
-Co fin de facilitar a democracia musical nas reunións de amigos, bares, festas e demais, xurde a idea de crear unha aplicación que permita aos usuarios escoller as cancións para escoitar. Esta idea xa existe pero non está implantada e dedúcese que o motivo é a dificultade de uso das aplicacións, se para engadir unha canción, é necesaria facer a descarga da aplicación, rexistrarse, procurar a sala e engadir a canción, é normal que os usuarios non teñan gran interese en realizar estes pasos. Algo similar ocorre cos administradores, cantos menos pasos haxa que dar para que os usuarios poidan utilizar a aplicación, mais probable será a súa adopción.\smallbreak
-Primeiramente pensouse en crear unha gramola que fose multiplataforma, que puidese incluír diferentes servizos e dependendo destes utilizar diferentes métodos para reproducir as cancións, finalmente esta idea rexeitouse debido a que resolveuse facer a reprodución directamente na plataforma.\smallbreak
-Outra das posibilidades que considerouse foi a da creación do proxecto prescindindo de Ionic xa que facilitaría a comunicación, pero observouse que se perdería adaptación a dispositivos móbiles é todos os compoñentes predefinidos.\smallbreak 
-Por estas razóns decidiuse crear unha aplicación web, xa que evita a descarga, cun rexistro sinxelo e unha interface intuitiva que axude aos usuarios na procura dos seus temas favoritos. Vaise desenvolver un frontend baseado en Ionic no que se amosarán todos os datos relacionados coas cancións que están na cola, o número de votos e a súa orde de reprodución. Tamén se vai realizar un backend en Django Rest Framework que nos permitirá a conexión do frontend coa API de Spotify e así levar a lóxica do proxecto a cabo.\medbreak
-
-A aplicación contará coas seguintes funcións:
-\begin{itemize}
-	\item \textbf{Xestión da reprodución de música}
-
-		Esta é a principal función do proxecto, permite xestionar a reprodución de música nun cliente de Spotify. O seu obxectivo é engadir a seguinte canción na lista de reprodución da aplicación a cola de reprodución coa finalidade de que esta sexa reproducida ao rematar a canción que está a soar. Deste xeito non se interrompe de ningunha forma o funcionamento normal do cliente de Spotify xa que pódese seguir facendo modificacións no cliente, engadindo cancións a cola ou cambiando a unha nova, e as seguintes soarán na orde correcta debido a que as accións no cliente prevalecen as da aplicación.
-		
-	\item \textbf{Creación dunha sesión}
-
-		Unha sesión consta dun conxunto de usuarios que engaden cancións a mesma lista de reprodución. Estas constan dun usuario administrador que é xeralmente tamén o propietario da conta de Spotify, é dicir unha sesión conta tan só con un lugar de reprodución. A aplicación permitirá crear diferentes sesións para diferentes grupos de usuarios e diferentes contas de Spotify. Cada sesión pode interpretarse coma un bar ou lugar de emprazamento dunha gramola física, pero por suposto que pode ser usado en oficinas, reunións particulares e calquera sitio onde a música teña cabida.
-
-	\item \textbf{Creación de usuarios}
-
-		Esta función é a que permite rexistrar usuarios en cada unha das salas, unha vez rexistrados estes poderán procurar e engadir cancións a cola de reprodución, tamén poderán realizar votacións en cada unha das cancións o que lles permitirá que as mais votadas sexan reproducidas antes que as que menos votos teñen. O primeiro usuario rexistrado terá o rol de administrador, polo tanto será o encargado de engadir a conta de Spotify para permitir a reprodución de música.
-
-	\item \textbf{Creación dunha cola de reprodución}
-
-		A creación da cola de reprodución é o que permitirá aos usuarios visualizar cales son as cancións que van soar a continuación. Esta estará ordenada de xeito cronolóxico é dicir, as engadidas con anterioridade serán as primeiras en soar, aínda que esta orde poderase ver modificada debido as votacións dos usuarios o que repercutirá en que as cancións mais votadas serán as primeiras en soar independentemente do intre no que se agregou a canción.
-
-	\item \textbf{Procura de cancións}
-
-		A función de procura é a que permite aos usuarios buscar cancións para engadir a cola de reprodución, amosa unha lista de resultados e o usuario ten que elixir a canción desexada. A procura faise no catálogo de Spotify, polo tanto a dispoñibilidade de uns ou outros temas depende da plataforma musical.
-
-	\item \textbf{Votación de cancións}
-		
-		Os usuarios terán a posibilidade de votar as cancións que estean na lista de reprodución, cando unha canción é a que maior número de votos ten, será a próxima en ser engadida a cola, independentemente do resto de factores que ordenan a lista de reprodución, o número de votos de cada canción aparece ao seu carón na lista.
-
-	\item \textbf{Elección de dispositivo}
-
-		Debido a que a plataforma de Spotify é multidispositivo, é probable que se atope mais dun cliente aberto a vez, por isto é necesario que o administrador poida elixir dende que dispositivo quere que a música sexa reproducida. No caso de que a música xa estea soando non é necesario facer esta elección xa que as cancións serán engadidas a cola do dispositivo que está a funcionar nese intre.
-
-	\item \textbf{Poboar a lista de reprodución}
-
-		A función de poboar a lista de reprodución, permite seleccionar unha lista de reprodución de Spotify, pode ser tanto unha que creemos nos coma calquera outra que sigamos, e vanse introducir as cancións de dita lista na nosa lista de reprodución. Deste xeito se consegue unha lista con cancións que son acorde a unha temática e que os usuarios poderán votar para elixir a orde, tamén pode axudarlles a orientarlles ao elixir as cancións que queiran procurar.
-\end{itemize}
-
-\section{Actores}
-Os actores nunha aplicación especifican un rol xogado por un usuario ou calquera outro sistema que interactúa co suxeito. No proxecto existen tres tipos de usuarios, usuarios sen rexistrar, usuarios rexistrados e administrador.
-
-\begin{figure}[hp!]
-	\caption{Diagrama de actores}
-	\centering
-	\includegraphics[width=0.7\textwidth]{imaxes/actores.png}
-	\label{fig:actores}
-\end{figure}
-
-\begin{itemize}
-	\item \textbf{Usuario sen rexistrar}
-
-		O usuario sen rexistrar é o usuario que accede a aplicación web pero non está autenticado. Non se contempla a posibilidade de que os usuarios sen rexistrar poidan consultar o estado de sesións nin realizar ningunha acción sen se rexistrar primeiro. As funcións que poden realizar os usuarios sen rexistrar son, creación dunha nova sesión, rexistrarse nunha sesión e conectarse ao seu usuario previamente rexistrado.
-
-	\item \textbf{Usuario rexistrado}
-
-		O usuario rexistrado é aquel que está autenticado na aplicación web, cada usuario estará asociado a unha sesión e dito usuario poderá realizar accións sobre unicamente esa sesión. As accións que poden realizar son, a visualización da cola de reprodución, buscar cancións no catálogo de Spotify, engadir cancións a cola de reprodución e votar as cancións que xa pertencen a lista de reprodución da sesión.
-
-	\item \textbf{Usuario administrador}
-
-		O usuario administrador é o primeiro usuario rexistrado en cada unha das sesións, pode realizar as mesmas accións que os usuarios rexistrados e ademais é o que interactúa coa conta de Spotify. As accións exclusivas do usuario administrador son, conectar a sesión con unha conta de Spotify, seleccionar o dispositivo no que vai traballar a aplicación e tamén ten a capacidade de poboar a lista de reprodución da aplicación seleccionando unha das listas da conta de Spotify.
-
-\end{itemize}
-
-\section{Requisitos da aplicación}
-Os requisitos son as necesidades físicas ou funcionais que o produto trata de satisfacer. Os requisitos poden ser funcionais ou non funcionais. Os requisitos non funcionais son aqueles que non están especificamente relacionados coa funcionalidade do sistema. Os requisitos funcionais son aqueles que describen o comportamento ou función particular dun sistema ou software cando se cumpren certas condicións.
-
-\subsection{Requisitos funcionais}
-\begin{itemize}
-		\item Amosar información da cola de reprodución.
-		\item Amosar os resultados de procura.
-		\item Permitir engadir cancións a cola.
-		\item Posibilitar a creación de sesións.
-		\item Permitir facer unha procura de cancións.
-		\item Permitir o rexistro de usuarios.
-		\item Permitir a autenticación dos usuarios.
-		\item Permitir facer votacións individualmente nas cancións.
-		\item Permitir a engadir unha lista completa a lista de reprodución.
-\end{itemize}
-
-\subsection{Requisitos non funcionais}
-\begin{itemize}
-	\item \textbf{Deseño:} minimalista fácil de comprender e sinxela de usar.
-	\item \textbf{Idioma:} a aplicación estará en inglés xa que a maior parte dos usuarios de Spotify é en Norte América e Europa, polo tanto un gran volume comprenderá o idioma sen problema.
-	\item \textbf{Consistencia:} o modelo da aplicación mantense actualizado sen perder datos.
-	\item \textbf{Seguridade:} tanto as comunicacións coa API coma o almacenamento de credenciais debe ser seguro.
-	\item \textbf{Fiabilidade:} Os erros en produción están controlados para poder dar unha resposta ó usuario en caso de que se dean.
-\end{itemize}
+Poñendo en conxunto as distintas análises de viabilidade pódese resumir que o proxecto ten cabida no mercado, é viable economicamente e técnicamente. Polo tanto dedúcese que o proxecto é viable e é posible que teña éxito no mercado.
