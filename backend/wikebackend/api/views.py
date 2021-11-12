@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import HttpRequest, HttpResponse
 
 from api.music import spotify
-from api.models import session, LocalPlaylist
+from api.models import session, Songs
 
 from datetime import datetime, timedelta
 import json
@@ -19,8 +19,8 @@ import time
 
 # import viewsets
 from rest_framework import viewsets
-from api.models import SongPlayingNow, LocalPlaylist
-from api.serializers import SongPlayingNowSerializer, LocalPlaylistSerializer
+from api.models import SongPlayingNow, Songs
+from api.serializers import SongPlayingNowSerializer, SongsSerializer
 
 # View for test auth purpouses
 class HelloView(APIView):
@@ -41,9 +41,9 @@ class SongPlayingNowViewSet(viewsets.ModelViewSet):
     serializer_class = SongPlayingNowSerializer
 
 @permission_classes([IsAuthenticated])
-class LocalPlaylistViewSet(viewsets.ModelViewSet):
-    queryset = LocalPlaylist.objects.all()
-    serializer_class = LocalPlaylistSerializer
+class SongsViewSet(viewsets.ModelViewSet):
+    queryset = Songs.objects.all()
+    serializer_class = SongsSerializer
 
 # Register new session
 @api_view(['POST'])
@@ -88,11 +88,11 @@ def playingNow(request):
 # Pops the first song of the list if is the one playing
 def popTop(wike):
     current = SongPlayingNow.objects.filter(session=wike).values('uri').first()
-    top = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+    top = Songs.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
     if current != None:
         if current == top:
             res = "same"
-            LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').first().delete()
+            Songs.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').first().delete()
         else:
             res = "notSame"
     else:
@@ -109,11 +109,11 @@ def addToQueue(wike):
         nowTime = timedelta(milliseconds=nowTime['progress_ms'])
         changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
         if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+            adding = Songs.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
             global lastInQueue
-            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
+            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the Songs
                 spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
+                lastInQueue = Songs.objects.filter(session=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
                 res = "Change"
             else:
                 res = "Already added"
@@ -124,28 +124,28 @@ def addToQueue(wike):
 
     return res
 
-# Get the songs of the LocalPlaylist
+# Get the songs of the Songs
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def queueSongs(request):
-    songs = list(LocalPlaylist.objects.filter(session=request.user.userSession).order_by('-votes', '-added_mode', 'created').values('artists', 'title', 'votes', 'uri'))
+    songs = list(Songs.objects.filter(session=request.user.userSession).order_by('-votes', '-added_mode', 'created').values('artists', 'title', 'votes', 'uri'))
     jsongs = json.dumps(songs)
     return HttpResponse(jsongs)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def voteP(request):
-    N = LocalPlaylist.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
+    N = Songs.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
     N = N+1
-    LocalPlaylist.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
+    Songs.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
     return Response(data="plus", status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def voteN(request):
-    N = LocalPlaylist.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
+    N = Songs.objects.values_list('votes', flat=True).get(session=request.user.userSession, uri=request.data['uri'])
     N = N-1
-    LocalPlaylist.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
+    Songs.objects.filter(session=request.user.userSession).filter(uri=request.data['uri']).update(votes=N)
     return Response(data="minus", status=200)
 
 ## Spotify ##
@@ -213,16 +213,16 @@ def playMusic(request):
 # Add a searched song to playlist given the song uri
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def searchToLocalPlaylist(request):
-    searchToPlaylist = spotify.searchToLocalPlaylist(request.data['songUri'], request.user.userSession)
-    return HttpResponse(searchToPlaylist)
+def searchToSongs(request):
+    searchToSongs = spotify.searchToSongs(request.data['songUri'], request.user.userSession)
+    return HttpResponse(searchToSongs)
 
-# Add songs to LocalPlaylist given the playlist uri
+# Add songs to Songs given the playlist uri
 # Aquí habería que meter tamén o limit e o offset para poder engadir todas as cancións
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def playlistToLocalPlaylist(request):
-    playlistSongs = spotify.playlistToLocalPlaylist(request.data['playlistId'], request.user.userSession)
+def addPlaylist(request):
+    playlistSongs = spotify.addPlaylist(request.data['playlistId'], request.user.userSession)
     return HttpResponse(playlistSongs)
 
 # Checks every time if have to change songs or something

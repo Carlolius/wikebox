@@ -35,7 +35,7 @@
 				<!-- Select playlists -->
 				<ion-item>
 					<ion-label>Choose a playlist to populate the queue</ion-label>
-					<ion-select #P placeholder="Playlists" interface="action-sheet" (ionChange)="addToLocalPlaylist(P.value)" (ionFocus)="getPlaylists()">
+					<ion-select #P placeholder="Playlists" interface="action-sheet" (ionChange)="addPlaylist(P.value)" (ionFocus)="getPlaylists()">
 						<ion-select-option *ngFor="let playlist of (playlists | async)" value={{playlist.value.playlistId}}>{{playlist.value.playlist}}</ion-select-option>
 					</ion-select>
 				</ion-item>
@@ -74,19 +74,19 @@
 										<h6>{{ song.artists }}</h6>
 									</ion-label>
 								</ion-col>
-								<ion-col size=1 >
+								<!-- <ion-col size=1 >
 									<ion-button color="light" (click)="voteN(song.uri)">
 										-
 									</ion-button>
-								</ion-col>
-								<ion-col size=1 >
+								</ion-col> -->
+								<ion-col size=0.5 >
 										<ion-label>
 											<h2>{{ song.votes }}</h2>
 										</ion-label>
 								</ion-col>
 								<ion-col size=1 >
-									<ion-button color="light" (click)="voteP(song.uri)">
-										+
+									<ion-button color="app" (click)="voteP(song.uri)">
+										+1
 									</ion-button>
 								</ion-col>
 							</ion-row>

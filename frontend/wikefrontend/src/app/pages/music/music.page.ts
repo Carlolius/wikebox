@@ -115,10 +115,10 @@ export class MusicPage implements OnInit {
 			}});
 	}
 
-	// Add playlist songs to LocalPlaylist
+	// Add playlist songs to Songs
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
-	addToLocalPlaylist( playlistId:string ) {
-		this.playlistSongs = this.apiService.spotifyAddToLocalPlaylist( playlistId )
+	addPlaylist( playlistId:string ) {
+		this.playlistSongs = this.apiService.spotifyAddPlaylist( playlistId )
 	}
 
 	async showPopMenu(ev: any){

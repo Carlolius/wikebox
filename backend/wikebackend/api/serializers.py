@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import SongPlayingNow, LocalPlaylist
+from .models import SongPlayingNow, Songs
 
 class SongPlayingNowSerializer(serializers.ModelSerializer):
     class Meta:
         model = SongPlayingNow
         fields = '__all__'
 
-class LocalPlaylistSerializer(serializers.ModelSerializer):
+class SongsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LocalPlaylist
+        model = Songs
         fields = '__all__'

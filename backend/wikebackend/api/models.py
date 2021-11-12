@@ -16,7 +16,7 @@ class session(models.Model):
         return self.name
 
 # Local playlists model
-class LocalPlaylist(models.Model):
+class Songs(models.Model):
     id = models.BigAutoField(primary_key=True)
     artists = models.CharField(max_length=1000)
     title = models.CharField(max_length=1000)

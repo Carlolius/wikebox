@@ -93,17 +93,17 @@ export class ApiService {
 		);
 	}
 
-	// Add a searched song to LocalPlaylist
+	// Add a searched song to Songs
 	spotifyClickSeachedSong(songUri:string) {
 		this.httpClient
-			.post(this.SERVER_ADDRESS + 'api/searchtolocalplaylist/', {'songUri': songUri})
+			.post(this.SERVER_ADDRESS + 'api/searchtosongs/', {'songUri': songUri})
 			.subscribe();
 	}
 
-	// Add songs to LocalPlaylist
-	spotifyAddToLocalPlaylist(playlistId:string) {
+	// Add songs to Songs
+	spotifyAddPlaylist(playlistId:string) {
 		this.httpClient
-			.post(this.SERVER_ADDRESS + 'api/playlisttolocalplaylist/', {'playlistId': playlistId})
+			.post(this.SERVER_ADDRESS + 'api/addplaylist/', {'playlistId': playlistId})
 			.subscribe();
 	}
 

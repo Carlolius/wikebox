@@ -5,7 +5,7 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register(r'playing', views.SongPlayingNowViewSet)
-router.register(r'local', views.LocalPlaylistViewSet)
+router.register(r'local', views.SongsViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -23,11 +23,11 @@ urlpatterns = [
         path('sessionregister/', views.RegisterSession),
         path('playingnow/', views.playingNow),
         path('playlists/', views.getPlaylists),
-        path('playlisttolocalplaylist/', views.playlistToLocalPlaylist),
+        path('addplaylist/', views.addPlaylist),
         path('playmusic/', views.playMusic),
         path('queuesongs/', views.queueSongs),
         path('search/', views.search),
-        path('searchtolocalplaylist/', views.searchToLocalPlaylist),
+        path('searchtosongs/', views.searchToSongs),
         path('voten/', views.voteN),
         path('votep/', views.voteP),
 ]

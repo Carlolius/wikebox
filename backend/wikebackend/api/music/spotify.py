@@ -2,7 +2,7 @@ import datetime
 import json
 
 import spotipy
-from api.models import LocalPlaylist, SongPlayingNow
+from api.models import Songs, SongPlayingNow
 from django.core import serializers
 
 client_id = 'your_spotify_client_id'
@@ -77,10 +77,10 @@ def chooseDevice(userSession):
     devicesJson = json.dumps(devicesDict)
     return devicesJson
 
-# Add next song from LocalPlaylist to Spotify queue
+# Add next song from Songs to Spotify queue
 def addToQueue(userSession):
     client = getClient(userSession)
-    curi = LocalPlaylist.objects.filter(session=usersession).order_by('-added_mode', '-votes', 'created').values('uri').first() # Get the uri of the next song
+    curi = Songs.objects.filter(session=userSession).order_by('-added_mode', '-votes', 'created').values('uri').first() # Get the uri of the next song
     ccuri = json.dumps(curi['uri']) # Get just the compleat uri
     cccuri = ccuri[15:] # Cleans the not important part of uri
     rcccuri = cccuri.replace("\"", "") # Remove the quotation marks "
@@ -93,7 +93,7 @@ def addToQueue(userSession):
 # Start to play music
 def playMusic(device, userSession):
     client = getClient(userSession)
-    song = LocalPlaylist.objects.filter(session=userSession).order_by('-added_mode', '-votes', 'created').values('uri').first()
+    song = Songs.objects.filter(session=userSession).order_by('-added_mode', '-votes', 'created').values('uri').first()
     uriSongs = [song['uri']]
     client.start_playback(device_id = device, uris = uriSongs)
 
@@ -207,12 +207,12 @@ def getPlaylistSongs(playlistId, userSession):
     return json.dumps(songs)
 
 # Pasar tamén o offset e o limit para poder ver todas as cancións
-def playlistToLocalPlaylist(playlistId, userSession):
+def addPlaylist(playlistId, userSession):
     client = getClient(userSession)
     spotifyPlaylist = client.playlist_tracks(playlistId)
     songs = spotifyPlaylist['items']  # Takes just the songs
-    playlist = LocalPlaylist()  # Assign the model
-    LocalPlaylist.objects.filter(added_mode="playlist").filter(session=userSession).delete() # Cleans the LocalPlaylist when selected playlist chagnes
+    playlist = Songs()  # Assign the model
+    Songs.objects.filter(added_mode="playlist").filter(session=userSession).delete() # Cleans the Songs when selected playlist chagnes
     for i in range(len(songs)):
         playlist.pk = None  # The pk is assigned automatically, this is needed for that
         artists = songs[i]['track']['artists']  # Loop in the artist if there are more than one
@@ -232,9 +232,9 @@ def playlistToLocalPlaylist(playlistId, userSession):
         playlist.save()
     return json.dumps(songs)
 
-def searchToLocalPlaylist(songUri, userSession):
+def searchToSongs(songUri, userSession):
     client = getClient(userSession)
-    playlist = LocalPlaylist()  # Assign the model
+    playlist = Songs()  # Assign the model
     searchedSong = client.track(songUri)
     playlist.pk = None  # The pk is assigned automatically, this is needed for that
     artists = searchedSong['artists']  # Loop in the artist if there are more than one
