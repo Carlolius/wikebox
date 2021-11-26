@@ -1,7 +1,6 @@
-import { Platform, AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, tap, switchMap, catchError } from 'rxjs/operators';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 
 import { Storage } from '@ionic/storage-angular';
@@ -10,7 +9,7 @@ import { Storage } from '@ionic/storage-angular';
 import { HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 import { AuthResponse } from '../models/auth-response';
-import { NavController } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 
 import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 
@@ -21,6 +20,8 @@ import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 
 export class AuthService {
 	private _storage: Storage | null = null;
+
+	isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
 	SERVER_ADDRESS: string = 'http://192.168.1.106:8000/';
 	/* loggedIn = false; // not necessary */
@@ -69,7 +70,21 @@ export class AuthService {
 	}
 
 	// Login
-	login(username: String, password: String) {
+	login(username: String, password: String){
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {"username": username, "password": password}).pipe(
+			map((token: any) => token.access),
+				switchMap(access => {
+				    console.log(access);
+				
+				// return from(Store.set({key: token, value: token}));
+			}),
+			tap(_ => {
+				this.isAuthenticated.next(true);
+			})
+		)
+	}
+
+	/* login(username: String, password: String) {
 		console.log("Name: "+  username)
 		console.log("Password: "+ password)
 		this.user = username
@@ -95,7 +110,7 @@ export class AuthService {
 				return token;
 			}),
 		);
-	}
+	} */
 
 	// Register
 
@@ -109,7 +124,7 @@ export class AuthService {
 	}
 
 	// Logout
-
+	// Isto borra todos os usuarios
 	async logout() {
 		this.storage.remove("token");
 		/* localStorage.setItem("token", this.token); */
