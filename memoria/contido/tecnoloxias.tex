@@ -16,13 +16,13 @@ Os requisitos son as necesidades físicas ou funcionais que o produto trata de s
 \begin{itemize}
 		\item Amosar información da cola de reprodución.
 		\item Amosar os resultados de procura.
-		\item Permitir engadir cancións a cola.
+		\item Permitir engadir cancións á cola.
 		\item Posibilitar a creación de sesións.
 		\item Permitir facer unha procura de cancións.
 		\item Permitir o rexistro de usuarios.
 		\item Permitir a autenticación dos usuarios.
 		\item Permitir facer votacións individualmente nas cancións.
-		\item Permitir a engadir unha lista completa a lista de reprodución.
+		\item Permitir engadir unha lista completa á lista de reprodución.
 \end{itemize}
 
 \subsection{Requisitos non funcionais}
@@ -35,7 +35,7 @@ Os requisitos son as necesidades físicas ou funcionais que o produto trata de s
 \end{itemize}
 
 \section{Actores}
-Os actores nunha aplicación especifican un rol xogado por un usuario ou calquera outro sistema que interactúa co suxeito. No proxecto existen tres tipos de usuarios, usuarios sen rexistrar, usuarios rexistrados e administradores.
+Os actores nunha aplicación especifican un rol xogado por un usuario ou calquera outro sistema que interactúa co suxeito. No proxecto existen tres tipos de usuarios, usuarios sen rexistrar, usuarios rexistrados e usuarios administradores.
 
 \begin{figure}[hp!]
 	\caption{Diagrama de actores}
@@ -47,7 +47,7 @@ Os actores nunha aplicación especifican un rol xogado por un usuario ou calquer
 \begin{itemize}
 	\item \textbf{Usuario sen rexistrar}
 
-		O usuario sen rexistrar é o usuario que accede á aplicación web pero non está autenticado. Non se contempla a posibilidade de que os usuarios sen rexistrar poidan consultar o estado de sesións nin realizar ningunha acción sen se rexistrar primeiro. As funcións que poden realizar os usuarios sen rexistrar son, creación dunha nova sesión, rexistrarse nunha sesión e conectarse ao seu usuario previamente rexistrado.
+		O usuario sen rexistrar é o usuario que accede á aplicación web pero non está autenticado. Non se contempla a posibilidade de que os usuarios sen rexistrar poidan consultar o estado de sesións nin realizar ningunha acción sen se rexistrar primeiro. As funcións que poden realizar os usuarios sen rexistrar son: creación dunha nova sesión, rexistrarse nunha sesión e conectarse ao seu usuario previamente rexistrado.
 
 	\item \textbf{Usuario rexistrado}
 
@@ -55,7 +55,7 @@ Os actores nunha aplicación especifican un rol xogado por un usuario ou calquer
 
 	\item \textbf{Usuario administrador}
 
-		O usuario administrador é o primeiro usuario rexistrado en cada unha das sesións, pode realizar as mesmas accións que os usuarios rexistrados e ademais é o que interactúa coa conta de Spotify. As accións exclusivas do usuario administrador son, conectar a sesión con unha conta de Spotify, seleccionar o dispositivo no que vai traballar a aplicación e tamén ten a capacidade de poboar a lista de reprodución da aplicación seleccionando unha das listas da conta de Spotify.
+		O usuario administrador é o primeiro usuario rexistrado en cada unha das sesións, pode realizar as mesmas accións que os usuarios rexistrados e ademais é o que interactúa coa conta de Spotify. As accións exclusivas do usuario administrador son: conectar a sesión con unha conta de Spotify, seleccionar o dispositivo no que vai traballar a aplicación e tamén ten a capacidade de poboar a lista de reprodución da aplicación seleccionando unha das listas da conta de Spotify.
 
 \end{itemize}
 
@@ -85,7 +85,7 @@ Os casos de uso representan unha tarefa que poden realizar os actores, están di
 
 	\item \textbf{Votación de cancións}
 		
-		Os usuarios terán a posibilidade de votar as cancións que estean na lista de reprodución. Cando unha canción é a que maior número de votos ten, será a próxima en ser engadida a cola, independentemente do resto de factores que ordenan a lista de reprodución. O número de votos de cada canción aparece ao seu carón na lista.
+		Os usuarios terán a posibilidade de votar as cancións que estean na lista de reprodución. A canción que maior número de votos ten, será a próxima en ser engadida a cola, independentemente do resto de factores que ordenan a lista de reprodución. O número de votos de cada canción aparece ao seu carón na lista.
 
 	\item \textbf{Elección de dispositivo}
 
@@ -93,7 +93,7 @@ Os casos de uso representan unha tarefa que poden realizar os actores, están di
 
 	\item \textbf{Poboar a lista de reprodución}
 
-		A función de poboar a lista de reprodución, permite seleccionar unha lista de reprodución de Spotify, pode ser tanto unha que creemos nós coma calquera outra que sigamos, e vanse introducir as cancións de dita lista na nosa lista de reprodución. Deste xeito, se consegue unha lista con cancións que son acorde a unha temática e que os usuarios poderán votar para elixir a orde, tamén pode axudarlles a orientarlles ao elixir as cancións que queiran procurar.
+		A función de poboar a lista de reprodución, permite seleccionar unha lista de reprodución de Spotify, pode ser tanto unha que cree o usuario ou calquera outra que siga, vanse introducir as cancións de dita lista na nosa lista de reprodución. Deste xeito, se consegue unha lista con cancións que son acorde a unha temática e que os usuarios poderán votar para elixir a orde, tamén pode axudarlles a orientarlles ao elixir as cancións que queiran procurar.
 \end{itemize}
 
 \section{Ferramentas de desenvolvemento}
@@ -105,11 +105,11 @@ Comezando polo sistema operativo, utilizouse \textbf{Linux}, todo o código do p
 
 Para e edición do código escolleuse \textbf{NeoVim}, trátase dun editor de texto na terminal, creado para aumentar a eficiencia ao editar calquera tipo de texto. É un fork de \textit{VIM}, e está deseñado facilitar o seu mantemento, a súa extensibilidade e usabilidade, alenta aos seus usuarios engadiren contribucións. Aínda que non se trata dun \acrfull{IDE}, grazas á comunidade existen múltiples complementos que fan o seu uso moi similar a un destes, pero sendo moito máis lixeiro en canto a recursos utilizados. Foi utilizado para o desenvolvemento do código e da memoria.
 
-Coma sistema de control de versións, utilízase \textbf{Git}, é un sistema de control de versións distribuído de código aberto, deseñado para manexar todo tipo de proxectos. Caracterízase principalmente pola súa velocidade, rendemento, usabilidade e flexibilidade. Facilita de gran maneira o rexistro de cambios que se fan no código o que tamén permite o desenvolvemento de código de forma colaborativa.
+Coma sistema de control de versións, utilízase \textbf{Git}~\cite{git}, é un sistema de control de versións distribuído de código aberto, deseñado para manexar todo tipo de proxectos. Caracterízase principalmente pola súa velocidade, rendemento, usabilidade e flexibilidade. Facilita de gran maneira o rexistro de cambios que se fan no código o que tamén permite o desenvolvemento de código de forma colaborativa.
 
 Para o aloxamento do proxecto, facilitando así a súa compartición e a copia de seguridade utilizouse \textbf{GitHub}, que é unha plataforma de desenvolvemento colectivo que utiliza o sistema de control de versións de \textit{Git}, utilízase principalmente para o control de versións e o almacenamento de código fonte.
 
-No apartado de probas utilízase \textbf{Firefox developer edition} para comprobar o funcionamiento da aplicación. Trátase dun dos navegadores mais utilizados, é de código libre e conta con unha comunidade que desenvolve unha gran cantidade de complementos. Nesta versión en concreto ponse énfase en facilitar o traballo aos desenvolvedores, xa que conta con características coma a visualización de cuadrículas \acrshort{CSS} ou un depurador para \textit{JavaScript}. Polo tanto pensouse que é o mais axeitado para o desenvolvemento de gran parte do frontend.
+No apartado de probas utilízase \textbf{Firefox developer edition} para comprobar o funcionamiento da aplicación. Trátase dun dos navegadores mais utilizados, é de código libre e conta con unha comunidade que desenvolve unha gran cantidade de complementos. Nesta versión en concreto ponse énfase en facilitar o traballo aos desenvolvedores, xa que conta con características coma a visualización de cuadrículas \acrshort{CSS} ou un depurador para \textit{JavaScript}~\cite{javascript}. Polo tanto pensouse que é o mais axeitado para o desenvolvemento de gran parte do frontend.
 
 Para comprobar a compatibilidade tamén usáronse diferentes navegadores, \textbf{Firefox} na súa versión normal e na versión móbil, do mesmo modo \textbf{Google Chrome} probouse en ambas versións, na móbil e na de escritorio. Nos navegadores específicos dos sistemas \textit{Windows} máis \textit{OS X}, que son \textit{Edge} e \textit{Safari} respectivamente, tamén foron utilizados, mais sen facer probas exhaustivas.
 
@@ -124,11 +124,11 @@ Coa idea de controlar o tempo invertido e a xestión de tarefas, utilizouse \tex
 \section{Frameworks e librarías}
 No desenvolvemento do proxecto utilizamos principalmente dous \glspl{framework} para o \gls{frontend} e o \gls{backend} e unha libraría que nos facilita as peticións á \gls{API} de \gls{Spotify}, descríbense a continuación.
 
-Para o desenvolvemento do \gls{frontend} empregamos \textbf{Ionic}, un \gls{framework} de código aberto que engloba un conxunto de ferramentas para o desenvolvemento de \acrfull{PWA}\footnote{Aplicacións, web progresivas}, enfócase na experiencia do usuario e no interface, proporcionando múltiples controles para xestionar as iteracións. Unha das súas características mais rechamantes é que permite co mesmo código a creación de aplicacións web, e aplicacións para os sistemas máis utilizados hoxe en día, \textit{iOS} e \textit{Android}. Escolleuse esta plataforma debido á súa integración e á facilidade para desenvolver aplicacións web.
+Para o desenvolvemento do \gls{frontend} empregamos \textbf{Ionic}~\cite{ionic5}, un \gls{framework}~\cite{ionicDocs} de código aberto que engloba un conxunto de ferramentas para o desenvolvemento de \acrfull{PWA}\footnote{Aplicacións, web progresivas}, enfócase na experiencia do usuario e no interface, proporcionando múltiples controles para xestionar as iteracións. Unha das súas características mais rechamantes é que permite co mesmo código a creación de aplicacións web, e aplicacións para os sistemas máis utilizados hoxe en día, \textit{iOS} e \textit{Android}. Escolleuse esta plataforma debido á súa integración e á facilidade para desenvolver aplicacións web.
 
-\textit{Ionic} permite a integración cos frameworks \textit{React}, \textit{Vue} e \textit{Angular} decantándonos por este último. \textbf{Angular} é un \gls{framework} baseado en compoñentes para a xeración de páxinas web escalables, está desenvolvido en \textit{TypeScript} e \textit{\acrshort{HTML}}, utiliza unha ampla gama de librarías que integran características coma as redireccións ou manexo de formularios. Decantámonos por este framework xa que é o que mais tempo leva funcionando en \textit{Ionic} e contén características coma os observables que facilitan a xestión das peticións ao backend.
+\textit{Ionic} permite a integración cos frameworks \textit{React}, \textit{Vue} e \textit{Angular}~\cite{angular5} decantándonos por este último. \textbf{Angular} é un \gls{framework} baseado en compoñentes para a xeración de páxinas web escalables, está desenvolvido en \textit{TypeScript}~\cite{typescript} e \textit{\acrshort{HTML}}, utiliza unha ampla gama de librarías que integran características coma as redireccións ou manexo de formularios. Decantámonos por este framework xa que é o que mais tempo leva funcionando en \textit{Ionic} e contén características coma os observables que facilitan a xestión das peticións ao backend.
 
-Na parte do \gls{backend} eliximos \textbf{\gls{Django}}, trátase dun \gls{framework} de código aberto escrito en \textit{Python}. Na súa orixe foi creado para xestionar un xornal de noticias, facilita a creación de sitios webs complexos, pon énfase na reutilización da conectividade e a extensibilidade dos compoñentes e no desenvolvemento rápido. No noso caso utilizamos \textit{Django Rest Framework}, que contén características mais específicas para a creación de \glspl{API} RESTful o que permite a transferencia de información entre as interfaces e as bases de datos, precisamente é o axeitado para o noso \gls{backend}.
+Na parte do \gls{backend} eliximos \textbf{\gls{Django}}~\cite{Django}, trátase dun \gls{framework} de código aberto escrito en \textit{Python}~\cite{python}. Na súa orixe foi creado para xestionar un xornal de noticias, facilita a creación de sitios webs complexos, pon énfase na reutilización da conectividade e a extensibilidade dos compoñentes e no desenvolvemento rápido. No noso caso utilizamos \textit{Django Rest Framework}~\cite{djangoApiGuide}, que contén características mais específicas para a creación de \glspl{API} RESTful o que permite a transferencia de información entre as interfaces e as bases de datos, precisamente é o axeitado para o noso \gls{backend}.
 
 Por último, referente as librerías, utilizamos \textbf{Spotipy}~\cite{spotipy}, é unha libraría de Python que permite a execución das consultas na \Gls{API} de \Gls{Spotify}. Ademais tamén inclúe a xestión de \textit{tokens} para gardar as credenciais de acceso dos usuarios, polo tanto dunha forma doada podemos interactuar coa plataforma de música. Tivemos en conta outras librerías coma Tekore~\cite{tekore} pero a descartamos por non contar con tanta documentación e non satisfacer as necesidades do mesmo xeito.
 
@@ -147,7 +147,7 @@ Na parte do backend utilizamos tan só \textbf{Python} xa que Django está escri
 
 Para o manexo da base de datos, \textit{Django} utiliza \textbf{SQL} que é unha linguaxe usada para a administración, recuperación de bases de datos relacionais. É particularmente útil usando modelos de datos. Unha das súas principais características é que usa álxebra relacional para efectuar as consultas, co fin de recuperar de forma sinxela información das bases de datos e para realizar cambios nela.
 
-\textbf{\LaTeX}~\cite{latex}, é un software de composición de textos de alta calidade que empregamos para a maquetación desta memoria. En xeral é usado para crear artigos e documentos técnicos e científicos aínda que pode utilizarse para todo tipo de textos. Segue a filosofía de separar a presentación e o contido, deste xeito os autores poden enfocarse no contido sen atender de forma simultánea á parte visual. Cando se prepara un documento, o escritor especifica unha estrutura lóxica utilizando conceptos simples coma capítulo, sección ou táboa, e \LaTeX~encárgase do formato, de todos modos permite a edición do estilo aínda que sexa dunha forma separada.
+\textbf{\LaTeX}~\cite{latexbook}~\cite{latex}, é un software de composición de textos de alta calidade que empregamos para a maquetación desta memoria. En xeral é usado para crear artigos e documentos técnicos e científicos aínda que pode utilizarse para todo tipo de textos. Segue a filosofía de separar a presentación e o contido, deste xeito os autores poden enfocarse no contido sen atender de forma simultánea á parte visual. Cando se prepara un documento, o escritor especifica unha estrutura lóxica utilizando conceptos simples coma capítulo, sección ou táboa, e \LaTeX~encárgase do formato, de todos modos permite a edición do estilo aínda que sexa dunha forma separada.
 
 \section{Sistema de xestión de base de datos}
 \textbf{\gls{SQLite}} é unha libraría escrita en \textit{C} que implementa un motor completo de bases de datos SQL, lixeiro, rápido e autocontido. É ideal para aplicacións que requiren unha instalación pequena e nas que a maioría das peticións son de tan só lectura.  No noso proxecto o usamos para almacenar tanto os usuarios, as sesións e as cancións.

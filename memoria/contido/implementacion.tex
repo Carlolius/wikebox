@@ -8,7 +8,7 @@ Na figura~\ref{fig:estrutura_xeral} amósase a estrutura xeral do proxecto e a s
 
 A estrutura principal do backend é similar a dos proxectos \textit{Django}, conta cun proxecto chamado \textit{Wikebackend} e dúas aplicacións: unha chamada \textit{users} que é a encargada da xestión dos usuarios e a outra \textit{api} que é a que xestiona as peticións recibidas e as enviadas a API de Spotify. 
 
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.3\textwidth]{imaxes/estrutura_xeral.png}
   \caption{Estrutura do proxecto}
@@ -24,7 +24,7 @@ A estrutura principal do backend é similar a dos proxectos \textit{Django}, con
 		É a aplicación que xestiona os usuarios, contén as modificacións para a adaptación do modelo de usuarios ao proxecto e as funcións que teñen que ver con estes.
 \end{itemize}
 
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.3\textwidth]{imaxes/estrutura_backend.png}
   \caption{Estrutura do backend}
@@ -44,7 +44,7 @@ Respecto ao frontend, a estrutura segue a distribución xeral dos proxectos en \
 		Almacena as variables correspondentes á folla de estilo, garda as cores principais para axeitar todo o proxecto a un tema en concreto e non ter que introducir as cores por separado cando sexan necesarias.
 \end{itemize}
 
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.3\textwidth]{imaxes/estrutura_frontend.png}
   \caption{Estrutura do frontend}
@@ -61,7 +61,15 @@ Os compoñentes tamén forman parte de este apartado. Son bloques que conteñen 
 Por último tamén se inclúen pequenos modelos utilizados para a transferencia de información, deste xeito dita información pódese xestionar como un bloque. Neste caso son utilizados para a autenticación dos usuarios, o almacenamento dos tokens e as cancións.
 
 \section{Fluxo das peticións}
-As peticións na aplicación seguen un fluxo a través dos ficheiros similar en todos os casos. Segundo o tipo de solicitude, os servizos e os ficheiros finais que as reciben varían. A continuación explícase o percorrido que seguiría unha procura dunha canción para posiblemente ser engadida a lista de reprodución, tamén pódese observar unha infografía desta mesma petición na figura~\ref{fig:wikebox_flow}.
+As peticións na aplicación seguen un fluxo a través dos compoñentes similar en todos os casos. Segundo o tipo de solicitude, os servizos e os compoñentes finais que as reciben varían. A continuación explícase o percorrido que seguiría unha procura dunha canción para posiblemente ser engadida a lista de reprodución, tamén pódese observar un diagrama de secuencia na figura~\ref{fig:diagrama_secuencia} unha infografía desta mesma petición na figura~\ref{fig:wikebox_flow}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{imaxes/diagrama_secuencia.png}
+  \caption{Diagrama de secuencia.}
+  \label{fig:diagrama_secuencia}
+\end{figure}
+
 \begin{enumerate}
 	\item Para comezar, o usuario interactúa co frontend en \textit{music.page.html}. Neste caso realiza unha procura na barra de procura, ao facer unha modificación no texto actívase o método \textit{searchChanged}.
 	\item O método atópase en \textit{music.page.ts} que é o controlador da páxina \textit{music}. Fai unha petición ao servizo encargado de xestionar todo o relacionado coa música.
@@ -72,7 +80,7 @@ As peticións na aplicación seguen un fluxo a través dos ficheiros similar en 
 	\item Por último as respostas son recibidas en forma inversa da anteriormente descrita e as cancións obtidas no resultado da procura son amosadas nun cadro de listas para ser engadidas na playlist.
 \end{enumerate}
 
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.9\textwidth]{imaxes/Wikebox_flow.png}
   \caption{Fluxo dunha petición.}
@@ -84,7 +92,7 @@ Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o des
 
 \subsection{Frontend}
 
-\begin{figure}[hp!]
+\begin{figure}[h]
 	\caption{Vista en diferentes dispositivos}
 	\label{fig:wikebox_sizes}
 	\begin{subfigure}[c]{1\textwidth}
@@ -122,40 +130,8 @@ playingNow(): Observable<IEsongs[]>{
 		Opción exclusiva para os administradores. Debido a que Spotify é multidispositivo pode darse o caso de que a aplicación se atope aberta en mais dun de eles á vez, o que complicaría o proceso de reprodución xa que por defecto a gramola funciona dende o dispositivo no que se está a reproducir música. Para evitar estes problemas permítese ao administrador seleccionar un dos dispositivos que se atopen conectados nese intre.
 
 	\item \textbf{Barra de procura}\smallbreak
-		Ao facer clic sobre a barra pódese escribir un termo a procurar. Este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reprodución. En~\ref{code:searchpop} podemos ver o código que executa o compoñente ao recibir os resultados da procura. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML}.
+		Ao facer clic sobre a barra pódese escribir un termo a procurar. Este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reprodución. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML}.
 		
-\begin{lstlisting}[language=javascript, label={code:searchpop}, caption={Función searchShowpop}]
-async searchShowpop( ev: any ) {
-	const popover = await this.searchPopover.create({
-		component: SearchresultpopComponent, 
-		event: ev,
-		componentProps: {
-			results: this.results,
-		},
-	});
-	// If the search field it's empty don't show the popover
-	if (this.searchTerm != "") {
-		await popover.present();
-	}
-	const { data } = await popover.onWillDismiss();
-	// Check if there are data
-	if (data) {
-		this.clickSearchSong( data.item)
-	}
-}
-\end{lstlisting}
-
-		\begin{lstlisting}[language=html, label={code:searchresultpop}, caption={music.page.html}]
-<ion-list>
-	<ion-item *ngFor="let item of (results | async);" (click)="onClick(item.value.uri)">
-		<ion-label>
-			<h2>{{ item.value.song }}</h2>
-			<h6>{{ item.value.artists }}</h6>
-		</ion-label>
-	</ion-item>
-</ion-list>
-\end{lstlisting}
-
 	\item \textbf{Lista de reproducción}\smallbreak
 		Trátase da parte da páxina onde se amosan as cancións na orde que se van reproducir. Ademais de poder ver o título da canción tamén amosase o artista e ao seu carón o número de votos realizados polos usuarios, isto permite ordenar as cancións segundo a preferencia dos usuarios. Os atributos polos que se ordena esta lista son os seguintes segundo a súa importancia: forma na que se engadiu, número de votos e momento no que se engadiu. Esta lista é gardada na base de datos da API, o que fai que os resultados sexan case instantáneos e se obteñen cun observable. Tamén se inclúe un botón que permite aos usuarios engadir un voto a canción seleccionada.
 
@@ -163,54 +139,17 @@ async searchShowpop( ev: any ) {
 		Como o seu nome indica, trátase dun menú depregable onde existen diferentes opcións para os usuarios como pode ser a de pechar a sesión facendo \textit{Logout}.
 \end{itemize}
 
-Unha vez descrita a páxina principal procédese a debullar as demais, que sen ter tantas opcións conteñen partes moi importantes da aplicación. Tanto a páxina de \textbf{session} coma a de \textbf{rexistro} son as encargadas de rexistrar unha nova sesión e os novos usuarios. Ámbalas dúas conteñen un formulario de rexistro sinxelo para realizar o rexistro. Para rexistrar unha sesión tan só hai que introducir o nome de esta e para rexistrar un usuario, hai que introducir tanto o nome de usuario coma un contrasinal. En~\ref{code:sessionForm} pódese observar o formulario de rexistro de sesións.
+Unha vez descrita a páxina principal procédese a debullar as demais, que sen ter tantas opcións conteñen partes moi importantes da aplicación. Tanto a páxina de \textbf{session} coma a de \textbf{rexistro} son as encargadas de rexistrar unha nova sesión e os novos usuarios. Ámbalas dúas conteñen un formulario de rexistro sinxelo para realizar o rexistro. Para rexistrar unha sesión tan só hai que introducir o nome de esta e para rexistrar un usuario, hai que introducir tanto o nome de usuario coma un contrasinal.
 
-\begin{lstlisting}[language=html, label={code:sessionForm}, caption={session.page.html}]
-<form #form="ngForm" (ngSubmit)="session(form)" method="post">
-	<ion-item style="margin-top:10%">
-		<ion-input name="instance" type="text" placeholder="Session" ngModel required></ion-input>
-	</ion-item>
-</form>
-\end{lstlisting}
+Aínda que son similares, a páxina de rexistro de usuarios contén unha peculiaridade. Os usuarios teñen que estar rexistrados nunha sesión, e en xeral estes van realizar o rexistro a través dun enlace proporcionado cunha forma similar a: \lstinline{www.wikebox.com/ sessionName/register} polo tanto o usuario quedará rexistrado como pertencente a sesión \textit{sessionName}. Para introducir o nome da sesión no rexistro e que non sexa o usuario o encargado de introducilo captúrase directamente dende a url. Utilízase o método \textit{ngOnInit}, este método execútase despois de cargar a páxina unha vez Angular finaliza a inicialización do compoñente, garda o nome da sesión e despois o pasa ao formulario de rexistro.
 
-Aínda que son similares, a páxina de rexistro de usuarios contén unha peculiaridade. Os usuarios teñen que estar rexistrados nunha sesión, e en xeral estes van realizar o rexistro a través dun enlace proporcionado cunha forma similar a: \lstinline{www.wikebox.com/sessionName/register} polo tanto o usuario quedará rexistrado como pertencente a sesión \textit{sessionName}. Para introducir o nome da sesión no rexistro e que non sexa o usuario o encargado de introducilo captúrase directamente dende a url. Utilizando o método \textit{ngOnInit} como vemos no listing~\ref{code:sessionCapture}. Este método execútase despois de cargar a páxina unha vez Angular finaliza a inicialización do compoñente, garda o nome da sesión e despois o pasa ao formulario de rexistro.
+Como estas funcións pertencen a partes distintas a súa comunicación co backend realizase dende diferentes servizos. O rexistro da sesión se controla a través do \textit{service.api} e o rexistro do usuario dende \textit{auth.service}.
 
-\begin{lstlisting}[language=javascript, label={code:sessionCapture}, caption={register.page.ts}]
-ngOnInit() {
-	this.mySession = this.activatedRoute.snapshot.paramMap.get('mySession');
-}
-\end{lstlisting}
-
-Como estas funcións pertencen a partes distintas a súa comunicación co backend realizase dende diferentes servizos. O rexistro da sesión se controla a través do \textit{service.api} e o rexistro do usuario dende \textit{auth.service}, en~\ref{code:registerUser} pódese ver como se realiza esta última petición.
-
-\begin{lstlisting}[language=javascript, label={code:registerUser}, caption={auth.service.ts}]
-register(username: String, password: String, mySession:string) {
-	console.log("Welcome: "+username)
-	return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
-		username: username,
-		password: password,
-		userSession: mySession
-	})
-}
-\end{lstlisting}
-
-Respecto a páxina de \textbf{login}, de novo é unha páxina sinxela que consta dun formulario no que os usuarios poden acceder a gramola. Do mesmo xeito que no método~\ref{code:sessionCapture} captúrase o nome da instancia para facer a redirección do usuario a súa sesión correspondente. No caso de que o usuario non estea accedendo á aplicación a través da url da súa sesión o que sería \lstinline{www.wikebox.com/login} é necesario facer unha redirección automática para coñecer a sesión e abrir correspondente. No código~\ref{code:loginForm} amosase como é realizado.
-
-\begin{lstlisting}[language=javascript, label={code:loginForm}, caption={login.page.ts}]
-login(form){
-	this.authService.login(form.value.username, form.value.password).subscribe(()=>{
-		if (this.mySession != null){
-			this.router.navigate([this.mySession + '/home'])
-		}
-		else
-			this.router.navigateByUrl('home')
-	});
-}
-\end{lstlisting}
+Respecto a páxina de \textbf{login}, de novo é unha páxina sinxela que consta dun formulario no que os usuarios poden acceder a gramola. Do mesmo xeito que no método \textit{sessionCapture} captúrase o nome da instancia para facer a redirección do usuario a súa sesión correspondente. No caso de que o usuario non estea accedendo á aplicación a través da url da súa sesión o que sería \lstinline{www.wikebox.com/login} é necesario facer unha redirección automática para coñecer a sesión e abrir a correspondente.
 
 Dende a propia páxina de login, tamén é posible acceder á páxina de rexistro. Tendo en conta o caso de que un novo usuario acceda a esta erroneamente e desexe rexistrarse, neste caso é necesario que o botón redirixa a páxina de rexistro correcta, para o que é necesario coñecer a instancia onde se quere realizar o rexistro a cal pode ser que non estea dispoñible. Neste caso notifícase ao usuario que necesita coñecer o nome da sesión.
 
-Probablemente a páxina menos vista polos usuarios sexa a de \textbf{callback}. A súa función é a de facer a captura do token enviado por Spotify, polo tanto tan só é útil para os administradores. O funcionamento é completamente automático, unha vez realizada a autenticación na plataforma de Spotify esta redirixe ao usuario á páxina de callback. De novo facendo uso do método \textit{ngOnInit} faise unha petición ao backend para facer o almacenamento do token e posteriormente redirixir ao usuario.
+Probablemente a páxina menos vista polos usuarios sexa a de \textbf{callback}. A súa función é a de facer a captura do token enviado por Spotify, polo tanto tan só é útil para os administradores. O funcionamento é completamente automático, unha vez realizada a autenticación na plataforma de Spotify esta redirixe ao usuario á páxina de callback. De novo facendo uso do método \textit{ngOnInit} faise unha petición ao backend para facer o almacenamento do token e posteriormente redirixir ao usuario isto pódese observar no listing~\ref{code:callbackInit}j.
 
 \begin{lstlisting}[language=javascript, label={code:callbackInit}, caption={callback.page.ts}]
 ngOnInit() {
@@ -225,70 +164,16 @@ Por último falarase sobre a primeira páxina que visualizan os usuarios. Tráta
 
 Unha vez rematada a explicación das diferentes páxinas que existen no proxecto, procederase a explicar os servizos necesarios para o resto do funcionamento do frontend.
 
-\textbf{Api service} é servizo encargado de xestionar todas as peticións que se fan ao backend. Todas elas son peticións de tipo \textit{POST} debido a que é necesario saber sempre cal é o usuario que está a realizar as peticións. Cada unha destas funcións comunicase co backend a través das urls alí definidas e cando reciben a resposta a amosan no lugar correspondente. Algunhas destas respostas necesitan ser formatadas tanto para amosalas en lista ou como sexa necesario por exemplo~\ref{code:choosedevice}.
-
-\begin{lstlisting}[language=javascript, label={code:choosedevice}, caption={api.service.ts}]
-spotifyChooseDevice(){
-	return this.httpClient
-	.post(this.SERVER_ADDRESS + 'api/choosedevice/', {'request': Request})
-	.pipe(
-		map(results => Object
-				.keys(results)
-				.map(key => ({value: results[key]}))
-			 ),
-	);
-}
-\end{lstlisting}
+\textbf{Api service} é servizo encargado de xestionar todas as peticións que se fan ao backend. Todas elas son peticións de tipo \textit{POST} debido a que é necesario saber sempre cal é o usuario que está a realizar as peticións. Cada unha destas funcións comunicase co backend a través das urls alí definidas e cando reciben a resposta a amosan no lugar correspondente. Algunhas destas respostas necesitan ser formatadas tanto para amosalas en lista ou como sexa necesario.
 
 \textbf{Auth service} como o seu nome indica, trátase do servizo encargado de xestionar a autenticación dos usuarios no frontend, realizar o login, comprobar os permisos\dots~Aínda que a xestión dos usuarios faise no backend, tanto o rexistro como a xeración dos tokens, é necesario contar con un sistema no frontend para realizar a verificación.\smallbreak
-O rexistro realiza unha petición ao backend para a creación dun novo usuario nunha instancia. A función de login utiliza \textit{angular storage} para almacenar os datos necesarios no navegador, estes son o nome do usuario, o token de acceso e o de refresco que son recibidos dende o backend cando se realiza o login. Pódese ver a función de login en~\ref{code:authLogin}
+O rexistro realiza unha petición ao backend para a creación dun novo usuario nunha instancia. A función de login utiliza \textit{angular storage} para almacenar os datos necesarios no navegador, estes son o nome do usuario, o token de acceso e o de refresco que son recibidos dende o backend cando se realiza o login.
 
-\begin{lstlisting}[language=javascript, label={code:authLogin}, caption={auth.service.ts}]
-login(username: String, password: String) {
-	this.user = username
-	return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {
-		"username": username, 
-		"password": password
-	})
-	.pipe(
-		tap(token => {
-			this.storeJwtToken(this.token.access)
-			this.storeRefreshToken(this.token.refresh)
-			this.storeUser()
-			this.storeExpiration()
-			.then(
-				() => {
-					console.log('Token Stored');
-				},
-				error => console.error('Error storing item', error)
-			);
-			return token;
-		}),
-	);
-}
-\end{lstlisting}
+Unha vez almacenados estes datos considérase que o usuario está conectado, xa que ao facer a desconexión son borrados. Tamén tense en conta que o token de refresco non estea expirado, isto se calcula ao gardalo engadindo un período de validez de 24 horas.
 
-Unha vez almacenados estes datos considérase que o usuario está conectado, xa que ao facer a desconexión son borrados. Tamén tense en conta que o token de refresco non estea expirado, isto se calcula ao gardalo engadindo un período de validez de 24 horas. No código~\ref{code:storeExpiration} pódese ver como se almacena estando o tempo de expiración en milisegundos.
+Referente a caducidade dos tokens é necesario prestar atención ao servizo de interceptor, é o encargado de engadir o token as cabeceiras das peticións. Tamén é o que fai a solicitude de actualizar os tokens xa expirados para os usuarios que aínda están conectados. O token de acceso ten unha caducidade de 5 minutos e para renovalo é necesario ter o token de refresco, facendo unha petición con este token obtense un novo de acceso, este procedemento é invisible para o usuario.
 
-\begin{lstlisting}[language=javascript, label={code:storeExpiration}, caption={auth.service.ts}]
-private storeExpiration() {
-	localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000))
-}
-\end{lstlisting}
-
-Referente a caducidade dos tokens é necesario prestar atención ao servizo de interceptor, é o encargado de engadir o token as cabeceiras das peticións. Tamén é o que fai a solicitude de actualizar os tokens xa expirados para os usuarios que aínda están conectados. O token de acceso ten unha caducidade de 5 minutos e para renovalo é necesario ter o token de refresco, facendo unha petición con este token obtense un novo de acceso, este procedemento é invisible para o usuario. A función encargada de isto é \textit{refreshToken}~\ref{code:refreshToken}.
-
-\begin{lstlisting}[language=javascript, label={code:refreshToken}, caption={auth.service.ts}]
-refreshToken() {
-	return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
-		'refresh': this.getRefreshToken()
-	}).pipe(tap((tokens: AuthResponse) => {
-		this.storeJwtToken(tokens.access);
-	}));
-}
-\end{lstlisting}
-
-Aínda que esta é so unha das funcións deste servizo é unha das mais complicadas xa que é necesario permitir a solicitude de un token de acceso a usuarios que xa non teñen acceso, tan só teñen o token de refresco e isto dificulta o funcionamento. A función que intercepta as peticións é \textit{intercept}~\ref{code:intercept}. Comproba todas as peticións \acrshort{HTTP} e engade o token cando é posible, no caso de recibir un erro de autenticación 401 chama a función \textit{handle401Error}~\ref{code:handle401} que trata de obter novamente o token de acceso e se é satisfactorio realiza novamente a petición.
+Aínda que esta é so unha das funcións deste servizo é unha das mais complicadas xa que é necesario permitir a solicitude de un token de acceso a usuarios que xa non teñen acceso, tan só teñen o token de refresco e isto dificulta o funcionamento. A función que intercepta as peticións é \textit{intercept} (listing~\ref{code:intercept}). Comproba todas as peticións \acrshort{HTTP} e engade o token cando é posible, no caso de recibir un erro de autenticación 401 chama a función \textit{handle401Error} (listing~\ref{code:handle401}) que trata de obter novamente o token de acceso e se é satisfactorio realiza novamente a petición.
 
 \begin{lstlisting}[language=javascript, label={code:intercept}, caption={interceptor.service.ts}]
 intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -337,130 +222,47 @@ O modelo é a estrutura onde se almacenan os datos da aplicación. Django por de
 \begin{itemize}
 	\item \textbf{Session} almacena as diferentes sesións que os usuarios poden crear para reproducir música en conxunto. Contén un identificador único que é o nome da sesión, este tamén se utiliza na url para que os usuarios poidan acceder, un nome modificable, a ruta onde se garda o token de acceso a Spotify e como chave foránea o nome do usuario administrador.
 
-\begin{lstlisting}[language=python, label={code:modelSession}, caption={api/models.py}]
-class session(models.Model):
-    url = models.CharField(max_length=1000, primary_key=True)
-    name = models.CharField(max_length=100)
-    spotify_token = models.CharField(max_length=1000, null=True, blank= True)
-    admin = models.ForeignKey("users.CustomUser", on_delete=models.DO_NOTHING, null=True, blank=True)
-    def __str__(self):
-        return self.name
-\end{lstlisting}
-
 	\item \textbf{Songs} garda as diferentes cancións que están relacionadas coas sesións. Está relacionada coas sesións a través dunha chave foránea, contén para cada canción os datos típicos de estas como son o título, o artista e a duración, tamén almacena o identificador único en Spotify chamado \textit{URI}. Os demais campos que se almacenan serven para realizar a ordenación das cancións dentro da lista, primeiro por votos, despois pola forma de ser engadida, isto quere dicir se foi cargada dende unha lista ou engadida a través da procura e por último a orde cronolóxica.
 
-\begin{lstlisting}[language=python, label={code:modelLocalPlaylist}, caption={api/models.py}]
-class LocalPlaylist(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    artists = models.CharField(max_length=1000)
-    title = models.CharField(max_length=1000)
-    duration = models.DurationField(default=None)
-    uri = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-    created = models.DateTimeField(default=datetime.now, blank=True)
-    added_mode = models.CharField(max_length=50)  # Added during search or during playlist load
-    session = models.ForeignKey(session, on_delete=models.DO_NOTHING)
-    def __str__(self):
-        return self.title
-\end{lstlisting}
+		% Aquí introducir unha clase do modelo seguindo o patrón active record
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	\item \textbf{SongPlayingNow} o outro modelo que utilízase para a xestión das cancións almacena o estado da sesión, garda a canción que se está a reproducir nese intre, isto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha redución do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sesión a que pertence.
 
 	\item \textbf{CustomUser} Django contén un sistema de xestión de usuarios. É bastante completo, pero como é lóxico non é posible que se adapte totalmente as necesidades de cada proxecto. Por isto permite facer modificacións sobre este para engadir campos ou quitalos, deste xeito o funcionamento da xestión de usuarios está creada e tan só é necesario adaptalo. Neste caso retirouse o campo de email, xa que non é necesario e engadiuse o de sesión para poder facer as relacións. Ademais cambiouse a chave primaria ao nome do usuario xa que antes este atributo pertencía ao email.
 
-\begin{lstlisting}[language=python, label={code:modelCustomUser}, caption={users/model.py}]
-class CustomUser(AbstractUser):
-    id = models.AutoField(primary_key=True)
-    userSession = models.ForeignKey("api.session", on_delete=models.CASCADE, null=True, blank=True)
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['userInstance']
-    objects = CustomUserManager()
-    def __str__(self):
-        return self.username
-\end{lstlisting}
 \end{itemize}
 
 Sabendo agora como é a implementación do modelo, pásase a explicar o funcionamento lóxico do backend. En Django este código almacénase nas chamadas \textit{views} que reciben as peticións dende o arquivo \textit{urls}. Existe un arquivo \textit{urls} para todo o backend que posteriormente desvía as peticións a cada un dos arquivos \textit{urls} de cada unha das aplicacións. Pódese ver na figura~\ref{fig:wikebox_flow}.\smallbreak
-A aplicación de Django encargada de xestionar os usuarios contén as modificacións mínimas, xa que proporcionase unha lóxica xa creada e adaptada para ser modificada. No código~\ref{code:userSerializer} pódese ver as modificacións realizadas no modelo de usuario a través do serializador. Tamén engadiuse a libraría \textit{Rest Framework Simplejwt} que é a encargada de xerar os tokens de acceso para os usuarios, non é necesaria configuración de esta.\smallbreak
+A aplicación de Django encargada de xestionar os usuarios contén as modificacións mínimas, xa que proporcionase unha lóxica xa creada e adaptada para ser modificada. Tamén engadiuse a libraría \textit{Rest Framework Simplejwt} que é a encargada de xerar os tokens de acceso para os usuarios, non é necesaria configuración de esta.\smallbreak
 
-\begin{lstlisting}[language=python, label={code:userSerializer}, caption={users/model.py}]
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'userInstance', 'password']
-        extra_kwargs = {
-                'password': {'write_only': True, 'required': True},
-                'userInstance': {'required': True}
-                }
-    def create(self, validated_data):
-        uInstance = instance.objects.filter(name= validated_data['userInstance']).get() 
-        # Check if there are an admin at the instance if there aren't first one it's admin.
-        try:
-            # No admin
-            haveAdmin = instance.objects.filter(name= validated_data['userInstance'], admin=None).get()
-            user = User.objects.create_admin(**validated_data)
-            user.userInstance = uInstance
-            # Updates the instance admin to user
-            instance.objects.filter(name= validated_data['userInstance']).update(admin=user)
-        except:
-            # Already admin
-            user = User.objects.create_user(**validated_data)
-            user.userInstance = uInstance
-        return user
-\end{lstlisting}
-
-A outra aplicación que existe, chamada \textit{api} é a encargada de todo o funcionamento da gramola. Inclúe todas as peticións para a xestión das canción e o manexo destas a través da API de Spotify. Os pasos principais que se executan son os seguintes:
+A outra aplicación que existe, chamada \textit{api} é a encargada de todo o funcionamento da gramola. Inclúe todas as peticións para a xestión das canción e o manexo destas a través da API de Spotify. Os pasos principais que se executan pódense ver na figura~\ref{fig:steps} e son os seguintes:
 
 \begin{enumerate}
-	\item Comprobar se falta mais de 30 segundos para que remate a canción que está soando. Función \textit{addToQueue}~\ref{code:addToQueue}.
+	\item Verificar que a sesión está a reproducir música.
+	\item Comprobar se falta mais de 30 segundos para que remate a canción que está soando.
 	\item Se faltan mais, non se fai nada.
 	\item Se non, a seguinte canción que está na lista de reprodución engádese a cola de Spotify.
-	\item Compróbase se a canción que está a soar é a mesma que a primeira na lista de reprodución. Función \textit{popTop}~\ref{code:popTop}.
+	\item Compróbase se a canción que está a soar é a mesma que a primeira na lista de reprodución.
 	\item Se non, non se fai nada.
 	\item Se sí, borrase a canción da lista de reproducción.
 \end{enumerate}
 
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{imaxes/steps.png}
+	\end{center}
+	\caption{Pasos principais}
+	\label{fig:steps}
+\end{figure}
+
+
 Deste xeito conséguese utilizar a gramola sen interromper o uso normal de Spotify, xa que o usuario que teña acceso pode seguir utilizándoa como de costume tan só vese afectado cando faltan menos de 30 segundos para o remate da canción.
-
-\begin{lstlisting}[language=python, label={code:addToQueue}, caption={api/views.py}]
-lastInQueue = None # Global var for keep the last song added to the queue
-def addToQueue(wike):
-    totalTime = SongPlayingNow.objects.filter(instance=wike) .values('duration').first() # Get the total duration of the song
-    nowTime = spotify.currentProgress(wike) # Get the progress of the song
-    if (totalTime != None) and (nowTime != None): # Check that there are a song playing
-        totalTime = totalTime['duration']
-        nowTime = timedelta(milliseconds=nowTime['progress_ms'])
-        changeTime = nowTime + timedelta(seconds=30) # Establish the time to add the next song
-        if changeTime > totalTime:
-            adding = LocalPlaylist.objects.filter(instance=wike) .order_by('-votes', '-added_mode', 'created').values('uri').first()
-            global lastInQueue
-            if adding != lastInQueue: # Check if the last added song is the same as the one at the top of the LocalPlaylist
-                spotify.addToQueue(wike)
-                lastInQueue = LocalPlaylist.objects.filter(instance=wike) .order_by('-votes', '-added_mode', 'created').values('uri').first()
-                res = "Change"
-            else:
-                res = "Already added"
-        else:
-            res = "No change"
-    else:
-        res = "No playing"
-    return res
-\end{lstlisting}
-
-\begin{lstlisting}[language=python, label={code:popTop}, caption={api/views.py}]
-def popTop(wike):
-    current = SongPlayingNow.objects. filter(instance=wike).values('uri').first()
-    top = LocalPlaylist.objects. filter(instance=wike).order_by('-votes', '-added_mode', 'created').values('uri').first()
-    if current != None:
-        if current == top:
-            res = "same"
-            LocalPlaylist.objects. filter(instance=wike).order_by('-votes', '-added_mode', 'created').first().delete()
-        else:
-            res = "notSame"
-    else:
-        res = "Not playing"
-    return res
-\end{lstlisting}
 
 Unha das características que diferencian esta aplicación de outras similares é a de non necesitar ningún sistema a parte que se encargue de facer as comprobacións, engadir cancións á cola e demais, isto realízase no propio backend. A función \textit{checkerThread} encárgase de facer unha comprobación cada 10 segundos, en cada unha das sesións que están a reproducir música. Comproba se é necesario engadir unha nova canción á cola, para isto é necesaria a creación dun fío paralelo xa que de outro xeito non sería posible admitir mais peticións porque dita función bloquearía o resto. Pódese ver o código da función en~\ref{code:checkerThread}. 
 
@@ -481,89 +283,18 @@ x.start()
 
 As demais funcións incluídas no arquivo views da api son necesarias para a obtención dos datos e o almacenamento. Tamén se inclúen as chamadas a funcións específicas en relación a API de Spotify que se atopan nun arquivo diferente que se situado en \textit{backend/api/music/spotify.py}. Isto inclúe tanto as funcións que permiten o acceso a api coma as que permiten atopar cancións, engadilas a base de datos, reproducir... A continuación especifícanse, estas funcións forman parte da lóxica da páxina de música.
 
-Tanto a selección dunha playlist coma a selección de dispositivos é similar. Faise unha petición a API de Spotify, e os resultados almacénanse nun dicionario que é transformado a JSON para devolvelo ao frontend. O código seguinte~\ref{code:getPlaylists} amosa como se obteñen as playlists dos usuarios.
+Tanto a selección dunha playlist coma a selección de dispositivos é similar. Faise unha petición a API de Spotify, e os resultados almacénanse nun dicionario que é transformado a JSON para devolvelo ao frontend.
 
-\begin{lstlisting}[language=python, label={code:getPlaylists}, caption={spotify.py}]
-def getPlaylists(userInstance):
-    client = getClient(userInstance)
-    user = client.current_user()
-    dictPlaylists = client.user_playlists(user['id'])
-    nextresult = dictPlaylists['next']
-    dictPlaylists = dictPlaylists['items']
-    playlists = {}
-    for i in range(len(dictPlaylists)):
-        playlists[i] = {
-                'playlist': dictPlaylists[i]['name'],
-                'playlistId': dictPlaylists[i]['id']
-                }
-    playlists['nextresult'] = nextresult
-    playlistsJson = json.dumps(playlists)
-    return playlistsJson
-\end{lstlisting}
-
-Para a procura de cancións, cando o usuario introduce o texto pásase ao API de Spotify, o resultado almacenase nun dicionario que é devolto ao frontend para ser amosado nun popover. Unha vez seleccionada a canción esta tense que engadir a base de datos isto faise co código de~\ref{code:searchToLocalPlaylist} que obtén os datos da canción, e gárdanse na \textit{LocalPlaylist}.
-
-\begin{lstlisting}[language=python, label={code:searchToLocalPlaylist}, caption={spotify.py}]
-def searchToLocalPlaylist(songUri, userInstance):
-    client = getClient(userInstance)
-    playlist = LocalPlaylist()  # Assign the model
-    searchedSong = client.track(songUri)
-    playlist.pk = None  # The pk is assigned automatically, this is needed for that
-    artists = searchedSong['artists']  # Loop in the artist if there are more than one
-    string = ""
-    for j in range(len(artists)):
-        string += artists[j]['name']
-        if j+1 != len(artists):
-            string += ", "  # Separate the artist names
-    playlist.artists = string
-    playlist.title = searchedSong['name']
-    playlist.duration = datetime.timedelta(milliseconds = searchedSong['duration_ms'])
-    playlist.uri = searchedSong['uri']
-    playlist.created = datetime.datetime.now()
-    playlist.added_mode = "search"
-    playlist.instance = userInstance  # The instance of the user comes as parameter
-    playlist.save()
-    return json.dumps(searchedSong)
-\end{lstlisting}
+Para a procura de cancións, cando o usuario introduce o texto pásase ao API de Spotify, o resultado almacenase nun dicionario que é devolto ao frontend para ser amosado nun popover. Unha vez seleccionada a canción esta tense que engadir a base de datos. A función \textit{searchToSongs} obtén os datos da canción, e gárdanse na táboa \textit{Songs}.
 
 Por último explícase como é o proceso da obtención do token sobre o API de Spotify, para facilitar todo o proceso úsase a librería externa Spotipy~\cite{spotipy}.
 
 \begin{enumerate}
 	\item Xerase un manager de autenticación, neste hai que almacenar os datos de acceso da aplicación en Spotify. Son necesarios: un identificador de cliente e unha clave, ademais dos scopes e a url de callback. Este manager é utilizado para autenticar as peticións que se fan a API de Spotify coa app creada en Spotify.
-
-\begin{lstlisting}[language=python, label={code:amanager}, caption={spotify.py}]
-client_id = 'identificador cliente'
-client_secret = 'clave cliente'
-redirect_uri = 'http://192.168.1.101:8100/callback/'
-scope = 'user-library-read, user-read-playback-position, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, playlist-modify-public, playlist-modify-private, playlist-read-private'
-
-def amanager(userInstance):
-    instance = str(userInstance)
-    auth_manager = spotipy.oauth2.SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri, scope=scope, cache_path=".spotify_token_" + instance)
-    return auth_manager
-\end{lstlisting}
-
 	\item Posteriormente obtense o cliente, que é identificado a través do manager.
 	\item Para obter o token de autenticación primeiro búscase se xa está gardado, se é así aquí remata o proceso.
-	\item Se non se atopa o token en caché, ábrese a páxina de autenticación de Spotify. O usuario introduce as súas credenciais de acceso a Spotify e automaticamente se redirixe a páxina de callback~\ref{code:getUrl} de novo na aplicación da gramola.
-
-\begin{lstlisting}[language=python, label={code:getUrl}, caption={spotify.py}]
-def getUrl(userInstance):
-    auth_manager = amanager(userInstance)
-    authUrl = auth_manager.get_authorize_url()
-    return authUrl
-\end{lstlisting}
-
+	\item Se non se atopa o token en caché, ábrese a páxina de autenticación de Spotify. O usuario introduce as súas credenciais de acceso a Spotify e automaticamente se redirixe a páxina de callback de novo na aplicación da gramola.
 	\item Na páxina de callback captúrase o código de autorización na url e finalmente obtense o token.
-
-\begin{lstlisting}[language=python, label={code:callback}, caption={spotify.py}]
-def callBackUrl(authCode, userInstance):
-    auth_manager = amanager(userInstance)
-    authCode = auth_manager.parse_response_code(authCode)
-    token = auth_manager.get_access_token(code=authCode,as_dict=False)
-    return token
-\end{lstlisting}
-
 \end{enumerate}
 
 \section{Seguridade}
@@ -582,7 +313,7 @@ Estudáronse estes métodos e concluíuse que o mais axeitado sería o uso de se
 Finalmente a opción elixida foi o uso de \acrshort{JWT}. Existen paquetes de terceiros para facilitar o manexo de \acrshort{JWT} con Django, o mais coñecido é \textit{SimpleJWT}~\cite{simpleJWT}. Xera un token de acceso con unha caducidade de 5 minutos e un de refresco con caducidade para 24 horas. No caso de Ionic foi necesaria a creación dun \textit{interceptor} que é o encargado tanto de engadir o token as cabeceiras nas peticións, como de facer a comprobación de se é necesario renovar o token de acceso cada vez que recibe unha nova petición.\smallbreak
 O funcionamento é sinxelo, cando se produce unha autenticación satisfactoria no backend este devolve un token de refresco e outro de acceso que é almacenado no frontend, posteriormente cando é necesario facer unha nova petición ao backend estando o usuario xa autenticado o interceptor é o encargado de engadir o token de acceso a dita solicitude. Algúns dos problemas que se tiveron que resolver foron o manexo dos tokens de refresco sen estar o usuario autenticado, xa que é necesario evitar recibir erros de autenticación. Na figura ~\ref{fig:token_flow} pódese ver como é este proceso.\medbreak
 
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{imaxes/token_flow.png}
   \caption{Fluxo dos tokens.}

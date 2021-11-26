@@ -80,7 +80,7 @@
 
 \usepackage{libertine}
 
-\usepackage{datetime}
+\usepackage[useregional,showdow]{datetime2}
 \usepackage{fancyhdr}
 \usepackage[toc,acronym]{glossaries}
 \usepackage{IEEEtrantools}
@@ -165,7 +165,12 @@
 % opcións datetime                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newdateformat{datasimple}{\begin{galician}\monthname[\THEMONTH] de \THEYEAR\end{galician}}
+% \newdateformat{datasimple}{\begin{galician}\monthname[\THEMONTH] de \THEYEAR\end{galician}}
+% \DTMnewdatestyle{mesano}{\THEMONTH de \THEYEAR}
+\DTMnewdatestyle{mesano}{%
+	\renewcommand{\DTMdisplaydate}[4]{\DTMMonthname##2 de \number##1 }%
+	\renewcommand{\DTMDisplaydate}{\DTMdisplaydate}%
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % opcións listings                     %

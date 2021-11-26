@@ -1,5 +1,8 @@
 # Ignore unnecessary files
 
+## Android studio
+frontend/wikefrontend/android
+
 ## Wikebox related ##
 .spotify_token_*
 

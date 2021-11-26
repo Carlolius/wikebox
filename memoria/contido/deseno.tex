@@ -77,9 +77,16 @@ Este patrón é coñecido por usarse en Django. Non existe unha gran diferencia 
 Como vemos a gran vantaxe das arquitecturas é a separación das responsabilidades dentro da aplicación. Deste xeito se existen cambios nos datos (modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademais de que o usuario non interactúa en ningún momento directamente cos datos.
 
 \subsection{Esquema xeral}
-O esquema xeral para o proxecto é o uso de Ionic para o Frontend e Django Rest framework para o Backend.\smallbreak
-Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día, polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos ou o manexo destes e pola súa ampla documentación. Creouse a aplicación para o sistema operativo Android e comprobouse que igual a aplicación web, unha ferramenta que podería servir para engadir características máis adiante. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións se así o desexaramos.\smallbreak
+O esquema xeral para o proxecto é o uso de Ionic para o Frontend e Django Rest framework para o Backend pódese ver na figura~\ref{fig:global_architecture}.\smallbreak
+Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día, polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos ou o manexo destes e pola súa ampla documentación. Creouse a aplicación para o sistema operativo Android e comprobouse que igual a aplicación web, unha ferramenta que podería servir para engadir características máis adiante. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións.\smallbreak
 No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta, a súa simpleza ao usar Python coma linguaxe de programación o que simplifica o uso de librerías para a conexión con Spotify por exemplo. Tamén é destacable o seu \acrfull{ORM}\footnote{Mapeo objeto-relacional}, a interface de administración, a seguridade por defecto e a gran documentación coa que conta.
+
+\begin{figure}[hp!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{imaxes/global_architecture.png}
+  \caption{Arquitectura xeral}
+  \label{fig:global_architecture}
+\end{figure}
 
 \section{Frontend}
 Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o desenvolvemento. Escolleuse utilizar \textit{Angular} xa que é ideal para a creación de \acrfull{PWA}\footnote{Aplicación web progresiva} que é o que pretendemos xerar no proxecto. A curva de aprendizaxe é pronunciada, pero as súas características fan que merezca a pena. As características máis destacadas son: o seu alto rendemento, as directivas, o ecosistema ou o uso da libraría de \acrfull{RxJS} que está enfocada no patrón de deseño \textit{observer}, o que se basea na notificación duns obxectos a outros cando se producen cambios. A continuación explícanse os elementos que compoñen este paradigma:
