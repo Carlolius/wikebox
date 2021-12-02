@@ -41,7 +41,7 @@ Respecto ao frontend, a estrutura segue a distribución xeral dos proxectos en \
 	\item \textbf{Environments}\smallbreak
 		Ao igual que moitas outras ferramentas de desenvolvemento, Ionic contén configuracións específicas para o traballo en produción e en desenvolvemento, o que facilita o cambio dun entorno a outro cando se queren facer modificacións. Estes arquivos gárdanse no cartafol environments.
 	\item \textbf{Theme}\smallbreak 
-		Almacena as variables correspondentes á folla de estilo, garda as cores principais para axeitar todo o proxecto a un tema en concreto e non ter que introducir as cores por separado cando sexan necesarias.
+		Almacena as variables correspondentes á folla de estilo, garda as cores principais para axeitar todo o proxecto a un tema en concreto e non ter que introducir as cores por separado cando sexa necesario.
 \end{itemize}
 
 \begin{figure}[h]
@@ -76,7 +76,7 @@ As peticións na aplicación seguen un fluxo a través dos compoñentes similar 
 	\item A petición chega á \textit{api.service.ts} que encárgase de interactuar co backend. Coa axuda dun observable faise unha petición á dirección \textit{/api/search/} cando se obteñan os resultados estes serán actualizados.
 	\item Recíbese no backend a petición, todas pasan polo ficheiro \textit{urls.py} xenérico para posteriormente ser redirixidas ao ficheiro co mesmo nome pero de cada app, neste caso \textit{api}.
 	\item Unha vez redirixida a petición pásase ao ficheiro \textit{views.py} que contén todas as funcións encargadas de xestionar a api entre elas \textit{search}, que fai a solicitude a \textit{spotify.py} o ficheiro que inclúe todas as funcións relacionadas con Spotify.
-	\item Nesta última función chamada \textit{search} faise a petición a través da libraría \textit{Spotipy} áo api de Spotify, o resultado é almacenado nun dicionario de Python.
+	\item Nesta última función chamada \textit{search} faise a petición a través da libraría \textit{Spotipy} ao api de Spotify, o resultado é almacenado nun dicionario de Python.
 	\item Por último as respostas son recibidas en forma inversa da anteriormente descrita e as cancións obtidas no resultado da procura son amosadas nun cadro de listas para ser engadidas na playlist.
 \end{enumerate}
 
@@ -222,15 +222,22 @@ O modelo é a estrutura onde se almacenan os datos da aplicación. Django por de
 \begin{itemize}
 	\item \textbf{Session} almacena as diferentes sesións que os usuarios poden crear para reproducir música en conxunto. Contén un identificador único que é o nome da sesión, este tamén se utiliza na url para que os usuarios poidan acceder, un nome modificable, a ruta onde se garda o token de acceso a Spotify e como chave foránea o nome do usuario administrador.
 
-	\item \textbf{Songs} garda as diferentes cancións que están relacionadas coas sesións. Está relacionada coas sesións a través dunha chave foránea, contén para cada canción os datos típicos de estas como son o título, o artista e a duración, tamén almacena o identificador único en Spotify chamado \textit{URI}. Os demais campos que se almacenan serven para realizar a ordenación das cancións dentro da lista, primeiro por votos, despois pola forma de ser engadida, isto quere dicir se foi cargada dende unha lista ou engadida a través da procura e por último a orde cronolóxica.
+    \item \textbf{Songs} garda as diferentes cancións que están relacionadas coas sesións. Está relacionada coas sesións a través dunha chave foránea, contén para cada canción os datos típicos de estas como son o título, o artista e a duración, tamén almacena o identificador único en Spotify chamado \textit{URI}. Os demais campos que se almacenan serven para realizar a ordenación das cancións dentro da lista, primeiro por votos, despois pola forma de ser engadida, isto quere dicir se foi cargada dende unha lista ou engadida a través da procura e por último a orde cronolóxica. Pódese ver a definición deste modelo no seguinte listing~\ref{code:songsModel}
 
-		% Aquí introducir unha clase do modelo seguindo o patrón active record
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}[language=python, label={code:songsModel}, caption={models.py}]
+class Songs(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    artists = models.CharField(max_length=1000)
+    title = models.CharField(max_length=1000)
+    duration = models.DurationField(default=None)
+    uri = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+    created = models.DateTimeField(default=datetime.now)
+    added_mode = models.CharField(max_length=50)
+    session = models.ForeignKey(session, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.title  
+\end{lstlisting}
 
 	\item \textbf{SongPlayingNow} o outro modelo que utilízase para a xestión das cancións almacena o estado da sesión, garda a canción que se está a reproducir nese intre, isto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha redución do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sesión a que pertence.
 

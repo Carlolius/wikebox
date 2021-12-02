@@ -1,11 +1,11 @@
 \chapter{Deseño}
 \label{chap:deseno}
 
-\lettrine{P}{artindo} dos requisitos e a planificación do proxecto, neste capítulo pásase a explicar os aspectos relevantes do deseño da aplicación, a arquitectura adoptada e os servizos utilizados.
+\lettrine{P}{ARTINDO} dos requisitos e a planificación do proxecto, neste capítulo pásase a explicar os aspectos relevantes do deseño da aplicación, a arquitectura adoptada e os servizos utilizados.
 
 \section{Lóxica de funcionamento}
-O propósito da aplicación é imitar unha gramola das que habitualmente se atopaban nos bares ou outros negocios da restauración. O deseño desta non quere imitar o aparello físico, senon á súa funcionalidade, adaptada ás tecnoloxías de agora. Polo tanto de forma virtual, aproveitando tamén para engadir características que melloren a experiencia dos usuarios finais. Partindo desta idea evítase concretar a aplicación nun nicho tan específico, buscando tamén que sexa útil noutros ámbitos nos que se desexe crear unha lista de reprodución compartida sen complicacións, como pode ser un ambiente de traballo cun fío musical, unha festa privada ou unha reunión de amigos.~\smallbreak
-Faise tamén fincapé en que a aplicación resulte sinxela de utilizar tanto para o administrador coma para os usuarios, axudando desta forma á súa adopción. Os pasos a seguir para un novo usuario, por exemplo o propietario dun bar, serían os seguintes:
+O propósito da aplicación é imitar unha gramola das que habitualmente se atopaban nos bares ou outros negocios da restauración. O deseño desta non quere imitar o aparello físico, senón á súa funcionalidade, adaptada ás tecnoloxías de agora. Polo tanto de forma virtual, aproveitando tamén para engadir características que melloren a experiencia dos usuarios finais. Partindo desta idea evítase concretar a aplicación nun nicho tan específico, buscando tamén que sexa útil noutros ámbitos nos que se desexe crear unha lista de reprodución compartida sen complicacións, como pode ser un ambiente de traballo cun fío musical, unha festa privada ou unha reunión de amigos.~\smallbreak
+Faise tamén fincapé en que a aplicación resulte sinxela de utilizar tanto para o administrador coma para os usuarios, axudando desta forma á súa adopción. Os pasos a seguir para un novo usuario serían os seguintes:
 
 \begin{enumerate}
 		\item Acceder a páxina da aplicación.
@@ -16,7 +16,7 @@ Faise tamén fincapé en que a aplicación resulte sinxela de utilizar tanto par
 		\item Compartir o enlace da sesión para o resto dos usuarios.
 \end{enumerate}
 
-No caso dos usuarios novos que acceden a unha sesión xa rexistrada, por exemplo os clientes dun bar, os pasos a seguir serían os seguintes:
+No caso dos usuarios novos que acceden a unha sesión xa rexistrada, os pasos a seguir serían os seguintes:
 \begin{enumerate}
 		\item Abrir a ligazón recibida, para acceder a páxina de rexistro de usuarios na nova sesión.
 		\item Rexistrar o novo usuario (tan só a primeira vez).
@@ -60,7 +60,7 @@ Este patrón é coñecido por usarse en Django. Non existe unha gran diferencia 
 		O \textbf{modelo} é similar ao caso de \acrshort{MVC}. Actúa como interface para os datos, é a estrutura lóxica de almacenamento de datos detrás da aplicación web ou a API no noso caso.
 
 	\item \textbf{Template}\smallbreak
-		A \textbf{plantilla} é o compoñente que marca a diferencia coa arquitectura \acrshort{MVC}. A plantilla actúa como á capa de presentación, basicamente é o código \acrshort{HTML} que renderiza a información. O contido das plantillas pode ser tanto estático coma dinámico, poderíase comparar a vista na arquitectura MVC.
+		A \textbf{plantilla} é o compoñente que marca a diferencia coa arquitectura \acrshort{MVC}. A plantilla actúa como a capa de presentación, basicamente é o código \acrshort{HTML} que renderiza a información. O contido das plantillas pode ser tanto estático coma dinámico, poderíase comparar a vista na arquitectura MVC.
 
 	\item \textbf{View}\smallbreak
 		A \textbf{vista} é o enlace entre o modelo e o template. Interactúa co modelo e decide que información vai ser amosada e que plantilla renderiza. É similar ao controller explicado na arquitectura \acrshort{MVC}.
@@ -74,12 +74,12 @@ Este patrón é coñecido por usarse en Django. Non existe unha gran diferencia 
   \label{fig:MTV}
 \end{figure}
 
-Como vemos a gran vantaxe das arquitecturas é a separación das responsabilidades dentro da aplicación. Deste xeito se existen cambios nos datos (modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademais de que o usuario non interactúa en ningún momento directamente cos datos.
+Como se pode observar, a gran vantaxe das arquitecturas é a separación das responsabilidades dentro da aplicación. Deste xeito se existen cambios nos datos (modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademais de que o usuario non interactúa en ningún momento directamente cos datos.
 
 \subsection{Esquema xeral}
 O esquema xeral para o proxecto é o uso de Ionic para o Frontend e Django Rest framework para o Backend pódese ver na figura~\ref{fig:global_architecture}.\smallbreak
-Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día, polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos ou o manexo destes e pola súa ampla documentación. Creouse a aplicación para o sistema operativo Android e comprobouse que igual a aplicación web, unha ferramenta que podería servir para engadir características máis adiante. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións.\smallbreak
-No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta, a súa simpleza ao usar Python coma linguaxe de programación o que simplifica o uso de librerías para a conexión con Spotify por exemplo. Tamén é destacable o seu \acrfull{ORM}\footnote{Mapeo objeto-relacional}, a interface de administración, a seguridade por defecto e a gran documentación coa que conta.
+Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día. Tamén polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos ou o manexo destes e pola súa ampla documentación. Creouse a aplicación para o sistema operativo Android e comprobouse que o seu funcionamento é igual a aplicación web. Unha ferramenta que podería servir para engadir características máis adiante. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións.\smallbreak
+No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta, a súa simpleza ao usar Python coma linguaxe de programación, o que simplifica o uso de librerías para a conexión con Spotify por exemplo. Tamén é destacable o seu \acrfull{ORM}\footnote{Mapeo obxeto-relacional}, a interface de administración, a seguridade por defecto e a gran documentación coa que conta.
 
 \begin{figure}[hp!]
   \centering
@@ -89,7 +89,7 @@ No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta
 \end{figure}
 
 \section{Frontend}
-Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o desenvolvemento. Escolleuse utilizar \textit{Angular} xa que é ideal para a creación de \acrfull{PWA}\footnote{Aplicación web progresiva} que é o que pretendemos xerar no proxecto. A curva de aprendizaxe é pronunciada, pero as súas características fan que merezca a pena. As características máis destacadas son: o seu alto rendemento, as directivas, o ecosistema ou o uso da libraría de \acrfull{RxJS} que está enfocada no patrón de deseño \textit{observer}, o que se basea na notificación duns obxectos a outros cando se producen cambios. A continuación explícanse os elementos que compoñen este paradigma:
+Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o desenvolvemento. Escolleuse utilizar \textit{Angular} xa que é ideal para a creación de \acrfull{PWA}\footnote{Aplicación web progresiva} que é o que pretendemos xerar no proxecto. A curva de aprendizaxe é pronunciada, pero as súas características fan que mereza a pena. As características máis destacadas son: o seu alto rendemento, as directivas, o ecosistema ou o uso da libraría de \acrfull{RxJS} que está enfocada no patrón de deseño \textit{observer}, o que se basea na notificación duns obxectos a outros cando se producen cambios. A continuación explícanse os elementos que compoñen este paradigma:
 \begin{itemize}
 	\item \textbf{Programación reactiva}\smallbreak
 		Trátase dun paradigma enfocado ao traballo con fluxos de datos, finitos ou infinitos de forma asíncrona. Ao ser asíncrona, a recepción dos datos non produce bloqueos o que facilita as chamadas a recursos con resposta tardía, coma poden ser os que están en rede, as chamadas a bases de datos, a xestión de peticións e en xeral todo o fluxo de chamadas.
@@ -108,7 +108,7 @@ Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o 
 \end{itemize}
 
 \subsection{Arquitectura do frontend}
-Na sección \ref{sec:arquitectura}, explícanse os diferentes patróns de deseño. Indícase que \textit{Ionic} e \textit{Angular} utilizan o patrón \acrshort{MVC}. No caso deste proxecto, ao facer o almacenamento dos datos no backend, non existe un modelo como tal para o almacenamento de datos no frontend, aínda que sí que almacenamos os tokens de acceso e de refresco para o uso de \acrshort{JWT}. A continuación coméntanse as singularidades do deseño tanto da Vista coma do Controlador, na sección~\ref{sec:modelo} explícase o modelo utilizado no backend.
+Na sección \ref{sec:arquitectura}, explícanse os diferentes patróns de deseño. Indícase que \textit{Ionic} e \textit{Angular} utilizan o patrón \acrshort{MVC}. No caso deste proxecto, ao facer o almacenamento dos datos no backend, non existe un modelo como tal para o almacenamento de datos no frontend, aínda que si que almacenamos os tokens de acceso e de refresco para o uso de \acrshort{JWT}. A continuación coméntanse as singularidades do deseño tanto da Vista coma do Controlador, na sección~\ref{sec:modelo} explícase o modelo utilizado no backend.
 
 \subsection{Vista}
 A vista é a última capa da arquitectura do sistema. Trátase da capa que interactúa co usuario mostrándolle a información e enviando as peticións do usuario ao controlador. Ao tratarse dunha aplicación web, a vista execútase nun navegador, ou nun dispositivo móbil coma \acrshort{PWA}, polo tanto son páxinas \acrshort{HTML} enriquecidas con TypeScript.\bigbreak
@@ -153,7 +153,7 @@ O controlador é a capa intermedia da arquitectura. Actúa coma comunicación en
 Deseñado coa idea de publicar noticias dun xornal, Django é un dos frameworks mais populares hoxe en día, segue o principio (DRY, Don't Repeat Yourself) \footnote{Non te repitas} polo que evita a repetición de código innecesariamente. Está escrito en Python, o que axuda á súa popularidade, ademais a súa arquitectura destaca pola simpleza á hora de cambiar a forma de visualizar o contido ou de realizar cambios nos datos.
 
 \subsection{Arquitectura do backend}
-Django utiliza un patrón de deseño específico o \textbf{MTV}~\ref{sec:MTV}, baseado no patrón \textbf{MCV}. Este patrón é lixeiramente diferente, consta de modelo, plantilla e vista, debido a que o frontend manexa a interface de usuario. Non utilizamos a plantilla xa que é a encargada de renderizar o código para a vista do usuario. A continuación explícase o uso do modelo e da vista neste framework:
+Django utiliza un patrón de deseño específico o \textbf{MTV}(sección ~\ref{sec:MTV}), baseado no patrón \textbf{MCV}. Este patrón é lixeiramente diferente, consta de modelo, plantilla e vista, debido a que o frontend manexa a interface de usuario. Non utilizamos a plantilla xa que é a encargada de renderizar o código para a vista do usuario. A continuación explícase o uso do modelo e da vista neste framework:
 
 \subsection{Modelo}
 \label{sec:modelo}
@@ -180,16 +180,16 @@ A capa modelo é a parte da aplicación que encapsula a lóxica de negocio e man
 \end{figure}
 
 \subsection{Vista}
-Na arquitectura \acrshort{MTV} é a vista a encargada de executar a lóxica de negocio. Recibe as peticións dende o arquivo \textit{urls.py} e executa as accións necesarias. No noso caso dividimos as peticións entre as necesarias para administrar os usuarios e as relacionadas coa música, dividindo estas últimas de novo entre as peticións á nosa API e as necesarias para a API de Spotify.
+Na arquitectura \acrshort{MTV} é a vista a encargada de executar a lóxica de negocio. Recibe as peticións dende o arquivo \textit{urls.py} e executa as accións necesarias. Neste caso divídense as peticións entre as necesarias para administrar os usuarios e as relacionadas coa música, dividindo estas últimas de novo entre as peticións á API e as necesarias para a API de Spotify.
 
 \begin{itemize}
 
 	\item \textbf{User views}\smallbreak
-		E conxunto de peticións encargadas do manexo de usuarios, debido a que utilizase o modelo de usuario predefinido por Django con modificacións para adaptarse ao proxecto, tan só tívose que engadir a obtención da sesión do usuario.
+		E conxunto de peticións encargadas do manexo de usuarios. Debido a que utilizase o modelo de usuario predefinido por Django con modificacións para adaptarse ao proxecto, tan só tívose que engadir a obtención da sesión do usuario.
 
 	\item \textbf{Api views}\smallbreak
-		Peticións encargadas de manexar a API propia, coma por exemplo engadir os votos, comprobar se é necesario engadir cancións, poboar a lista de reprodución~\dots Todas as peticións son de tipo POST debido a que sempre temos que saber cal é o usuario que fai a solicitude.
+		Peticións encargadas de manexar a API propia. Por exemplo engadir os votos, comprobar se é necesario engadir cancións, poboar a lista de reprodución\dots~ Todas as peticións son de tipo POST debido a que sempre temos que saber cal é o usuario que fai a solicitude.
 
 	\item \textbf{Spotify views}\smallbreak
-		E conxunto funcións relacionadas coas peticións a API de Spotify, por exemplo a autenticación de usuarios na plataforma, engadir a seguinte canción a cola, procura de cancións, procura de playlists~\dots 
+		E conxunto funcións relacionadas coas peticións a API de Spotify, por exemplo a autenticación de usuarios na plataforma, engadir a seguinte canción a cola, procura de cancións, procura de playlists\dots 
 \end{itemize}
