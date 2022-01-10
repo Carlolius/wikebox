@@ -3,6 +3,9 @@
 ## Android studio
 frontend/wikefrontend/android
 
+## Angular cache
+frontend/wikefrontend/.angular/cache
+
 ## Wikebox related ##
 .spotify_token_*
 
