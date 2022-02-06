@@ -1,64 +1,82 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, tap, switchMap, catchError } from 'rxjs/operators';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+import { BehaviorSubject} from 'rxjs';
+import { Router } from "@angular/router";
+
+import { AuthResponse } from '../models/auth-response';
+import { NavController } from '@ionic/angular';
 
 import { Storage } from '@ionic/storage-angular';
-/* import { JwtHelperService } from '@auth0/angular-jwt'; */
-
-import { HttpHeaders } from '@angular/common/http';
-import { User } from '../models/user';
-import { AuthResponse } from '../models/auth-response';
-import { Platform, NavController } from '@ionic/angular';
-
-import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
 	providedIn: 'root'
 })
 
-
 export class AuthService {
+
 	private _storage: Storage | null = null;
 
-	isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+	SERVER_ADDRESS = environment.SERVER_ADDRESS;
+	isAuthenticated = new BehaviorSubject<boolean>(null);
+	JwtHelper = new JwtHelperService();
 
-	SERVER_ADDRESS: string = 'http://192.168.1.106:8000/';
-	/* loggedIn = false; // not necessary */
 	token:any;
-	access:any;
-	refresh:any;
-	data:any;
 	user:any;
 	session:any;
+	redirectUrl: string;
 
 	constructor(
 		private httpClient: HttpClient,
 		private storage: Storage,
 		private navCtrl: NavController,
 		private router: Router,
+		private alertController: AlertController,
 	) {
-		// Init for storage service
-		this.init();
+		this.checkToken();  // Check if ther's a token stored
+		this.initStorage(); // Initiates the storage service
 	}
 
 	// Init for storage service
-	async init() {
+	async initStorage() {
+		if(this._storage != null) {
+			return;
+		}
 		const storage = await this.storage.create();
 		this._storage = storage;
 	}
 
-	// Can activate
-	// Test with isLoggedIn and if the token is not empty can activate
-	canActivate (route: ActivatedRouteSnapshot): boolean {
-		console.log("route: ", route)
-		this.isLoggedIn().then((token) => {
-			if (!token) {
-				this.router.navigateByUrl("home");
-				return false;
-			}})
-			return true;
-		}
+	// Check if the user is already logged in.
+	async checkToken() {
+		await this.getJwtToken().then(token => {
+			if(token) {
+				this.token = token
+				let decoded = this.JwtHelper.decodeToken(token['access']);
+				let isAccessExpired = this.JwtHelper.isTokenExpired(token['access']);
+				// console.log("Accessexpired?", isAccessExpired);
+				if(!isAccessExpired) {
+					this.storeJwtToken(token)
+					this.user = decoded['user_id'];
+					this.isAuthenticated.next(true);
+					if(this.redirectUrl) {
+						this.router.navigate([this.redirectUrl]);
+					}
+				}
+				else {
+					this.removeToken();
+					this.isAuthenticated.next(false);
+				}
+			}
+		})
+	}
+
+	isLoggedIn(): boolean {
+		console.log("isLoggedIn?", this.isAuthenticated.value);
+		return this.isAuthenticated.value;
+	}
 
 	getSession() {
 		this.httpClient.post(this.SERVER_ADDRESS + 'users/getsession/', {"username": this.user})
@@ -70,123 +88,73 @@ export class AuthService {
 	}
 
 	// Login
+	
+	// Alert login error
+	async presentLoginError() {
+		const alert = await this.alertController.create({
+			cssClass: 'my-custom-class',
+			header: 'Login error!',
+			// subHeader: 'Subtitle',
+			message: 'Wrong username or password.',
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+
 	login(username: String, password: String){
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {"username": username, "password": password}).pipe(
-			map((token: any) => token.access),
-				switchMap(access => {
-				    console.log(access);
+			tap(token => {
+				console.log("taptoken", token);
 				
-				// return from(Store.set({key: token, value: token}));
-			}),
-			tap(_ => {
+				this.storeJwtToken(token)
+				this.storeUser(username.toString())
 				this.isAuthenticated.next(true);
+			}),
+			catchError(e => {
+				this.presentLoginError();
+				console.log("loginError", e['error']['detail']);
+				throw Error(e['error']['detail']);
 			})
 		)
 	}
 
-	/* login(username: String, password: String) {
-		console.log("Name: "+  username)
-		console.log("Password: "+ password)
-		this.user = username
-		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {
-			"username": username, 
-			"password": password
-		})
-		.pipe(
-			tap(token => {
-				this.getSession()
-				this.token = token;
-				this.storeJwtToken(this.token.access)
-				this.storeRefreshToken(this.token.refresh)
-				this.storeUser()
-				this.storeExpiration()
-				this.storage.set("token", this.token)
-				.then(
-					() => {
-						//console.log('Token Stored');
-					},
-					error => console.error('Error storing item', error)
-				);
-				return token;
-			}),
-		);
-	} */
-
 	// Register
-
 	register(username: String, password: String, mySession:string) {
-		console.log("Welcome: "+username)
-		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/',	{
-			username: username,
-			password: password,
-			userSession: mySession
-		})
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/', {username: username, password: password, userSession: mySession}).pipe(
+			catchError(e => {
+				throw new Error(e);
+			})
+		)
 	}
 
 	// Logout
-	// Isto borra todos os usuarios
-	async logout() {
-		this.storage.remove("token");
-		/* localStorage.setItem("token", this.token); */
-		/* Revocar access token */
-		/* localStorage.removeItem("access"); */
-		/* localStorage.removeItem("refresh"); */
-		/* localStorage.removeItem("expiration"); */
-		/* localStorage.removeItem("username"); */
-		/* localStorage.removeItem("session"); */
-		localStorage.clear()
-		// this.navCtrl.navigateRoot('/home');
-	}
-
-	// Is logged in
-	// Check if the token has expired and if not check if the token is saved
-	async isLoggedIn() {
-		var now = JSON.stringify(Date.now())
-		var exp = localStorage.getItem("expiration");
-		if (now > exp) {
-			this.logout()
-		} else {
-			return this.storage.get("token").then(
-				data => {
-					this.token = data;
-					if (this.token) {
-						console.log("Access: "+this.token.access)
-						console.log("Refresh: "+this.token.refresh)
-						return true
-					}
-					else {
-						console.log("Not logged in")
-						return false
-					}
-				})
-		}
+	logout() {
+		this.removeToken();
+		this.isAuthenticated.next(false);
+		this.navCtrl.navigateRoot('/home');
 	}
 
 	// Interceptor
-
-	getJwtToken() {
-		/* console.log(localStorage.getItem("token")) */
-		return localStorage.getItem("access");
+	async storeJwtToken(token):Promise<any> {
+		await this.initStorage();
+		this.token = token;
+		return this._storage?.set("token", token);
 	}
 
-	private getRefreshToken() {
-		return localStorage.getItem("refresh")
+	async getJwtToken():Promise<any> {
+		await this.initStorage();
+		return await this._storage?.get("token");
 	}
 
-	private storeJwtToken(access: string) {
-		localStorage.setItem("access", access);
+	async removeToken():Promise<any> {
+		await this.initStorage();
+		return await this._storage?.clear();
 	}
 
-	private storeRefreshToken(refresh: string) {
-		localStorage.setItem("refresh", refresh);
-	}
-
-	private storeExpiration() {
-		localStorage.setItem("expiration", JSON.stringify(Date.now() + 86400000))
-	}
-
-	private storeUser() {
-		localStorage.setItem("username", this.user)
+	private storeUser(user: string) {
+		this.user = user;
+		return this.storage.set("user", user)
+		// localStorage.setItem("username", this.user)
 	}
 
 	private storeSession(data:any) {
@@ -196,12 +164,9 @@ export class AuthService {
 	
 	refreshToken() {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
-			'refresh': this.getRefreshToken()
-		}).pipe(tap((tokens: AuthResponse) => {
-			this.storeJwtToken(tokens.access);
-			/* This is not necessary I'm not sure how it solves to update the refreshToken */
-			/* this.storeRefreshToken(tokens.refresh); */
-			/* this.storeExpiration(); */
+			'refresh': this.token['refresh']
+		}).pipe(tap((token: AuthResponse) => {
+			this.storeJwtToken(token);
 		}));
 	}
 

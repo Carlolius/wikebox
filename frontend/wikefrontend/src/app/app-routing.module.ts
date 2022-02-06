@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {AuthService} from './services/auth.service';
+import { AuthguardService } from './services/authguard.service';
 
 const routes: Routes = [
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,7 +12,7 @@ const routes: Routes = [
 	{
 		path: ':mySession/home',
 		loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
-			canActivate: [AuthService]
+			canActivate: [AuthguardService]
 	},
 	{
 		path: ':mySession/register',
@@ -29,12 +29,12 @@ const routes: Routes = [
 	{
 		path: 'callback',
 		loadChildren: () => import('./pages/callback/callback.module').then( m => m.CallbackPageModule),
-			canActivate: [AuthService]
+			canActivate: [AuthguardService]
 	},
 	{
 		path: ':mySession/music',
 		loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule),
-			canActivate: [AuthService] /* Engadir mais Guards para comprobar que a instancia é a que é. */
+			canActivate: [AuthguardService] /* Engadir mais Guards para comprobar que a instancia é a que é. */
 	},
 	{
 		path: 'session',

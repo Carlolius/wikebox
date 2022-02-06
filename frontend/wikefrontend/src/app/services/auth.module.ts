@@ -9,9 +9,9 @@ import { IonicStorageModule } from '@ionic/storage-angular';
   declarations: [],
   imports: [
     CommonModule,
-		HttpClientModule,
-		FormsModule,
-		IonicStorageModule.forRoot()
+    HttpClientModule,
+    FormsModule,
+    IonicStorageModule.forRoot()
   ]
 })
 export class AuthModule { }
