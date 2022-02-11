@@ -12,7 +12,7 @@ Faise tamén fincapé en que a aplicación resulte sinxela de utilizar tanto par
 		\item Creación dunha nova sesión (poderíamos usar o símil dun bar).
 		\item Creación dun usuario nesta sesión. Este ao ser o primeiro será o usuario administrador.
 		\item Conexión da sesión co usuario de Spotify.
-		\item Reproducir música en calquera dos clientes de Spotify, xa pode ser a web, os clientes de escritorio ou móbil.
+		\item Reproducir música en calquera dos clientes de Spotify, a web, as aplicacións de escritorio ou móbil.
 		\item Compartir o enlace da sesión para o resto dos usuarios.
 \end{enumerate}
 
@@ -28,7 +28,7 @@ Pódese observar que os pasos non son complicados. Outros proxectos similares ne
 
 \section{Arquitectura}
 \label{sec:arquitectura}
-Cando se fala de arquitectura en desenvolvemento software faise unha analoxía coa arquitectura da construción. É un símil xa que o desenvolvemento de software baséase na elección de estruturas fundamentais para a organización do sistema. Dita organización inclúe todos os compoñentes, a forma de interactuar uns con outros e co entorno onde se atopan. Este método de separación dos compoñentes chámase \acrlong{CBD}\footnote{Desenvolvemento baseado en compoñentes.}, trátase dun concepto da enxeñería de software no que se pon énfase na separación dos diferentes compoñentes. A idea é a reutilización a hora de definir, implementar e crear compoñentes independentes, que xuntos crean un sistema.\smallbreak
+Cando se fala de arquitectura en desenvolvemento software faise unha analoxía coa arquitectura da construción. É un símil xa que o desenvolvemento de software baséase na elección de estruturas fundamentais para a organización do sistema. Dita organización inclúe todos os compoñentes, a forma de interación de uns con outros e co entorno onde se atopan. Este método de separación dos compoñentes chámase \acrlong{CBD}\footnote{Desenvolvemento baseado en compoñentes.}, trátase dun concepto da enxeñería de software no que se pon énfase na separación dos diferentes compoñentes. A idea é a reutilización a hora de definir, implementar e crear compoñentes independentes, que xuntos crean un sistema.\smallbreak
 Neste proxecto utilízanse dúas arquitecturas diferentes, debido aos frameworks utilizados, aínda que son similares teñen características que os fan distintos. Angular é o framework co que se usa Ionic e utiliza a arquitectura, \acrfull{MVC}\footnote{Modelo, vista, controlador.}. En cambio Django, o framework usado para desenvolver o backend, utiliza \acrfull{MTV}\footnote{Modelo, plantilla, vista.}. Ámbolos patróns de arquitectura baséanse na idea de reutilización do código e separación de conceptos. Os dous separan as representacións internas da información e o xeito no que é presentada aos usuarios, isto permite o desenvolvemento paralelo ademais de facilitar a tarefa aos desenvolvedores e facelo mais doado de manter.
 
 \subsection{MVC: Modelo, vista, controlador}
@@ -57,7 +57,7 @@ Trátase do patrón de deseño software máis coñecido. É moi utilizado no des
 Este patrón é coñecido por usarse en Django. Non existe unha gran diferencia entre este patrón e o \textbf{\acrshort{MVC}} mais ben é unha implementación diferente na que o controlador é manexado directamente polo framework. A continuación explícanse as tres partes que o forman:
 \begin{itemize}
 	\item \textbf{Model}\smallbreak
-		O \textbf{modelo} é similar ao caso de \acrshort{MVC}. Actúa como interface para os datos, é a estrutura lóxica de almacenamento de datos detrás da aplicación web ou a API no noso caso.
+		O \textbf{modelo} é similar ao caso de \acrshort{MVC}. Actúa como interface para os datos, é a estrutura lóxica de almacenamento de datos detrás da aplicación web ou a API neste caso.
 
 	\item \textbf{Template}\smallbreak
 		A \textbf{plantilla} é o compoñente que marca a diferencia coa arquitectura \acrshort{MVC}. A plantilla actúa como a capa de presentación, basicamente é o código \acrshort{HTML} que renderiza a información. O contido das plantillas pode ser tanto estático coma dinámico, poderíase comparar a vista na arquitectura MVC.
@@ -77,8 +77,8 @@ Este patrón é coñecido por usarse en Django. Non existe unha gran diferencia 
 Como se pode observar, a gran vantaxe das arquitecturas é a separación das responsabilidades dentro da aplicación. Deste xeito se existen cambios nos datos (modelo) non afecta a visualización xa que esta se actualizará co contido novo, ademais de que o usuario non interactúa en ningún momento directamente cos datos.
 
 \subsection{Esquema xeral}
-O esquema xeral para o proxecto é o uso de Ionic para o Frontend e Django Rest framework para o Backend pódese ver na figura~\ref{fig:global_architecture}.\smallbreak
-Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día. Tamén polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos ou o manexo destes e pola súa ampla documentación. Creouse a aplicación para o sistema operativo Android e comprobouse que o seu funcionamento é igual a aplicación web. Unha ferramenta que podería servir para engadir características máis adiante. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións.\smallbreak
+O esquema xeral é o uso de Ionic para o Frontend e Django Rest framework para o Backend, pódese ver na figura~\ref{fig:global_architecture}.\smallbreak
+Decidiuse utilizar Ionic pola súa capacidade de desenvolver un código válido tanto nunha aplicación web coma aplicacións específicas para os sistemas operativos mais usados nos móbiles hoxe en día. Tamén polo uso de linguaxes de programación xa coñecidos, a gran cantidade de elementos para a interface dos usuarios xa xerados, seu cliente que facilita a xestión de novos recursos e pola súa ampla documentación. Sopesouse utilizar tan só Django para todo o desenvolvemento, pero a súa capacidade de adaptación a dispositivos móbiles non é tan boa e perderíamos a posibilidade de crear as aplicacións móbiles.\smallbreak
 No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta, a súa simpleza ao usar Python coma linguaxe de programación, o que simplifica o uso de librerías para a conexión con Spotify por exemplo. Tamén é destacable o seu \acrfull{ORM}\footnote{Mapeo obxeto-relacional}, a interface de administración, a seguridade por defecto e a gran documentación coa que conta.
 
 \begin{figure}[hp!]
@@ -89,7 +89,7 @@ No caso de Django decidiuse utilizalo, polo coñecemento previo desta ferramenta
 \end{figure}
 
 \section{Frontend}
-Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o desenvolvemento. Escolleuse utilizar \textit{Angular} xa que é ideal para a creación de \acrfull{PWA}\footnote{Aplicación web progresiva} que é o que pretendemos xerar no proxecto. A curva de aprendizaxe é pronunciada, pero as súas características fan que mereza a pena. As características máis destacadas son: o seu alto rendemento, as directivas, o ecosistema ou o uso da libraría de \acrfull{RxJS} que está enfocada no patrón de deseño \textit{observer}, o que se basea na notificación duns obxectos a outros cando se producen cambios. A continuación explícanse os elementos que compoñen este paradigma:
+Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o desenvolvemento. Escolleuse utilizar \textit{Angular} xa que é ideal para a creación de \acrfull{PWA}\footnote{Aplicación web progresiva} que é o que se pretende xerar no proxecto. A curva de aprendizaxe é pronunciada, pero as súas características fan que mereza a pena. As características máis destacadas son: o seu alto rendemento, as directivas, o ecosistema ou o uso da libraría de \acrfull{RxJS} que está enfocada no patrón de deseño \textit{observer}, o que se basea na notificación duns obxectos a outros cando se producen cambios. A continuación explícanse os elementos que compoñen este paradigma:
 \begin{itemize}
 	\item \textbf{Programación reactiva}\smallbreak
 		Trátase dun paradigma enfocado ao traballo con fluxos de datos, finitos ou infinitos de forma asíncrona. Ao ser asíncrona, a recepción dos datos non produce bloqueos o que facilita as chamadas a recursos con resposta tardía, coma poden ser os que están en rede, as chamadas a bases de datos, a xestión de peticións e en xeral todo o fluxo de chamadas.
@@ -104,7 +104,7 @@ Para o frontend utilízase Ionic, permite o uso de diferentes frameworks para o 
 		Permite percorrer contedores de información, coma por exemplo un \textit{array}, sen necesidade de coñecer o seu contido. \textit{\acrshort{RxJS}} proporciona os métodos \textit{hasNext} para indicar se hai máis datos no iterador e \textit{next} para acceder á seguinte posición do iterador.
 
 	\item \textbf{Programación funcional}\smallbreak
-		Outro patrón no que se basea \textit{RxJS} é a programación funcional. Un paradigma de sobra coñecido pola súa antigüidade pero que volve a utilizarse grazas a programación reactiva. Na programación funcional o factor mais importante son as funcións, todo está orientado ao uso de funcións e estas permiten o paso de outras funcións coma argumento. As funcións deben ser funcións puras, isto quere dicir que unha función cun mesmo argumento de entrada debe devolver sempre o mesmo resultado. A priori, podemos pensar que isto é unha característica de calquera función pero non é así, por exemplo se se usan variables globais xa depende do elemento externo que pode variar.
+		Outro patrón no que se basea \textit{RxJS} é a programación funcional. Un paradigma de sobra coñecido pola súa antigüidade pero que volve a utilizarse grazas a programación reactiva. Na programación funcional o factor mais importante son as funcións, todo está orientado ao uso de funcións e estas permiten o paso de outras funcións coma argumento. As funcións deben ser puras, isto quere dicir que unha función cun mesmo argumento de entrada debe devolver sempre o mesmo resultado. A priori, podemos pensar que isto é unha característica de calquera función pero non é así, por exemplo se se usan variables globais xa depende do elemento externo que pode variar.
 \end{itemize}
 
 \subsection{Arquitectura do frontend}
@@ -145,7 +145,7 @@ O controlador é a capa intermedia da arquitectura. Actúa coma comunicación en
 		O servizo de auth manexa a autenticación dos usuarios. Utiliza \acrlong{JWT} para o control de acceso xa que permite a propagación de identidades e privilexios entre o provedor de información e o solicitante. Para o almacenamento dos \acrshort{JWT}, utilízase Ionic Storage~\cite{ionicStorage} xa que usa o mellor método para gardar os datos nas distintas plataformas utilizadas.
 
 	\item \textbf{Interceptor}\smallbreak
-		Para o uso de autenticación con \acrshort{JWT}, é necesario engadir o token en cada unha das peticións ao backend. \textit{Intercept} (función \ref{code:intercept}) é a función que se encarga de interceptar a petición. Posteriormente a función \textit{addToken} é a encargada de engadir o token a cabeceira. Para garantir a seguridade, os tokens de acceso caducan cada 5 minutos polo tanto necesítase renovalos co token de refresco. Como pódese observar, a función \textit{handle401Error} (función \ref{code:handle401}) renova o token, se pode, cando se produce un erro de autenticación.
+		Para o uso de autenticación con \acrshort{JWT}, é necesario engadir o token en cada unha das peticións ao backend. \textit{Intercept} (función \ref{code:intercept}) é a función que se encarga de interceptar a petición. Posteriormente a función \textit{addToken} é a encargada de engadir o token a cabeceira. Para garantir a seguridade, os tokens de acceso caducan cada 5 minutos polo tanto necesítase renovalos co token de refresco. A función \textit{handle401Error} renova o token, se pode, cando se produce un erro de autenticación.
 
 \end{itemize}
 
@@ -164,13 +164,13 @@ A capa modelo é a parte da aplicación que encapsula a lóxica de negocio e man
 		Representa os datos das sesións, almacena a lista de sesións que estean rexistradas na aplicación con un nome e unha url de acceso, tamén almacena o nome do usuario administrador da sesión.
 
 	\item \textbf{Songs}\smallbreak
-		Representa a lista de cancións, almacena os datos das cancións coma o título, artista e duración, tamén os votos dos usuarios.
+		Representa a lista de cancións, almacena os datos das cancións coma o título, artista e duración e os votos dos usuarios.
 
 	\item \textbf{SongPlayingNow}\smallbreak
-		Representa a canción que se está a reproducir nas sesións, tamén almacena os datos das cancións, utilízase para gardar cal é a canción que esta a soar e facilita engadir a seguinte á cola de reprodución.
+		Representa a canción que se está a reproducir nas sesións, almacena os datos das cancións, utilízase para gardar cal é a canción que esta a soar e facilita engadir a seguinte á cola de reprodución.
 
 	\item \textbf{CustomUser}\smallbreak
-		Trátase dunha modificación do modelo \textit{User} predefinido por Django, representa os usuarios da aplicación, retiráronse campos como o correo electrónico e se engadiron outros coma a sesión.
+		Trátase dunha modificación do modelo \textit{User} predefinido por Django, representa os usuarios da aplicación, retiráronse campos como o correo electrónico e engadironse outros coma a sesión.
 \end{itemize}
 
 \begin{figure}[hp!]
@@ -185,10 +185,10 @@ Na arquitectura \acrshort{MTV} é a vista a encargada de executar a lóxica de n
 \begin{itemize}
 
 	\item \textbf{User views}\smallbreak
-		E conxunto de peticións encargadas do manexo de usuarios. Debido a que utilizase o modelo de usuario predefinido por Django con modificacións para adaptarse ao proxecto, tan só tívose que engadir a obtención da sesión do usuario.
+		E conxunto de peticións encargadas do manexo de usuarios. Debido a que utilízase o modelo de usuario predefinido por Django con modificacións para adaptarse ao proxecto, tan só tívose que engadir a obtención da sesión do usuario.
 
 	\item \textbf{Api views}\smallbreak
-		Peticións encargadas de manexar a API propia. Por exemplo engadir os votos, comprobar se é necesario engadir cancións, poboar a lista de reprodución\dots~ Todas as peticións son de tipo POST debido a que sempre temos que saber cal é o usuario que fai a solicitude.
+		Peticións encargadas de manexar a API propia. Por exemplo engadir os votos, comprobar se é necesario engadir cancións, poboar a lista de reprodución\dots~ Todas as peticións son de tipo POST debido a que sempre é necesario saber cal é o usuario que fai a solicitude.
 
 	\item \textbf{Spotify views}\smallbreak
 		E conxunto funcións relacionadas coas peticións a API de Spotify, por exemplo a autenticación de usuarios na plataforma, engadir a seguinte canción a cola, procura de cancións, procura de playlists\dots 

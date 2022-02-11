@@ -8,7 +8,7 @@ Na figura~\ref{fig:estrutura_xeral} amósase a estrutura do proxecto e a súa xe
 
 A estrutura principal do backend é similar a dos proxectos \textit{Django}, conta cun proxecto chamado \textit{Wikebackend} e dúas aplicacións: unha chamada \textit{users} que é a encargada da xestión dos usuarios e a outra \textit{api} que é a que xestiona as peticións recibidas e as enviadas a API de Spotify. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.3\textwidth]{imaxes/estrutura_xeral.png}
   \caption{Estrutura do proxecto}
@@ -17,7 +17,7 @@ A estrutura principal do backend é similar a dos proxectos \textit{Django}, con
 
 \begin{itemize}
 	\item \textbf{Wikebackend}\smallbreak
-		Garda os arquivos de configuración de Django, entre eles as opcións en \textit{settings.py}. Neste arquivo se almacenan aspectos básicos da configuración, coma son as apps utilizadas, o método de autenticación, o tipo de base de datos, configuración da zona horaria\dots~ Nesta parte da estrutura tamén se almacena a redirección de urls principal no arquivo \textit{urls.py} este redirixe as peticións que recibe aos ficheiros axeitados. 
+		Garda os arquivos de configuración de Django, entre eles as opcións en \textit{settings.py}. Neste arquivo almacenase os aspectos básicos da configuración, coma son as apps utilizadas, o método de autenticación, o tipo de base de datos, configuración da zona horaria\dots~ Nesta parte da estrutura tamén almacenase a redirección de urls principal no arquivo \textit{urls.py}, este redirixe as peticións que recibe aos ficheiros axeitados. 
 	\item \textbf{Api}\smallbreak
 		Trátase da parte principal do proxecto, é a parte encargada de gran parte da lóxica de este. Encárgase de xestionar as peticións recibidas e devolver as respostas axeitadas. Tamén contén as peticións necesarias para a iteración coa API de Spotify.
 	\item \textbf{Users}\smallbreak
@@ -53,7 +53,7 @@ Respecto ao frontend, a estrutura segue a distribución xeral dos proxectos en \
 
 A continuación descríbese en profundidade as partes mais extensas que son a aplicación \textbf{api} no backend e a \textbf{app} no frontend:
 
-\textbf{Api} é parte do backend. Consta dos arquivos xerais dunha aplicación Django. O arquivo \textit{urls.py} é o encargado de xestionar as peticións e executar as funcións de \textit{views.py}. En \textit{models.py} como o seu nome indica, defínense os modelos. Para facilitar o almacenamento de datos nos modelos utilízanse os serializadores, definidos no arquivo \textit{serializers.py}. Tamén conta cun ficheiro tan só para as peticións á api de Spotify chamado \textit{spotify.py} é utilizado nas funcións das vistas.
+\textbf{Api} é parte do backend. Consta dos arquivos xerais dunha aplicación Django. O arquivo \textit{urls.py} é o encargado de xestionar as peticións e executar as funcións de \textit{views.py}. En \textit{models.py} como o seu nome indica, defínense os modelos. Para facilitar o almacenamento de datos nos modelos utilízanse os serializadores, definidos no arquivo \textit{serializers.py}. Tamén conta cun ficheiro tan só para as peticións á api de Spotify chamado \textit{spotify.py}, é utilizado nas funcións das vistas.
 
 \textbf{App} forma parte do frontend, e como xa vimos contén a maior parte do código de este. Está formado principalmente polas páxinas web ás que os usuarios terán acceso, (ver sección~\ref{sec:paxinas_front}). Estas contan cos seus módulos e as súas propias follas de estilos.\smallbreak
 Para o correcto funcionamento das páxinas, son necesarios os servizos incluídos tamén neste apartado da estrutura. Son os principais encargados de realizar as peticións ao backend. Están divididos entre os xerais de api, autenticación e o interceptor, encargado de engadir as cabeceiras para o correcto funcionamento dos \acrshort{JWT}.\smallbreak
@@ -65,7 +65,7 @@ As peticións na aplicación seguen un fluxo a través dos compoñentes similar 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1\textwidth]{imaxes/diagrama_secuencia.png}
+  \includegraphics[scale=0.4]{imaxes/diagrama_secuencia.png}
   \caption{Diagrama de secuencia.}
   \label{fig:diagrama_secuencia}
 \end{figure}
@@ -88,11 +88,11 @@ As peticións na aplicación seguen un fluxo a través dos compoñentes similar 
 \end{figure}
 
 \section{Desenvolvemento}
-Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o deseño, debido a falta de coñecementos, que se foron acadando ao longo do proceso, realizáronse cambios tanto no desempeño das funcións coma na lóxica do funcionamento. Por estas razóns o proceso de implementación foi diferente ao primeiramente deseñado, algo habitual que sucede cando se utiliza unha metodoloxía de desenvolvemento áxil coma é Scrum. A continuación, afondarase sobre o desenvolvemento do proxecto comezando pola parte visual e introducindo as partes de código mais relevantes, a vez que se detallan os problemas xurdidos e as solucións aplicadas.
+Durante o proceso de desenvolvemento seguíronse as ideas acadadas durante o deseño. Debido a falta de coñecementos, que se foron acadando ao longo do proceso, realizáronse cambios tanto no desempeño das funcións coma na lóxica do funcionamento. Por estas razóns o proceso de implementación foi diferente ao primeiramente deseñado, algo habitual que sucede cando se utiliza unha metodoloxía de desenvolvemento áxil coma é Scrum. A continuación, afondarase sobre o desenvolvemento do proxecto comezando pola parte visual e introducindo as partes de código mais relevantes, a vez que se detallan os problemas xurdidos e as solucións aplicadas.
 
 \subsection{Frontend}
 
-\begin{figure}[h]
+\begin{figure}[hp]
 	\caption{Vista en diferentes dispositivos}
 	\label{fig:wikebox_sizes}
 	\begin{subfigure}[c]{1\textwidth}
@@ -130,7 +130,7 @@ playingNow(): Observable<IEsongs[]>{
 		Opción exclusiva para os administradores. Debido a que Spotify é multidispositivo pode darse o caso de que a aplicación se atope aberta en mais dun de eles á vez, o que complicaría o proceso de reprodución xa que por defecto a gramola funciona dende o dispositivo no que se está a reproducir música. Para evitar estes problemas permítese ao administrador seleccionar un dos dispositivos que se atopen conectados nese intre.
 
 	\item \textbf{Barra de procura}\smallbreak
-		Ao facer clic sobre a barra pódese escribir un termo a procurar. Este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina, no que ao facer clic nun destes resultados a canción engádese a lista de reprodución. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML}.
+		Ao facer clic sobre o cadro, pódese escribir un termo a procurar. Este termo se transfire a Spotify e se amosan os resultados proporcionados por este, pódese facer unha procura tanto por nome de canción como por nome de artista, quedando excluídos os podcasts xa que considerase que non son necesarios. Amósanse os dez primeiros resultados nun compoñente chamado \textit{ion-popover} que non é mais que un diálogo superposto ao resto da páxina. Ao facer clic nun destes resultados a canción engádese a lista de reprodución. O compoñente é creado manualmente e ten un funcionamento similar a unha páxina en \acrshort{HTML}.
 		
 	\item \textbf{Lista de reproducción}\smallbreak
 		Trátase da parte da páxina onde se amosan as cancións na orde que se van reproducir. Ademais de poder ver o título da canción tamén amosase o artista e ao seu carón o número de votos realizados polos usuarios, isto permite ordenar as cancións segundo a preferencia dos usuarios. Os atributos polos que se ordena esta lista son os seguintes segundo a súa importancia: forma na que se engadiu, número de votos e momento no que se engadiu. Esta lista é gardada na base de datos da API, o que fai que os resultados sexan case instantáneos e se obteñen cun observable. Tamén se inclúe un botón que permite aos usuarios engadir un voto a canción seleccionada.
@@ -160,7 +160,7 @@ ngOnInit() {
 }
 \end{lstlisting}
 
-Por último falarase sobre a primeira páxina que visualizan os usuarios. Trátase da páxina de \textbf{home} esta tan só contén as instrucións para que os novos usuarios saiban de que trata a aplicación e brevemente explícase como facer uso desta. A páxina de home tamén é a encargada de realizar diferentes redireccións segundo os usuarios estean xa conectados, se coñeza a súa instancia ou non.
+Por último falarase sobre a primeira páxina que visualizan os usuarios. Trátase da páxina de \textbf{home}, esta tan só contén as instrucións para que os novos usuarios saiban de que trata a aplicación e brevemente explícase como facer uso desta. A páxina de home tamén é a encargada de realizar diferentes redireccións segundo os usuarios estean xa conectados, se coñeza a súa sesión ou non.
 
 Unha vez rematada a explicación das diferentes páxinas que existen no proxecto, procederase a explicar os servizos necesarios para o resto do funcionamento do frontend.
 
@@ -169,54 +169,37 @@ Unha vez rematada a explicación das diferentes páxinas que existen no proxecto
 \textbf{Auth service} como o seu nome indica, trátase do servizo encargado de xestionar a autenticación dos usuarios no frontend, realizar o login, comprobar os permisos\dots~Aínda que a xestión dos usuarios faise no backend, tanto o rexistro como a xeración dos tokens, é necesario contar con un sistema no frontend para realizar a verificación.\smallbreak
 O rexistro realiza unha petición ao backend para a creación dun novo usuario nunha instancia. A función de login utiliza \textit{angular storage} para almacenar os datos necesarios no navegador, estes son o nome do usuario, o token de acceso e o de refresco que son recibidos dende o backend cando se realiza o login.
 
-Unha vez almacenados estes datos considérase que o usuario está conectado, xa que ao facer a desconexión son borrados. Tamén tense en conta que o token de refresco non estea expirado, isto se calcula ao gardalo engadindo un período de validez de 24 horas.
+Unha vez almacenados estes datos considérase que o usuario está conectado, xa que ao facer a desconexión son borrados. Tamén tense en conta que o token de refresco non estea expirado.
 
 Referente a caducidade dos tokens é necesario prestar atención ao servizo de interceptor, é o encargado de engadir o token as cabeceiras das peticións. Tamén é o que fai a solicitude de actualizar os tokens xa expirados para os usuarios que aínda están conectados. O token de acceso ten unha caducidade de 5 minutos e para renovalo é necesario ter o token de refresco, facendo unha petición con este token obtense un novo de acceso, este procedemento é invisible para o usuario.
 
-Aínda que esta é so unha das funcións deste servizo é unha das mais complicadas xa que é necesario permitir a solicitude de un token de acceso a usuarios que xa non teñen acceso, tan só teñen o token de refresco e isto dificulta o funcionamento. A función que intercepta as peticións é \textit{intercept} (listing~\ref{code:intercept}). Comproba todas as peticións \acrshort{HTTP} e engade o token cando é posible, no caso de recibir un erro de autenticación 401 chama a función \textit{handle401Error} (listing~\ref{code:handle401}) que trata de obter novamente o token de acceso e se é satisfactorio realiza novamente a petición.
+Aínda que esta é so unha das funcións deste servizo é unha das mais complicadas xa que é necesario permitir a solicitude de un token de acceso a usuarios que xa non teñen acceso, tan só teñen o token de refresco e isto dificulta o funcionamento. A función que intercepta as peticións é \textit{intercept} (listing~\ref{code:intercept}). Comproba todas as peticións \acrshort{HTTP} e engade o token cando é posible, no caso de recibir un erro de autenticación 401 chama a función \textit{handle401Error} que trata de obter novamente o token de acceso e se é satisfactorio realiza novamente a petición.\newpage
 
 \begin{lstlisting}[language=javascript, label={code:intercept}, caption={interceptor.service.ts}]
 intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-	if (this.authService.getJwtToken()) {
-		request = this.addToken(request, this.authService.getJwtToken());
-		console.log(request)
-	}
-	return next.handle(request).pipe(catchError(error => {
-		if (error instanceof HttpErrorResponse && error.status === 401) {
-			return this.handle401Error(request, next);
-		} else {
-			return throwError(error);
-		}
-	}));
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=javascript, label={code:handle401}, caption={interceptor.service.ts}]
-private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-	if (!this.isRefreshing) {
-		this.isRefreshing = true;
-		this.refreshTokenSubject.next(null);
-
-		return this.authService.refreshToken().pipe(
-			switchMap((token: any) => {
-				this.isRefreshing = false;
-				this.refreshTokenSubject.next(token.access);
-				return next.handle(this.addToken(request, token.access));
-			}));
-
+	if (this.isInBlockedList(request.url)) {
+		return next.handle(request);
 	} else {
-		return this.refreshTokenSubject.pipe(
-			filter(token => token != null),
-				take(1),
-			switchMap(access => {
-				return next.handle(this.addToken(request, access));
-			}));
+		return next.handle(this.addToken(request))
+		.pipe(catchError(error => {
+			if (error instanceof HttpErrorResponse) {
+				switch (error.status) {
+					case 400: return this.handle400Error();
+					case 401: return this.handle401Error(request, next);
+					default:
+					return throwError(error);
+				}
+			} else {
+				return throwError(error);
+			}
+		}));
 	}
 }
+
 \end{lstlisting}
 
 \subsection{Backend}
-Unha vez introducido o funcionamento do frontend pásase a explicar de forma similar o funcionamento do backend. Como xa se explicou, contén dúas aplicacións. Unha encargada do control de usuarios chamada \textit{users} e outra chamada \textit{api} que é a encargada de facer o resto de funcións, tanto as peticións a API de Spotify como as modificacións dos datos no modelo etc.\smallbreak
+Unha vez introducido o funcionamento do frontend pásase a explicar de forma similar o funcionamento do backend. Contén dúas aplicacións, unha encargada do control de usuarios chamada \textit{users} e outra chamada \textit{api} que é a encargada de facer o resto de funcións, tanto as peticións a API de Spotify como as modificacións dos datos no modelo etc.\smallbreak
 O modelo é a estrutura onde se almacenan os datos da aplicación. Django por defecto utiliza \textit{\Gls{SQLite}} como base de datos, decidiuse manter esta librería para o manexo dos datos xa que as súas características principais son: a eficiencia, a simplicidade e a independencia. O que quere dicir que é axeitado para sistemas pequenos onde non se reciben moitas peticións diarias, ademais ten un pequeno uso de recursos. Existen catro táboas diferentes no modelo unha é a que xestiona os usuarios rexistrados e as outras tres serven para o manexo dos datos, comezaremos explicando estas últimas.\smallbreak
 
 \begin{itemize}
@@ -239,9 +222,9 @@ class Songs(models.Model):
         return self.title  
 \end{lstlisting}
 
-	\item \textbf{SongPlayingNow} o outro modelo que utilízase para a xestión das cancións almacena o estado da sesión, garda a canción que se está a reproducir nese intre, isto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha redución do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sesión a que pertence.
+	\item \textbf{SongPlayingNow} o outro modelo que se utilíza para a xestión das cancións almacena o estado da sesión, garda a canción que se está a reproducir nese intre, isto serve para poder xestionar a cola de reprodución de Spotify xa que a API de este non nos permite consultala nin borrar os elementos de esta, tan só engadir novas cancións, polo tanto é necesario saber cal é a canción que se está reproducindo para engadir a seguinte no momento axeitado. O modelo é unha redución do anterior, tan só garda os datos da canción e cunha chave foránea relacionase coa sesión a que pertence.
 
-	\item \textbf{CustomUser} Django contén un sistema de xestión de usuarios. É bastante completo, pero como é lóxico non é posible que se adapte totalmente as necesidades de cada proxecto. Por isto permite facer modificacións sobre este para engadir campos ou quitalos, deste xeito o funcionamento da xestión de usuarios está creada e tan só é necesario adaptalo. Neste caso retirouse o campo de email, xa que non é necesario e engadiuse o de sesión para poder facer as relacións. Ademais cambiouse a chave primaria ao nome do usuario xa que antes este atributo pertencía ao email.
+	\item \textbf{CustomUser} Django contén un sistema de xestión de usuarios. É bastante completo, pero como é lóxico non é posible que se adapte totalmente as necesidades de cada proxecto. Por isto permite facer modificacións sobre este para engadir campos ou quitalos, deste xeito o funcionamento da xestión de usuarios está creada e tan só é necesario adaptalo. Neste caso retirouse o campo de email, xa que non é necesario e engadiuse o de sesión para poder facer as relacións. Ademais cambiouse a chave primaria ao identificador do usuario xa que antes este atributo pertencía ao email.
 
 \end{itemize}
 
@@ -257,17 +240,16 @@ A outra aplicación que existe, chamada \textit{api} é a encargada de todo o fu
 	\item Se non, a seguinte canción que está na lista de reprodución engádese a cola de Spotify.
 	\item Compróbase se a canción que está a soar é a mesma que a primeira na lista de reprodución.
 	\item Se non, non se fai nada.
-	\item Se sí, borrase a canción da lista de reproducción.
+	\item No outro caso, borrase a canción da lista de reprodución.
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[h]
 	\begin{center}
-		\includegraphics[width=0.95\textwidth]{imaxes/steps.png}
+		\includegraphics[scale=0.4]{imaxes/steps.png}
 	\end{center}
 	\caption{Pasos principais}
 	\label{fig:steps}
 \end{figure}
-
 
 Deste xeito conséguese utilizar a gramola sen interromper o uso normal de Spotify, xa que o usuario que teña acceso pode seguir utilizándoa como de costume tan só vese afectado cando faltan menos de 30 segundos para o remate da canción.
 
@@ -297,7 +279,7 @@ Para a procura de cancións, cando o usuario introduce o texto pásase ao API de
 Por último explícase como é o proceso da obtención do token sobre o API de Spotify, para facilitar todo o proceso úsase a librería externa Spotipy~\cite{spotipy}.
 
 \begin{enumerate}
-	\item Xerase un manager de autenticación, neste hai que almacenar os datos de acceso da aplicación en Spotify. Son necesarios: un identificador de cliente e unha clave, ademais dos scopes e a url de callback. Este manager é utilizado para autenticar as peticións que se fan a API de Spotify coa app creada en Spotify.
+	\item Xerase un manager de autenticación. Neste hai que almacenar os datos de acceso da aplicación en Spotify. Son necesarios: un identificador de cliente e unha clave, ademais dos scopes e a url de callback. Este manager é utilizado para autenticar as peticións que se fan a API de Spotify coa app creada en Spotify.
 	\item Posteriormente obtense o cliente, que é identificado a través do manager.
 	\item Para obter o token de autenticación primeiro búscase se xa está gardado, se é así aquí remata o proceso.
 	\item Se non se atopa o token en caché, ábrese a páxina de autenticación de Spotify. O usuario introduce as súas credenciais de acceso a Spotify e automaticamente se redirixe a páxina de callback de novo na aplicación da gramola.
@@ -316,13 +298,13 @@ Para comprobar a autenticidade do servidor utilizamos CORS, en cambio para auten
 	\item \textbf{Autenticación personalizada:} permite crear un tipo de autenticación propio axeitado para as necesidades exactas.
 \end{itemize}
 Tamén existe a opción de utilizar paquetes de terceiros con diferentes métodos de autenticación coma OAuth ou \acrshort{JWT}~\cite{djangoAuth}.\smallbreak
-Estudáronse estes métodos e concluíuse que o mais axeitado sería o uso de sesións ou tokens. A autenticación por sesións non sería axeitada para a comunicación entre o backend e o frontend debido a que está pensada para o seu uso en clientes \textit{AJAX} que funcionan no mesmo contexto que a propia páxina web. Polo tanto a elección final é utilizar un sistema de autenticación por tokens. Novamente existen dúas eleccións, o uso de \textbf{OAuth} ou \textbf{\acrshort{JWT}}. Aínda que a autenticación con OAuth podería ser moi axeitada declinouse debido a intención de simplificar o máximo, aínda que cabe destacar que nun futuro sería unha opción a contemplar xa que permitiría unificar as contas de usuarios entre sesións.\smallbreak
+Estudáronse estes sistemas e concluíuse que o mais axeitado sería o uso de sesións ou tokens. A autenticación por sesións non sería axeitada para a comunicación entre o backend e o frontend debido a que está pensada para o seu uso en clientes \textit{AJAX} que funcionan no mesmo contexto que a propia páxina web. Polo tanto a elección final é utilizar un sistema de autenticación por tokens. Novamente existen dúas eleccións, o uso de \textbf{OAuth} ou \textbf{\acrshort{JWT}}. Aínda que a autenticación con OAuth podería ser moi axeitada declinouse debido a intención de simplificar o máximo, aínda que cabe destacar que nun futuro sería unha opción a contemplar xa que permitiría, mais métodos de autenticaciónn.\smallbreak
 Finalmente a opción elixida foi o uso de \acrshort{JWT}. Existen paquetes de terceiros para facilitar o manexo de \acrshort{JWT} con Django, o mais coñecido é \textit{SimpleJWT}~\cite{simpleJWT}. Xera un token de acceso con unha caducidade de 5 minutos e un de refresco con caducidade para 24 horas. No caso de Ionic foi necesaria a creación dun \textit{interceptor} que é o encargado tanto de engadir o token as cabeceiras nas peticións, como de facer a comprobación de se é necesario renovar o token de acceso cada vez que recibe unha nova petición.\smallbreak
 O funcionamento é sinxelo, cando se produce unha autenticación satisfactoria no backend este devolve un token de refresco e outro de acceso que é almacenado no frontend, posteriormente cando é necesario facer unha nova petición ao backend estando o usuario xa autenticado o interceptor é o encargado de engadir o token de acceso a dita solicitude. Algúns dos problemas que se tiveron que resolver foron o manexo dos tokens de refresco sen estar o usuario autenticado, xa que é necesario evitar recibir erros de autenticación. Na figura ~\ref{fig:token_flow} pódese ver como é este proceso.\medbreak
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1\textwidth]{imaxes/token_flow.png}
+  \includegraphics[scale=0.4]{imaxes/token_flow.png}
   \caption{Fluxo dos tokens.}
   \label{fig:token_flow}
 \end{figure}

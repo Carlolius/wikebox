@@ -1,27 +1,26 @@
 \chapter{Introdución}
 \label{chap:introducion}
 
-\lettrine{N}{este} primeiro capítulo da memoria, se explica a motivación, se expoñen os obxectivos e se define á estrutura.\bigbreak
+\lettrine{N}{este} primeiro capítulo da memoria, explícase a motivación, expóñense os obxectivos e defínese a estrutura.\bigbreak
 
-Durante a décadas dos 60 e 70 a industria musical sufriu unha revolución, nunha gran parte dos lugares de restauración comezaron aparecer aparellos que permitían elixir as seguintes cancións no local, as gramolas. Coa dixitalización da música, as gramolas foron desaparecendo e en poucos casos adaptándose aos novos formatos e dixitalizándose. Nos nosos días, coas múltiples plataformas que existen e a música na nube é moi complicado atopar un bar no que se permita elixir a seguinte canción, coma antes. Do mesmo xeito en calquera lugar onde soe música sempre hai alguén que quere engadir a súa canción á cola de reprodución, este pode ser un obxectivo sinxelo ou complicado dependendo de moitos factores. Con este proxecto tratamos de resolver estes problemas e dun xeito doado compartir os diferentes gustos musicais.
+Durante as décadas dos 60 e 70 a industria musical sufriu unha revolución, nunha gran parte dos lugares de restauración comezaron a aparecer aparellos que permitían elixir as seguintes cancións no local, as gramolas. Coa dixitalización da música, as gramolas foron desaparecendo e en poucos casos adaptándose aos novos formatos. Nos nosos días, coas múltiples plataformas que existen e a música na nube é moi complicado atopar un bar no que se permita elixir, coma antes, a seguinte canción. Do mesmo xeito en calquera lugar onde soe música sempre hai alguén que quere engadir a súa canción á cola de reprodución, este pode ser un obxectivo sinxelo ou complicado dependendo de moitos factores. Con este proxecto trátase de resolver estes problemas e, dun xeito doado, compartir os diferentes gustos musicais.
 
-O obxectivo deste proxecto é crear unha aplicación web na que os usuarios poidan engadir as cancións que desexen a unha lista de reprodución compartida e votar polas súas favoritas. Deste xeito as cancións reprodúcense segundo a orde de chegada e segundo o seu número de votos. Polo tanto a idea é crear unha gramola virtual na que os usuarios non teñen que recorrer a ningún aparello, con calquera dispositivo con acceso a Internet deberían de ser capaces de conectarse á gramola e engadir cancións. Para realizar a reprodución de música usase o cliente de \gls{Spotify} que é controlado mediante a súa propia \gls{API}, deste xeito se xestiona a música que vai soar, polo tanto poderá ser reproducida en calquera dispositivo que teña un cliente desta plataforma. Evítase interromper o uso normal do Spotify, é dicir, facendo que o usuario poida usar o seu cliente de \gls{Spotify} coma sempre e facendo que a aplicación engada as cancións á cola de reprodución tan só nos momentos necesarios. Co propósito de facilitar o seu uso, e desta maneira incrementar o número de usuarios creouse a plataforma do xeito mais intuitivo posible para estes.
+O obxectivo é crear unha aplicación web na que os usuarios poidan engadir as cancións que desexen a unha lista de reprodución compartida e votar polas súas favoritas. Deste xeito as cancións reprodúcense segundo a orde de chegada e segundo o seu número de votos. O resultado é unha gramola virtual na que os usuarios non teñen que recorrer a ningún aparello, con calquera dispositivo con acceso a Internet deberían de ser capaces de conectarse á gramola e engadir cancións. Para realizar a reprodución de música úsase o cliente de \gls{Spotify} que é controlado mediante a súa propia \gls{API}, deste xeito xestionase a música que vai soar, polo tanto poderá ser reproducida en calquera dispositivo que teña un cliente desta plataforma. Evítase interromper o uso normal do Spotify, é dicir, facendo que o usuario poida usar o seu cliente de \gls{Spotify} coma sempre e permitindo que a aplicación engada as cancións á cola de reprodución tan só nos momentos necesarios. Co propósito de facilitar o seu uso e, desta maneira, incrementar o número de usuarios creouse a plataforma do xeito mais intuitivo posible para estes.
 
-Na parte técnica, o obxectivo é crear una \gls{PWA}~\cite{pwa}\footnote{Aplicacións, web progresivas}, é dicir unha aplicación creada coas tecnoloxías web, que funciona en calquera tipo de navegador compatible.
-% A aplicación constará dun \gls{backend} en \Gls{Django}~\cite{Django} Rest Framework~\cite{djangoApiGuide}, que será o encargado de xestionar as solicitudes á \gls{API} de \gls{Spotify}, e manexar as propias peticións do noso \gls{frontend} escrito en \Gls{Ionic}~\cite{ionic5}~\cite{ionicDocs} que utiliza \gls{Angular}~\cite{angular5} coma \gls{framework}, en canto a base de datos utilizaremos SQLite para o almacenamento dos usuarios e as listas de reprodución.
+Na parte técnica, o obxectivo é crear unha \gls{PWA}~\cite{pwa}\footnote{Aplicacións, web progresivas}, é dicir unha aplicación creada coas tecnoloxías web, que funciona en calquera navegador compatible.
 
 \section{Obxectivos}
-O proxecto pretende crear unha plataforma de creación de listas de reprodución de música de forma colaborativa cunhas funcionalidades similares ás de unha gramola, e a reprodución destas mediante un cliente de Spotify. Os obxectivos funcionais do traballo son os seguintes:
+O proxecto pretende crear unha plataforma de xestión de listas de reprodución de música de forma colaborativa, cunhas funcionalidades similares ás de unha gramola, e a reprodución destas mediante un cliente de Spotify. Os obxectivos funcionais do traballo son os seguintes:
 \begin{itemize}
 	\item Xestión de sesións nas que os administradores poderán conectar a súa conta de Spotify para a reprodución de música.
-	\item Creación de novos usuarios dentro de cada unha das sesións, contando estas cun usuario administrador e os demais usuarios rexistrados.
+	\item Creación de novos usuarios dentro de cada unha das sesións, contando estas cun usuario administrador e o resto de usuarios rexistrados.
 	\item Posibilidade de facer unha procura de cancións para engadir á cola de reprodución.
 	\item Opción de votación para as cancións na cola de reprodución, isto permitirá cambiar a orde na que as cancións son reproducidas.
 \end{itemize}
 Do mesmo xeito se expoñen os obxectivos non funcionais:
 \begin{itemize}
-	\item As comunicacións tanto coa API propia coma coa de Spotify deberán de ser seguras.
-	\item O sistema debe ser usable de forma sinxela, tanto o rexistro coma a procura de música ten que ser clara.
+	\item As comunicacións, tanto coa API propia coma coa de Spotify, deberán ser seguras.
+	\item O sistema debe ser utilizable de forma sinxela. Tanto o rexistro coma a procura de música ten que ser clara.
 	\item Funcionamento sen manter a aplicación aberta por parte do administrador.
 	\item Modulable e extensible para permitir a introdución de novas funcionalidades.
 	\item A versión web deberá ser adaptable, tanto a pantallas grandes coma a móbiles.
@@ -31,7 +30,7 @@ Do mesmo xeito se expoñen os obxectivos non funcionais:
 Este documento estruturase en 8 capítulos.
 \begin{itemize}
 	\item Neste primeiro capítulo descríbese a motivación, e os obxectivos do traballo.
-	\item O capítulo segundo, contén a análise de viabilidade do proxecto.
+	\item O capítulo segundo, contén a análise de viabilidade do proxecto e o estado da arte.
 	\item No capítulo terceiro explícanse as tecnoloxías utilizadas durante o proceso de desenvolvemento.
 	\item O cuarto capítulo inclúe a planificación do proxecto, a metodoloxía usada e os custos.
 	\item No capítulo quinto descríbese o deseño inicial da aplicación e as ferramentas utilizadas.
