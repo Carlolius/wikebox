@@ -20,8 +20,9 @@
 				</ion-searchbar>
 
 			</ion-col>
-			<ion-col offset="2" class="ion-align-self-right">
-				<ion-button fill="clear" (click)="showPopMenu($event)">{{userName}}</ion-button>
+			<ion-col offset="1" class="ion-align-self-right">
+				<ion-button fill="clear" (click)="showShare()">Share</ion-button>
+				<ion-button fill="clear" (click)="showPopMenu($event)">{{ userName }}</ion-button>
 			</ion-col>
 		</ion-row>
 	</div>

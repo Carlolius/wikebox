@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { ApiService } from '../../services/api.service';  // Import the music service
 import { PopoverController } from '@ionic/angular';
 import { SearchresultpopComponent } from 'src/app/components/searchresultpop/searchresultpop.component';
 import { PopmenuComponent } from 'src/app/components/popmenu/popmenu.component';
 import { PopTokenComponent } from 'src/app/components/pop-token/pop-token.component';
+import { PopshareComponent } from 'src/app/components/popshare/popshare.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
 	selector: 'app-music',
@@ -24,7 +27,8 @@ export class MusicPage implements OnInit {
 	deviceName:string = "Choose device"
 	deviceId:string
 	currentPlaying:any
-	userName:string
+	userName:any
+	userSession:any
 	admin:any
 	check5:any 
 	/* Meter por aquí variables del tipo */
@@ -35,13 +39,16 @@ export class MusicPage implements OnInit {
 
 	constructor(
 		private apiService: ApiService,
+		private authService: AuthService,
 		private searchPopover: PopoverController,
 		private popMenu: PopoverController,
 		private popToken: PopoverController,
+		private popShare: PopoverController,
 	) { }
 
 	ngOnInit() {
-		this.userName = localStorage.getItem("username")
+		this.getUsername();
+		this.getSession();
 		this.spotifyareToken();
 		this.checkAdmin();
 		this.getDevices();
@@ -56,11 +63,27 @@ export class MusicPage implements OnInit {
 		})
 	}
 
+	ngOnDestroy(){
+		this.endCheck()
+	}
+
 	// Finish the subscription to the observable
 	endCheck() {
 		this.check5.next()
 		this.check5.complete()
 		this.check5.unsubscribe()
+	}
+
+	getUsername() {
+		this.authService.getUsername().subscribe(data => {
+			this.userName = data;
+		})
+	}
+
+	getSession() {
+		this.authService.getSession().subscribe(data => {
+			this.userSession = data;
+		})
 	}
 
 	// Shows the obtain token popover
@@ -119,6 +142,21 @@ export class MusicPage implements OnInit {
 	/* Aquí también hay que pasar el limit y el offset para ver todas las canciones */
 	addPlaylist( playlistId:string ) {
 		this.playlistSongs = this.apiService.spotifyAddPlaylist( playlistId )
+	}
+
+	async showShare(){
+		const popover = await this.popShare.create({
+			component: PopshareComponent,
+			align: 'center',
+			cssClass: 'share-popover',
+			componentProps: {
+				session: this.userSession
+			}
+		});
+		await popover.present();
+		 const {data} = await popover.onDidDismiss();
+		 if (data)
+			 this.endCheck()
 	}
 
 	async showPopMenu(ev: any){
