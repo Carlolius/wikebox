@@ -115,24 +115,30 @@ export class MusicPage implements OnInit {
 
 	// When click in a search result
 	clickSearchSong( songUri:string ) {
-		this.searchedSong = this.apiService.spotifyClickSeachedSong(songUri);
-		this.showQueue();
+		this.searchedSong = this.apiService.spotifyClickSeachedSong(songUri)
+		setTimeout(() => {
+			this.showQueue();
+		}, 500);
 	}
 	
 	// Vote positive for a song
 	voteP(uri:string){
 		this.apiService.voteP(uri);
-		this.showQueue();
+		setTimeout(() => {
+			this.showQueue();
+		}, 500);
 	}
 
 	// Vote negative for a song
 	voteN(uri:string){
 		this.apiService.voteN(uri)
-		this.showQueue();
+		setTimeout(() => {
+			this.showQueue();
+		}, 500);
 	}
 
 	showQueue(){
-		this.apiService.queueSongs().subscribe(data => {
+		return this.apiService.queueSongs().subscribe(data => {
 			if (JSON.stringify(this.queueSongs) != JSON.stringify(data)) {
 				this.queueSongs = data
 			}});

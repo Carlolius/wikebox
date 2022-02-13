@@ -112,7 +112,7 @@ export class ApiService {
 
 	// Add a searched song to Songs
 	spotifyClickSeachedSong(songUri:string) {
-		this.httpClient
+		return this.httpClient
 			.post(this.SERVER_ADDRESS + 'api/searchtosongs/', {'songUri': songUri})
 			.subscribe();
 	}
