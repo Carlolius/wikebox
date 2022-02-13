@@ -18,7 +18,6 @@ export class Interceptor implements HttpInterceptor {
 	// Intercept every HTTP call
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		if (this.isInBlockedList(request.url)) {
-			console.log("reurl", request.url);
 			return next.handle(request);
 		} else {
 			return next.handle(this.addToken(request)).pipe(catchError(error => {
@@ -41,7 +40,9 @@ export class Interceptor implements HttpInterceptor {
 	// Filter out URLs where don't want to add the token
 	private isInBlockedList(url: string): Boolean {
 		// Example: Filter out our login and logout API call
-		if (url == `${environment.SERVER_ADDRESS}users/token/refresh/` || url == `${environment.SERVER_ADDRESS}users/token/`) {
+		if (url == `${environment.SERVER_ADDRESS}users/token/refresh/`
+			|| url == `${environment.SERVER_ADDRESS}users/users/`
+			|| url == `${environment.SERVER_ADDRESS}users/token/`) {
 			return true;
 		} else {
 			return false;
@@ -88,7 +89,7 @@ export class Interceptor implements HttpInterceptor {
 
 			// First, get a new access token
 			return this.authService.refreshToken().pipe(
-				switchMap((token: any) => {
+				switchMap(token => {
 					if (token) {
 						// Store the new token
 						return this.authService.storeJwtToken(token).then(

@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
 
 import {IEsongs} from '../songs';
+import { AlertController } from '@ionic/angular';
 /* import { catch } from 'rxjs/operators'; */
 /* import { map } from 'rxjs/operators'; */
 
@@ -19,15 +20,31 @@ export class ApiService {
 
 	constructor(
 		private httpClient: HttpClient,
-		private router: Router
+		private router: Router,
+		private alertController: AlertController,
 	) {}
 
 	get() {
 		return this.httpClient.get(this.SERVER_ADDRESS);
 	}
 
+	async presentSessionError() {
+		const alert = await this.alertController.create({
+			cssClass: 'my-custom-class',
+			header: 'Register error!',
+			message: 'The session already exists',
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+	
 	RegisterSession(session: String) {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'api/sessionregister/', {urlSession: session})
+		return this.httpClient.post(this.SERVER_ADDRESS + 'api/sessionregister/', {urlSession: session}).pipe(
+			catchError(e => {
+				this.presentSessionError();
+				throw new Error(e);
+			})
+		)
 	}
 
 	voteP(song:string){

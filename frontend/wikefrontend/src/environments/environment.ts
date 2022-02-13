@@ -5,6 +5,7 @@
 export const environment = {
 	production: false,
 	SERVER_ADDRESS: 'http://192.168.1.106:8000/',
+	ionic_server: 'http://localhost:8100/',
 };
 
 /*

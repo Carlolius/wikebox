@@ -31,21 +31,7 @@ export class LoginPage implements OnInit {
 		this.authService.login(form.value.username, form.value.password).subscribe(
 			(res) => {
 				// A redirección do router debería de ser a instancia do propio usuario
-				if (this.mySession != null){
-					this.router.navigate([this.mySession + '/home'])
-				}
-				else
-					this.router.navigateByUrl('home')
-			},
-			async (res) => {
-				console.log(res)
-				const alert = await this.alertController.create({
-					header: 'Login failed',
-					message: res.error.error,
-					buttons: ['OK'],
-				});
-
-				await alert.present();
+				this.router.navigate(['music'])
 			}
 		);
 	}

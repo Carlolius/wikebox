@@ -32,7 +32,8 @@ const routes: Routes = [
 			canActivate: [AuthguardService]
 	},
 	{
-		path: ':mySession/music',
+		path: 'music',
+		// path: ':mySession/music',
 		loadChildren: () => import('./pages/music/music.module').then( m => m.MusicPageModule),
 			canActivate: [AuthguardService] /* Engadir mais Guards para comprobar que a instancia é a que é. */
 	},

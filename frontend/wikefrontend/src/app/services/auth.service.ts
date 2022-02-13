@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { tap, catchError } from 'rxjs/operators';
-import { BehaviorSubject} from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from "@angular/router";
 
 import { AuthResponse } from '../models/auth-response';
@@ -25,7 +25,10 @@ export class AuthService {
 	JwtHelper = new JwtHelperService();
 
 	token:any;
-	user:any;
+	access:any;
+	refresh:any;
+	userid:any;
+	username:any;
 	session:any;
 	redirectUrl: string;
 
@@ -51,6 +54,9 @@ export class AuthService {
 
 	// Check if the user is already logged in.
 	async checkToken() {
+		await this.getRefreshToken().then(refresh => {
+			this.refresh = refresh
+		})
 		await this.getJwtToken().then(token => {
 			if(token) {
 				this.token = token
@@ -58,8 +64,10 @@ export class AuthService {
 				let isAccessExpired = this.JwtHelper.isTokenExpired(token['access']);
 				// console.log("Accessexpired?", isAccessExpired);
 				if(!isAccessExpired) {
-					this.storeJwtToken(token)
-					this.user = decoded['user_id'];
+					this.storeAccessToken(token['access'])
+					this.userid = decoded['user_id'];
+					this.getUsername();
+					this.session = this.getSession();
 					this.isAuthenticated.next(true);
 					if(this.redirectUrl) {
 						this.router.navigate([this.redirectUrl]);
@@ -73,28 +81,26 @@ export class AuthService {
 		})
 	}
 
+	// Check if the user is logged in
 	isLoggedIn(): boolean {
-		console.log("isLoggedIn?", this.isAuthenticated.value);
 		return this.isAuthenticated.value;
 	}
 
+	// Check the user session
 	getSession() {
-		this.httpClient.post(this.SERVER_ADDRESS + 'users/getsession/', {"username": this.user})
-		.subscribe(data => {
-			const session = JSON.stringify(data)
-			const unquoted = session.replace(/['"]+/g, '');
-			this.session = unquoted;
-			this.storeSession(unquoted)})
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/getsession/', {request: Request})
+	}
+
+	// Check the username
+	getUsername(){
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/getusername/', {request: Request})
 	}
 
 	// Login
-	
 	// Alert login error
 	async presentLoginError() {
 		const alert = await this.alertController.create({
-			cssClass: 'my-custom-class',
 			header: 'Login error!',
-			// subHeader: 'Subtitle',
 			message: 'Wrong username or password.',
 			buttons: ['OK']
 		});
@@ -104,25 +110,49 @@ export class AuthService {
 	login(username: String, password: String){
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/', {"username": username, "password": password}).pipe(
 			tap(token => {
-				console.log("taptoken", token);
-				
 				this.storeJwtToken(token)
-				this.storeUser(username.toString())
+				this.storeAccessToken(token['access'])
+				this.storeRefreshToken(token['refresh'])
+				// this.storeUser(username.toString())
+				let decoded = this.JwtHelper.decodeToken(token['access']);
+				this.userid = decoded['user_id'];
+				// this.session = this.getSession();
 				this.isAuthenticated.next(true);
 			}),
 			catchError(e => {
 				this.presentLoginError();
-				console.log("loginError", e['error']['detail']);
 				throw Error(e['error']['detail']);
 			})
 		)
 	}
 
 	// Register
+	// Alert register error
+	async presentRegisterError() {
+		const alert = await this.alertController.create({
+			header: 'Register error!',
+			message: 'The username already exists.',
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+
 	register(username: String, password: String, mySession:string) {
-		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/', {username: username, password: password, userSession: mySession}).pipe(
-			catchError(e => {
-				throw new Error(e);
+		return this.httpClient.post(this.SERVER_ADDRESS + 'users/users/', {"username": username, "password": password, "userSession": mySession}).pipe(
+			tap(res => {
+				console.log("resres", res);
+				this.login(username, password).subscribe(
+					tap(logres => {
+						console.log("logres", logres);
+						
+					})
+				)
+				}),
+			catchError(error => {
+				if (error['status'] == 400){
+					this.presentRegisterError();
+				}
+				throw new Error(error);
 			})
 		)
 	}
@@ -135,9 +165,10 @@ export class AuthService {
 	}
 
 	// Interceptor
-	async storeJwtToken(token):Promise<any> {
+	async storeJwtToken(token:any):Promise<any> {
 		await this.initStorage();
 		this.token = token;
+		// this.storeRefreshToken(token['refresh'])
 		return this._storage?.set("token", token);
 	}
 
@@ -146,27 +177,41 @@ export class AuthService {
 		return await this._storage?.get("token");
 	}
 
+	async storeAccessToken(token:any):Promise<any> {
+		await this.initStorage();
+		this.access = token;
+		return this._storage?.set("access", token);
+	}
+
+	async getAccessToken():Promise<any> {
+		await this.initStorage();
+		return await this._storage?.get("access");
+	}
+
+	async storeRefreshToken(token:any):Promise<any> {
+		console.log("storeRefreshToken", token);
+		
+		this.refresh = token;
+		await this.initStorage();
+		console.log("thistokenafter", this.refresh)
+		return this._storage?.set("refresh", token);
+	}
+
+	async getRefreshToken():Promise<any> {
+		await this.initStorage();
+		return await this._storage?.get("refresh");
+	}
+
 	async removeToken():Promise<any> {
 		await this.initStorage();
 		return await this._storage?.clear();
 	}
 
-	private storeUser(user: string) {
-		this.user = user;
-		return this.storage.set("user", user)
-		// localStorage.setItem("username", this.user)
-	}
-
-	private storeSession(data:any) {
-		localStorage.setItem("session", data)
-	}
-
-	
 	refreshToken() {
 		return this.httpClient.post(this.SERVER_ADDRESS + 'users/token/refresh/', {
-			'refresh': this.token['refresh']
-		}).pipe(tap((token: AuthResponse) => {
-			this.storeJwtToken(token);
+			'refresh': this.refresh
+			}).pipe(tap(token => {
+				this.storeAccessToken(token['access']);
 		}));
 	}
 

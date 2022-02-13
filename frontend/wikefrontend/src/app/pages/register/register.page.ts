@@ -22,8 +22,9 @@ export class RegisterPage implements OnInit {
 		this.mySession = this.activatedRoute.snapshot.paramMap.get('mySession');
 	}
 	register(form) {
-    this.authService.register(form.value.username, form.value.password, this.mySession).subscribe((res)=>{
-			this.router.navigateByUrl(this.mySession + '/login');
+		this.authService.register(form.value.username, form.value.password, this.mySession)
+			.subscribe((res)=>{
+				// this.router.navigateByUrl(this.mySession + '/home');
 		});
 	}
 

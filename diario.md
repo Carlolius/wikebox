@@ -495,3 +495,9 @@ Creación do interceptor no frontend.
 Refresh funcionando realmente.
 Reparación do tema do refresh, agora gardase cando vai caducar o token e se está caducado pide facer login outra vez, se non está caducado envía o refresh.
 Cando se quere facer login é necesario permitir que o fagan usuarios non autenticados, simplemente quitando IsAuthenticated nas funcións necesarias.
+
+**07/02/2022**  
+Titoriais usados para a comunicación dos tokens front e backend:
+1. https://devdactic.com/ionic-jwt-refresh-token/
+1. https://www.learmoreseekmore.com/2020/11/part-1-ionic-angular-jwt-authentication-accesstoken.html
+1. https://devdactic.com/jwt-authentication-ionic-node/
