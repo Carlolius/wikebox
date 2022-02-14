@@ -1,4 +1,4 @@
-\chapter{Implementación}
+\chapter{Implementación e probas}
 \label{chap:implementación}
 
 \lettrine{N}{este} capítulo explicase o proceso de implementación, as decisións importantes tomadas durante este, os problemas atopados e as súas solucións.
@@ -24,7 +24,7 @@ A estrutura principal do backend é similar a dos proxectos \textit{Django}, con
 		É a aplicación que xestiona os usuarios, contén as modificacións para a adaptación do modelo de usuarios ao proxecto e as funcións que teñen que ver con estes.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.3\textwidth]{imaxes/estrutura_backend.png}
   \caption{Estrutura do backend}
@@ -309,4 +309,16 @@ O funcionamento é sinxelo, cando se produce unha autenticación satisfactoria n
   \label{fig:token_flow}
 \end{figure}
 
-Finalmente para concluír o apartado de seguridade explícase o sistema utilizado para o almacenamento dos tokens no frontend. Os tokens almacenase igual que o resto dos datos na aplicación, utilizando o paquete de Ionic, \textit{storage-angular} que permite gardar os datos na caché do navegador. No caso de que fose necesario Ionic ofrece un paquete premium, de pago, chamado \textit{Ionic secure storage} que permite o cifrado dos datos almacenados utilizando unha base de datos.
+Finalmente para concluír o apartado de seguridade explícase o sistema utilizado para o almacenamento dos tokens no frontend. Os tokens almacenase igual que o resto dos datos na aplicación, utilizando o paquete de Ionic, \textit{storage-angular} que permite gardar os datos na cache do navegador. No caso de que fose necesario Ionic ofrece un paquete premium, de pago, chamado \textit{Ionic secure storage} que permite o cifrado dos datos almacenados utilizando unha base de datos.
+
+\section{Probas}
+Nesta sección explícanse as probas que se realizaron durante o desenvolvemento da aplicación para comprobar o seu correcto funcionamento. Esta fase é moi importante xa que asegura que a implementación está libre de fallos e que ademais cumpre cos requisitos acordados con anterioridade.
+
+\subsection{Probas unitarias}
+As probas unitarias se realizan para comprobar o correcto funcionamento dunha unidade de código. Isto serve para asegurar que cada unidade funcione correctamente por separado. As probas realizáronse sobre os servizos da aplicación intentando cubrir os máximos casos posibles de forma que cada caso sexa independente do resto. Estas probas execútanse de maneira automática e verifícase que os resultados son os esperados. Tanto Ionic coma Django contan cun cliente que axuda a execución deste tipo de probas.
+
+\subsection{Probas de sistema}
+As probas de sistema teñen como obxectivo comprobar a integración de forma global, verifican que o funcionamento entre os distintos subsistemas que compoñen a aplicación é correcto. Estas probas realizáronse con dispositivos móbiles e estacións de traballo, utilizando en cada un os navegadores \textit{Google Chrome} e \textit{Firefox}. Non foi posible realizalas en dispositivos con sistemas operativos \textit{iOS} nin nos seus navegadores.
+
+\subsection{Probas de aceptación}
+Este tipo de probas realízanse unha vez finalizado todo o desenvolvemento, serven para determinar se a aplicación cumpre coas necesidades e os requisitos. Neste caso, as probas realizáronse polo autor e dous compañeiros que contaban con unha subscrición a plataforma de Spotify e comprobouse que cumpren os requisitos iniciais.
