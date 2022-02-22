@@ -29,7 +29,9 @@ export class AppComponent {
 
       this.authService.isAuthenticated.subscribe((state) => {
         if (state) {
-          this.router.navigate(['music'])
+	  if (!window.location.href.includes("callback")) {
+		this.router.navigate(['music'])
+          }
         } else {
           // this.router.navigate(['home'])
         }

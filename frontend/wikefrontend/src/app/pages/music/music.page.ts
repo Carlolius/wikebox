@@ -51,14 +51,14 @@ export class MusicPage implements OnInit {
 		this.getSession();
 		this.spotifyareToken();
 		this.checkAdmin();
-		this.getDevices();
-		this.currentSong();
+		// this.getDevices();
+		// this.currentSong();
 		this.showQueue();
 		// Necessary checks for the backend
 		// Subscribe to an observable to get the data
 		this.check5 = interval(10000).subscribe(() => {
-			this.getDevices();
-			this.currentSong();
+			// this.getDevices();
+			// this.currentSong();
 			this.showQueue();
 		})
 	}
@@ -99,9 +99,14 @@ export class MusicPage implements OnInit {
 		this.apiService.spotifyareToken().subscribe(data => {
 			if(data != true){
 				// If there aren't token, stop the checks and ask to login in Spotify
-				this.check5.next()
-				this.check5.complete()
+				this.endCheck()
 				this.tokenPopover()
+			} else {
+				this.check5 = interval(10000).subscribe(() => {
+					this.getDevices();
+					this.currentSong();
+					this.showQueue();
+				})
 			}
 		});
 	}

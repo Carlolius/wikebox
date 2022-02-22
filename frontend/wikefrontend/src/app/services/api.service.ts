@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -15,7 +16,7 @@ import { AlertController } from '@ionic/angular';
 
 export class ApiService {
 
-	private SERVER_ADDRESS: string = 'http://192.168.1.106:8000/';
+	SERVER_ADDRESS = environment.SERVER_ADDRESS;
 
 
 	constructor(
