@@ -1,0 +1,31 @@
+services:
+  wikebox:
+    build: .
+    container_name: wikebox
+    networks:
+      - traefik_network
+    volumes:
+      - wikebox_data:/data
+    environment:
+      DATABASE_URL: /data/wikebox.db
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${PUBLIC_APP_URL:-https://wikebox.miralapantalla.com}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL:-https://wikebox.miralapantalla.com}
+    restart: unless-stopped
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_network"
+      traefik.http.routers.wikebox.rule: "Host(`wikebox.miralapantalla.com`)"
+      traefik.http.routers.wikebox.tls: "true"
+      traefik.http.routers.wikebox.entrypoints: "websecure"
+      traefik.http.services.wikebox.loadbalancer.server.port: "3000"
+      traefik.http.routers.wikebox.tls.certresolver: "letsencrypt"
+
+networks:
+  traefik_network:
+    external: true
+
+volumes:
+  wikebox_data:
