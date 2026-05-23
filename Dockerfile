@@ -9,9 +9,6 @@ RUN npm install --legacy-peer-deps
 
 COPY app/ .
 
-# Generate Drizzle migration files from schema (no DB connection needed)
-RUN npx drizzle-kit generate
-
 # Build SvelteKit app — BETTER_AUTH_SECRET must be present during SSR init
 # Use a placeholder; actual secret comes from docker-compose .env at runtime
 ARG BETTER_AUTH_SECRET=build-time-placeholder-secret-wikebox-x
