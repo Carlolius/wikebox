@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, getContext } from 'svelte';
+  import type { Writable } from 'svelte/store';
 
   interface QueueEntry {
     id: string;
@@ -35,6 +36,8 @@
 
   let { data } = $props();
 
+  const lang = getContext<Writable<'es' | 'en'>>('lang');
+
   let queue = $state<QueueEntry[]>(data.queue as QueueEntry[]);
   let nowPlaying = $state<NowPlaying | null>(data.nowPlaying as NowPlaying | null);
   let searchQuery = $state('');
@@ -50,8 +53,35 @@
   let skipCount = $state(0);
   let skipRequired = $state(0);
   let mySkipVote = $state(false);
+  let sdkReady = $state(false);
+  let sdkPlayer: any = null;
 
   const queueUris = $derived(new Set(queue.map(s => s.spotifyUri)));
+
+  const t = $derived({
+    nowPlaying: $lang === 'es' ? 'Ahora suena' : 'Now playing',
+    nothingPlaying: $lang === 'es' ? 'Nada sonando ahora' : 'Nothing playing',
+    search: $lang === 'es' ? 'Buscar canción' : 'Search song',
+    searchPlaceholder: $lang === 'es' ? 'Buscar en Spotify…' : 'Search Spotify…',
+    noResults: $lang === 'es' ? 'Sin resultados' : 'No results',
+    inQueue: $lang === 'es' ? 'En cola' : 'In queue',
+    queue: $lang === 'es' ? 'Cola' : 'Queue',
+    song: $lang === 'es' ? 'canción' : 'song',
+    songs: $lang === 'es' ? 'canciones' : 'songs',
+    emptyQueue: $lang === 'es' ? 'La cola está vacía' : 'Queue is empty',
+    emptyQueueSub: $lang === 'es' ? 'Busca una canción y añádela' : 'Search for a song and add it',
+    addedBy: $lang === 'es' ? 'añadida por' : 'added by',
+    screen: $lang === 'es' ? 'Pantalla' : 'Screen',
+    admin: $lang === 'es' ? 'Admin' : 'Admin',
+    namePromptTitle: $lang === 'es' ? '¿Cómo te llamas?' : 'What\'s your name?',
+    namePromptSub: $lang === 'es' ? 'Tu nombre aparecerá junto a las canciones que añadas.' : 'Your name will appear next to the songs you add.',
+    namePlaceholder: $lang === 'es' ? 'Tu nombre (opcional)' : 'Your name (optional)',
+    cancel: $lang === 'es' ? 'Cancelar' : 'Cancel',
+    addSong: $lang === 'es' ? 'Añadir canción' : 'Add song',
+    code: $lang === 'es' ? 'Código' : 'Code',
+    sdkActive: $lang === 'es' ? 'SDK activo' : 'SDK active',
+    sdkConnecting: $lang === 'es' ? 'SDK conectando…' : 'SDK connecting…',
+  });
 
   // Format milliseconds as mm:ss
   function formatDuration(ms: number): string {
@@ -129,11 +159,11 @@
         })
       });
       if (res.status === 409) {
-        errorMsg = 'Esta canción ya está en la cola';
+        errorMsg = $lang === 'es' ? 'Esta canción ya está en la cola' : 'This song is already in the queue';
         return;
       }
       if (res.status === 403) {
-        errorMsg = 'Esta canción está bloqueada en esta sala';
+        errorMsg = $lang === 'es' ? 'Esta canción está bloqueada en esta sala' : 'This song is blocked in this room';
         return;
       }
       if (!res.ok) throw new Error('Failed to add song');
@@ -141,7 +171,7 @@
       searchQuery = '';
       searchResults = [];
     } catch (e) {
-      errorMsg = e instanceof Error ? e.message : 'Error añadiendo canción';
+      errorMsg = e instanceof Error ? e.message : ($lang === 'es' ? 'Error añadiendo canción' : 'Error adding song');
     } finally {
       addingUri = null;
     }
@@ -196,6 +226,38 @@
     }
   }
 
+  async function initSDK() {
+    const res = await fetch(`/api/spotify/token?room=${data.room.id}`);
+    if (!res.ok) return;
+    const { token: initialToken } = await res.json() as { token: string };
+
+    (window as any).onSpotifyWebPlaybackSDKReady = () => {
+      const player = new (window as any).Spotify.Player({
+        name: `Wikebox · ${data.room.name}`,
+        getOAuthToken: async (cb: (t: string) => void) => {
+          const r = await fetch(`/api/spotify/token?room=${data.room.id}`);
+          if (r.ok) { const d = await r.json() as { token: string }; cb(d.token); }
+          else cb(initialToken);
+        },
+        volume: 0.8
+      });
+      player.addListener('ready', async ({ device_id }: { device_id: string }) => {
+        sdkReady = true;
+        await fetch(`/api/rooms/${data.room.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activeDeviceId: device_id })
+        });
+      });
+      player.addListener('not_ready', () => { sdkReady = false; });
+      player.connect();
+      sdkPlayer = player;
+    };
+    const script = document.createElement('script');
+    script.src = 'https://sdk.scdn.co/spotify-player.js';
+    document.body.appendChild(script);
+  }
+
   // SSE connection
   onMount(() => {
     // Load saved guest name
@@ -229,6 +291,10 @@
       refreshSkipStatus();
     });
 
+    if (data.room.playbackMode === 'sdk' && data.isAdmin) {
+      initSDK();
+    }
+
     return () => {
       es.close();
       if (progressInterval) clearInterval(progressInterval);
@@ -241,16 +307,42 @@
   <header class="border-b border-border px-4 py-3 flex items-center justify-between">
     <div>
       <h1 class="text-lg font-bold text-foreground">{data.room.name}</h1>
-      <p class="text-xs text-muted-foreground">Código: <span class="font-mono font-semibold">{data.room.id}</span></p>
+      <p class="text-xs text-muted-foreground">{t.code}: <span class="font-mono font-semibold">{data.room.id}</span></p>
     </div>
-    <a
-      href="/room/{data.room.id}/screen"
-      class="text-xs text-muted-foreground hover:text-foreground underline"
-      target="_blank"
-    >
-      Pantalla TV
-    </a>
+    <div class="flex items-center gap-2">
+      {#if data.room.playbackMode === 'sdk' && data.isAdmin}
+        <div
+          class="flex items-center gap-1.5 text-xs text-muted-foreground"
+          title={sdkReady ? t.sdkActive : t.sdkConnecting}
+        >
+          <div class="w-2 h-2 rounded-full {sdkReady ? 'bg-green-500' : 'bg-orange-400 animate-pulse'}"></div>
+          <span class="hidden sm:inline">SDK</span>
+        </div>
+      {/if}
+      {#if data.isAdmin}
+        <a
+          href="/room/{data.room.id}/admin"
+          class="text-xs px-2.5 py-1.5 rounded-md border border-border bg-card text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {t.admin}
+        </a>
+      {/if}
+      <a
+        href="/room/{data.room.id}/screen"
+        class="text-xs text-muted-foreground hover:text-foreground underline"
+        target="_blank"
+      >
+        {t.screen}
+      </a>
+    </div>
   </header>
+
+  <!-- Welcome message banner -->
+  {#if data.room.welcomeMessage}
+    <div class="px-4 py-2.5 bg-primary/10 border-b border-primary/20 text-sm text-foreground">
+      {data.room.welcomeMessage}
+    </div>
+  {/if}
 
   <div class="flex flex-col lg:flex-row flex-1 overflow-hidden">
     <!-- Left: Now playing + Search -->
@@ -258,7 +350,7 @@
       <!-- Now Playing -->
       {#if nowPlaying}
         <div class="p-4 bg-card border-b border-border">
-          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Ahora suena</p>
+          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{t.nowPlaying}</p>
           <div class="flex gap-3 items-center">
             {#if nowPlaying.albumArt}
               <img src={nowPlaying.albumArt} alt={nowPlaying.title} class="w-16 h-16 rounded-md object-cover flex-shrink-0" />
@@ -284,33 +376,36 @@
           <div class="mt-3 flex items-center gap-2">
             <button
               onclick={voteSkip}
-              class="text-xs px-3 py-1.5 rounded-md transition-colors font-medium
+              class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border transition-all
                 {mySkipVote
-                  ? 'bg-orange-500/20 text-orange-500 hover:bg-orange-500/30'
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'}"
+                  ? 'border-orange-500/50 bg-orange-500/10 text-orange-400'
+                  : 'border-border bg-muted/50 text-muted-foreground hover:border-primary/50 hover:text-foreground'}"
+              title={mySkipVote ? ($lang === 'es' ? 'Retirar voto' : 'Remove vote') : ($lang === 'es' ? 'Votar para saltar' : 'Vote to skip')}
             >
-              {mySkipVote ? '↩ Retirar skip' : '⏭ Votar skip'}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18L14.5 12 6 6v12zM16 6v12h2V6h-2z"/></svg>
+              {#if skipRequired > 0}
+                <span class="tabular-nums">{skipCount}/{skipRequired}</span>
+              {:else}
+                <span>{mySkipVote ? ($lang === 'es' ? 'Retirar' : 'Remove') : 'Skip'}</span>
+              {/if}
             </button>
-            {#if skipRequired > 0}
-              <span class="text-xs text-muted-foreground">{skipCount}/{skipRequired}</span>
-            {/if}
           </div>
         </div>
       {:else}
         <div class="p-4 bg-card border-b border-border">
-          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Ahora suena</p>
-          <p class="text-sm text-muted-foreground">Nada sonando ahora</p>
+          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{t.nowPlaying}</p>
+          <p class="text-sm text-muted-foreground">{t.nothingPlaying}</p>
         </div>
       {/if}
 
       <!-- Search -->
       <div class="p-4 flex-1 overflow-y-auto">
-        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Buscar canción</p>
+        <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{t.search}</p>
         <div class="relative">
           <input
             bind:value={searchQuery}
             oninput={onSearchInput}
-            placeholder="Buscar en Spotify…"
+            placeholder={t.searchPlaceholder}
             class="w-full rounded-md border border-border bg-card px-3 py-2 text-sm pr-8 focus:outline-none focus:ring-2 focus:ring-primary"
           />
           {#if searching}
@@ -344,13 +439,13 @@
                       ? 'bg-muted text-muted-foreground cursor-not-allowed'
                       : 'bg-primary text-primary-foreground hover:opacity-90'}"
                 >
-                  {queueUris.has(track.uri) ? 'En cola' : addingUri === track.uri ? '…' : '+'}
+                  {queueUris.has(track.uri) ? t.inQueue : addingUri === track.uri ? '…' : '+'}
                 </button>
               </li>
             {/each}
           </ul>
         {:else if searchQuery.trim() && !searching}
-          <p class="mt-3 text-sm text-muted-foreground">Sin resultados</p>
+          <p class="mt-3 text-sm text-muted-foreground">{t.noResults}</p>
         {/if}
       </div>
     </div>
@@ -358,13 +453,13 @@
     <!-- Right: Queue -->
     <div class="flex-1 overflow-y-auto p-4">
       <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-        Cola · {queue.length} {queue.length === 1 ? 'canción' : 'canciones'}
+        {t.queue} · {queue.length} {queue.length === 1 ? t.song : t.songs}
       </p>
 
       {#if queue.length === 0}
         <div class="text-center py-12 text-muted-foreground">
-          <p class="text-lg">La cola está vacía</p>
-          <p class="text-sm mt-1">Busca una canción y añádela</p>
+          <p class="text-lg">{t.emptyQueue}</p>
+          <p class="text-sm mt-1">{t.emptyQueueSub}</p>
         </div>
       {:else}
         <ul class="space-y-2">
@@ -385,7 +480,7 @@
                 <p class="font-medium text-sm truncate text-foreground">{song.title}</p>
                 <p class="text-xs text-muted-foreground truncate">{song.artists}</p>
                 <p class="text-xs text-muted-foreground mt-0.5">
-                  {formatDuration(song.durationMs)} · añadida por {song.addedByName ?? 'Guest'}
+                  {formatDuration(song.durationMs)} · {t.addedBy} {song.addedByName ?? 'Guest'}
                 </p>
               </div>
 
@@ -432,11 +527,11 @@
     aria-modal="true"
   >
     <div class="bg-card border border-border rounded-xl p-6 w-full max-w-sm space-y-4">
-      <h2 class="text-lg font-semibold text-foreground">¿Cómo te llamas?</h2>
-      <p class="text-sm text-muted-foreground">Tu nombre aparecerá junto a las canciones que añadas.</p>
+      <h2 class="text-lg font-semibold text-foreground">{t.namePromptTitle}</h2>
+      <p class="text-sm text-muted-foreground">{t.namePromptSub}</p>
       <input
         bind:value={guestName}
-        placeholder="Tu nombre (opcional)"
+        placeholder={t.namePlaceholder}
         class="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
         onkeydown={(e) => e.key === 'Enter' && confirmNameAndAdd()}
         autofocus
@@ -446,13 +541,13 @@
           onclick={() => { guestName = ''; showNamePrompt = false; pendingTrack = null; }}
           class="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted"
         >
-          Cancelar
+          {t.cancel}
         </button>
         <button
           onclick={confirmNameAndAdd}
           class="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground font-medium"
         >
-          Añadir canción
+          {t.addSong}
         </button>
       </div>
     </div>

@@ -34,6 +34,9 @@
   }
 
   const roomCode = data.room.id;
+  const appUrl = (data.appUrl as string | undefined) ?? 'wikebox.app';
+  const displayUrl = appUrl.replace(/^https?:\/\//, '');
+
   let roomName = $state(data.room.name);
   let nowPlaying = $state<NowPlaying | null>(null);
   let upNext = $state<QueueEntry[]>([]);
@@ -90,7 +93,8 @@
     fetchQueue();
     updateClock();
 
-    clockInterval = setInterval(updateClock, 10000);
+    // Update clock every second for accuracy
+    clockInterval = setInterval(updateClock, 1000);
 
     progressInterval = setInterval(() => {
       if (nowPlaying?.isPlaying) {
@@ -124,8 +128,16 @@
 
 <div class="min-h-screen bg-[#0a0a0a] text-white flex flex-col overflow-hidden" style="font-family: 'Inter', system-ui, sans-serif;">
 
+  <!-- Blurred album art backdrop -->
+  {#if nowPlaying?.albumArt}
+    <div
+      class="fixed inset-0 opacity-10 pointer-events-none"
+      style="background-image: url({nowPlaying.albumArt}); background-size: cover; background-position: center; filter: blur(60px) saturate(1.5);"
+    ></div>
+  {/if}
+
   <!-- Top bar: branding + clock -->
-  <div class="flex items-center justify-between px-10 pt-8 pb-0">
+  <div class="flex items-center justify-between px-10 pt-8 pb-0 relative z-10">
     <div class="flex items-center gap-4">
       <span class="text-2xl font-black tracking-tight text-white opacity-60">WIKEBOX</span>
       {#if roomName}
@@ -134,11 +146,11 @@
       {/if}
     </div>
     <div class="text-right">
-      <p class="text-4xl font-thin text-white opacity-50 tabular-nums">{clockStr}</p>
+      <p class="text-5xl font-bold text-white/70 tabular-nums tracking-tight">{clockStr}</p>
     </div>
   </div>
 
-  <div class="flex flex-1 gap-0 px-10 py-8 overflow-hidden">
+  <div class="flex flex-1 gap-0 px-10 py-8 overflow-hidden relative z-10">
 
     <!-- Left column: Now Playing (big) -->
     <div class="flex-1 flex flex-col justify-center pr-10">
@@ -149,11 +161,11 @@
             <img
               src={nowPlaying.albumArt}
               alt={nowPlaying.title}
-              class="w-72 h-72 rounded-2xl shadow-2xl object-cover"
+              class="w-96 h-96 rounded-2xl shadow-2xl object-cover"
               style="box-shadow: 0 0 120px rgba(255,255,255,0.05), 0 30px 80px rgba(0,0,0,0.8);"
             />
           {:else}
-            <div class="w-72 h-72 rounded-2xl bg-white/5 flex items-center justify-center">
+            <div class="w-96 h-96 rounded-2xl bg-white/5 flex items-center justify-center">
               <span class="text-6xl opacity-20">♪</span>
             </div>
           {/if}
@@ -191,7 +203,7 @@
         <!-- Nothing playing -->
         <div class="space-y-4">
           <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase">Ahora suena</p>
-          <div class="w-72 h-72 rounded-2xl bg-white/5 flex items-center justify-center">
+          <div class="w-96 h-96 rounded-2xl bg-white/5 flex items-center justify-center">
             <span class="text-7xl opacity-10">♪</span>
           </div>
           <p class="text-white/30 text-2xl font-light">Nada sonando</p>
@@ -277,10 +289,10 @@
   </div>
 
   <!-- Bottom bar: room code -->
-  <div class="px-10 pb-8 flex items-center justify-between">
+  <div class="px-10 pb-8 flex items-center justify-between relative z-10">
     <div class="flex items-center gap-3">
       <span class="text-white/20 text-sm">Únete en</span>
-      <span class="text-white/60 text-sm font-mono font-semibold">wikebox.app</span>
+      <span class="text-white/60 text-sm font-mono font-semibold">{displayUrl}</span>
       <span class="text-white/20 text-sm">·</span>
       <span class="text-white/20 text-sm">Código</span>
       <span

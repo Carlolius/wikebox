@@ -17,6 +17,7 @@
     skipThreshold: number;
     genreFilter: string | null;
     activeDeviceId: string | null;
+    welcomeMessage: string | null;
   }
 
   let { data } = $props();
@@ -36,6 +37,7 @@
   let skipThreshold = $state(room.skipThreshold);
   let genreFilter = $state(room.genreFilter ?? '');
   let selectedDeviceId = $state(room.activeDeviceId ?? '');
+  let welcomeMessage = $state(room.welcomeMessage ?? '');
 
   // Blacklist
   let blacklistSearch = $state('');
@@ -86,7 +88,8 @@
           creditsEnabled,
           creditsPerHour,
           skipThreshold,
-          genreFilter: genreFilter.trim() || null
+          genreFilter: genreFilter.trim() || null,
+          welcomeMessage: welcomeMessage.trim() || null
         })
       });
       if (res.ok) {
@@ -194,7 +197,7 @@
   <header class="border-b border-border px-6 py-4 flex items-center justify-between">
     <div>
       <h1 class="text-xl font-bold text-foreground">Panel de administración</h1>
-      <p class="text-sm text-muted-foreground">{room.name}</p>
+      <p class="text-sm text-muted-foreground">{room.name} · <span class="text-xs text-muted-foreground/70">La configuración puede cambiarse en cualquier momento.</span></p>
     </div>
     <a
       href="/room/{room.id}"
@@ -232,6 +235,19 @@
           </a>
         </div>
       </div>
+    </section>
+
+    <hr class="border-border" />
+
+    <!-- Welcome message -->
+    <section class="space-y-3">
+      <h2 class="text-base font-semibold text-foreground">Mensaje de bienvenida</h2>
+      <p class="text-xs text-muted-foreground">Se muestra en la sala al entrar. Déjalo vacío para no mostrar nada.</p>
+      <input
+        bind:value={welcomeMessage}
+        placeholder=""
+        class="w-full rounded-md border border-border bg-card px-3 py-2 text-sm"
+      />
     </section>
 
     <hr class="border-border" />
@@ -306,13 +322,13 @@
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-semibold text-foreground">Modo DJ</h2>
-          <p class="text-xs text-muted-foreground mt-0.5">El admin controla la cola manualmente, sin auto-queue</p>
+          <p class="text-xs text-muted-foreground mt-0.5">Las canciones no se añaden automáticamente a Spotify. El admin controla cuándo suena cada canción desde esta pantalla.</p>
         </div>
         <button
           role="switch"
           aria-checked={djMode}
           onclick={() => (djMode = !djMode)}
-          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ml-4
             {djMode ? 'bg-primary' : 'bg-muted'}"
         >
           <span
@@ -336,7 +352,7 @@
           role="switch"
           aria-checked={creditsEnabled}
           onclick={() => (creditsEnabled = !creditsEnabled)}
-          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ml-4
             {creditsEnabled ? 'bg-primary' : 'bg-muted'}"
         >
           <span
@@ -393,7 +409,7 @@
       <p class="text-xs text-muted-foreground">Géneros separados por coma que se bloquearán (ej: reggaeton, trap)</p>
       <input
         bind:value={genreFilter}
-        placeholder="rock, pop, jazz…"
+        placeholder=""
         class="w-full rounded-md border border-border bg-card px-3 py-2 text-sm"
       />
     </section>

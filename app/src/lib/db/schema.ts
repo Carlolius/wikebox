@@ -60,6 +60,7 @@ export const rooms = sqliteTable('rooms', {
   skipThreshold: integer('skip_threshold').notNull().default(50), // % of active users needed to skip
   genreFilter: text('genre_filter'), // JSON array or null
   activeDeviceId: text('active_device_id'),
+  welcomeMessage: text('welcome_message'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`)
 });
 

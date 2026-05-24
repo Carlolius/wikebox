@@ -3,11 +3,15 @@ import { rooms, songs, votes, nowPlaying } from '$lib/db/schema';
 import { eq, sql, desc } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
+import { auth } from '$lib/auth';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ params, cookies, request }) => {
   const room = await db.query.rooms.findFirst({ where: eq(rooms.id, params.code) });
   if (!room) throw error(404, 'Room not found');
+
+  const session = await auth.api.getSession({ headers: request.headers });
+  const isAdmin = session?.user?.id === room.adminId;
 
   let voterId = cookies.get('wike_visitor');
   if (!voterId) {
@@ -37,9 +41,16 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
   const np = await db.query.nowPlaying.findFirst({ where: eq(nowPlaying.roomId, params.code) });
 
   return {
-    room: { id: room.id, name: room.name, playbackMode: room.playbackMode, djMode: room.djMode },
+    room: {
+      id: room.id,
+      name: room.name,
+      playbackMode: room.playbackMode,
+      djMode: room.djMode,
+      welcomeMessage: room.welcomeMessage ?? null
+    },
     queue,
     nowPlaying: np ?? null,
-    voterId
+    voterId,
+    isAdmin
   };
 };

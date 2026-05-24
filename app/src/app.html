@@ -5,7 +5,12 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#0a0a0a" />
-		<meta name="description" content="Gramola colaborativa. Sin apps. Sin registro." />
+		<meta name="description" content="Wikebox" />
+		<script>
+		  if (localStorage.getItem('wike_theme') !== 'light') {
+		    document.documentElement.classList.add('dark');
+		  }
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
