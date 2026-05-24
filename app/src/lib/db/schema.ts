@@ -72,9 +72,10 @@ export const songs = sqliteTable('songs', {
   artists: text('artists').notNull(),
   albumArt: text('album_art'),
   durationMs: integer('duration_ms').notNull(),
-  addedBy: text('added_by').notNull(), // fingerprint or userId
+  addedBy: text('added_by').notNull(),
   addedByName: text('added_by_name'),
   addedMode: text('added_mode', { enum: ['search', 'playlist'] }).notNull().default('search'),
+  status: text('status', { enum: ['pending', 'queued'] }).notNull().default('pending'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`)
 });
 

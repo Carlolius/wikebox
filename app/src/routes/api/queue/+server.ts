@@ -31,6 +31,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       durationMs: songs.durationMs,
       addedBy: songs.addedBy,
       addedByName: songs.addedByName,
+      status: songs.status,
       createdAt: songs.createdAt,
       voteScore: sql<number>`coalesce(sum(${votes.value}), 0)`.as('vote_score'),
       myVote: sql<number | null>`max(case when ${votes.voterId} = ${voterId} then ${votes.value} end)`.as('my_vote')

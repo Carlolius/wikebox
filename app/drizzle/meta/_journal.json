@@ -16,5 +16,12 @@
       "tag": "0001_add_welcome_message",
       "breakpoints": true
     }
+    ,{
+      "idx": 2,
+      "version": "6",
+      "when": 1748220000000,
+      "tag": "0002_songs_status",
+      "breakpoints": true
+    }
   ]
 }

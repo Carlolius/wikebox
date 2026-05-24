@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   interface Device {
     id: string;
     name: string;
@@ -10,7 +12,6 @@
     id: string;
     name: string;
     adminId: string;
-    playbackMode: 'sdk' | 'connect';
     djMode: boolean;
     creditsEnabled: boolean;
     creditsPerHour: number;
@@ -27,10 +28,11 @@
 
   let devices = $state<Device[]>([]);
   let loadingDevices = $state(false);
-  let saving = $state(false);
-  let savedMsg = $state('');
+  let saveStatus = $state<'idle' | 'saving' | 'saved'>('idle');
+  let showQrModal = $state(false);
+  let showDeleteConfirm = $state(false);
+  let deleting = $state(false);
 
-  let playbackMode = $state<'sdk' | 'connect'>(room.playbackMode);
   let djMode = $state(room.djMode);
   let creditsEnabled = $state(room.creditsEnabled);
   let creditsPerHour = $state(room.creditsPerHour);
@@ -51,6 +53,18 @@
   let playlistName = $state(`${room.name} - Wikebox`);
   let exportMsg = $state('');
 
+  // Auto-save: debounce every 800ms after first change
+  let firstRun = true;
+  let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+  $effect(() => {
+    // Read all tracked settings to create dependencies
+    void [djMode, creditsEnabled, creditsPerHour, skipThreshold, genreFilter, welcomeMessage];
+    if (firstRun) { firstRun = false; return; }
+    if (saveTimer) clearTimeout(saveTimer);
+    saveStatus = 'idle';
+    saveTimer = setTimeout(saveSettings, 800);
+  });
 
   async function loadDevices() {
     loadingDevices = true;
@@ -70,20 +84,18 @@
     });
     if (res.ok) {
       selectedDeviceId = deviceId;
-      savedMsg = 'Dispositivo seleccionado';
-      setTimeout(() => (savedMsg = ''), 2000);
+      saveStatus = 'saved';
+      setTimeout(() => (saveStatus = 'idle'), 2000);
     }
   }
 
   async function saveSettings() {
-    saving = true;
-    savedMsg = '';
+    saveStatus = 'saving';
     try {
-      const res = await fetch(`/api/rooms/${room.id}`, {
+      await fetch(`/api/rooms/${room.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          playbackMode,
           djMode,
           creditsEnabled,
           creditsPerHour,
@@ -92,22 +104,27 @@
           welcomeMessage: welcomeMessage.trim() || null
         })
       });
-      if (res.ok) {
-        savedMsg = 'Configuración guardada';
-        setTimeout(() => (savedMsg = ''), 3000);
-      }
+      saveStatus = 'saved';
+      setTimeout(() => (saveStatus = 'idle'), 2000);
+    } catch {
+      saveStatus = 'idle';
+    }
+  }
+
+  async function deleteRoom() {
+    deleting = true;
+    try {
+      const res = await fetch(`/api/rooms/${room.id}`, { method: 'DELETE' });
+      if (res.ok) goto('/');
     } finally {
-      saving = false;
+      deleting = false;
     }
   }
 
   let blacklistTimer: ReturnType<typeof setTimeout> | null = null;
   function onBlacklistInput() {
     if (blacklistTimer) clearTimeout(blacklistTimer);
-    if (!blacklistSearch.trim()) {
-      blacklistResults = [];
-      return;
-    }
+    if (!blacklistSearch.trim()) { blacklistResults = []; return; }
     blacklistTimer = setTimeout(() => doBlacklistSearch(blacklistSearch), 400);
   }
 
@@ -116,8 +133,7 @@
     try {
       const res = await fetch(`/api/spotify/search?q=${encodeURIComponent(q)}&room=${room.id}`);
       if (res.ok) {
-        const tracks = await res.json() as { uri: string; name: string; artists: string; albumArt: string | null }[];
-        blacklistResults = tracks;
+        blacklistResults = await res.json() as { uri: string; name: string; artists: string; albumArt: string | null }[];
       }
     } finally {
       searchingBlacklist = false;
@@ -134,8 +150,6 @@
       });
       blacklistSearch = '';
       blacklistResults = [];
-      savedMsg = 'Añadido a la lista negra';
-      setTimeout(() => (savedMsg = ''), 2000);
     } finally {
       addingToBlacklist = false;
     }
@@ -151,8 +165,6 @@
         body: JSON.stringify({ roomId: room.id, artistName: artistBlacklist.trim() })
       });
       artistBlacklist = '';
-      savedMsg = 'Artista añadido a la lista negra';
-      setTimeout(() => (savedMsg = ''), 2000);
     } finally {
       addingToBlacklist = false;
     }
@@ -181,23 +193,87 @@
 
   function copyShareLink() {
     navigator.clipboard.writeText(shareUrl);
-    savedMsg = '¡Enlace copiado!';
-    setTimeout(() => (savedMsg = ''), 2000);
   }
 
   $effect(() => {
-    if (playbackMode === 'connect') {
-      loadDevices();
-    }
+    loadDevices();
   });
 </script>
+
+<!-- QR Modal -->
+{#if showQrModal}
+  <div
+    class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-6"
+    onclick={(e) => { if (e.target === e.currentTarget) showQrModal = false; }}
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-white rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
+      <img src={qrDataUrl} alt="QR sala {room.id}" class="w-72 h-72" />
+      <p class="text-5xl font-black font-mono tracking-widest text-black">{room.id}</p>
+      <p class="text-sm text-gray-500">{shareUrl}</p>
+      <div class="flex gap-3">
+        <a
+          href="/room/{room.id}/qr"
+          target="_blank"
+          class="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+        >
+          Pantalla completa →
+        </a>
+        <button
+          onclick={() => showQrModal = false}
+          class="rounded-lg bg-black text-white px-4 py-2 text-sm font-medium"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- Delete confirm modal -->
+{#if showDeleteConfirm}
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+    onclick={(e) => { if (e.target === e.currentTarget) showDeleteConfirm = false; }}
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-card border border-border rounded-xl p-6 w-full max-w-sm space-y-4">
+      <h2 class="text-lg font-semibold text-foreground">¿Borrar sala?</h2>
+      <p class="text-sm text-muted-foreground">Se eliminará la sala <strong>{room.name}</strong> con toda su cola e historial. Esta acción no se puede deshacer.</p>
+      <div class="flex gap-2 justify-end">
+        <button
+          onclick={() => showDeleteConfirm = false}
+          class="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted"
+        >
+          Cancelar
+        </button>
+        <button
+          onclick={deleteRoom}
+          disabled={deleting}
+          class="px-4 py-2 text-sm rounded-md bg-red-600 text-white font-medium disabled:opacity-50"
+        >
+          {deleting ? 'Borrando…' : 'Sí, borrar'}
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <div class="min-h-screen bg-background">
   <!-- Header -->
   <header class="border-b border-border px-6 py-4 flex items-center justify-between">
-    <div>
-      <h1 class="text-xl font-bold text-foreground">Panel de administración</h1>
-      <p class="text-sm text-muted-foreground">{room.name} · <span class="text-xs text-muted-foreground/70">La configuración puede cambiarse en cualquier momento.</span></p>
+    <div class="flex items-center gap-3">
+      <div>
+        <h1 class="text-xl font-bold text-foreground">Panel de administración</h1>
+        <p class="text-sm text-muted-foreground">{room.name}</p>
+      </div>
+      {#if saveStatus === 'saving'}
+        <span class="text-xs text-muted-foreground animate-pulse">Guardando…</span>
+      {:else if saveStatus === 'saved'}
+        <span class="text-xs text-primary">✓ Guardado</span>
+      {/if}
     </div>
     <a
       href="/room/{room.id}"
@@ -226,13 +302,24 @@
         </button>
       </div>
       <div class="flex items-center gap-4">
-        <img src={qrDataUrl} alt="QR sala {room.id}" class="w-24 h-24 rounded-lg border border-border" />
+        <button
+          onclick={() => showQrModal = true}
+          class="rounded-lg border border-border hover:border-primary/50 transition-colors overflow-hidden"
+          title="Ver QR más grande"
+        >
+          <img src={qrDataUrl} alt="QR sala {room.id}" class="w-24 h-24" />
+        </button>
         <div class="text-sm text-muted-foreground space-y-1">
           <p>Código de sala:</p>
           <p class="text-3xl font-bold font-mono text-foreground tracking-widest">{room.id}</p>
-          <a href="/room/{room.id}/stats" class="text-xs underline text-muted-foreground hover:text-foreground">
-            Ver estadísticas →
-          </a>
+          <div class="flex gap-3 pt-1">
+            <a href="/room/{room.id}/stats" class="text-xs underline text-muted-foreground hover:text-foreground">
+              Ver estadísticas →
+            </a>
+            <a href="/room/{room.id}/qr" target="_blank" class="text-xs underline text-muted-foreground hover:text-foreground">
+              QR pantalla completa →
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -242,7 +329,7 @@
     <!-- Welcome message -->
     <section class="space-y-3">
       <h2 class="text-base font-semibold text-foreground">Mensaje de bienvenida</h2>
-      <p class="text-xs text-muted-foreground">Se muestra en la sala al entrar. Déjalo vacío para no mostrar nada.</p>
+      <p class="text-xs text-muted-foreground">Se muestra en la sala al entrar. Vacío para no mostrar nada.</p>
       <input
         bind:value={welcomeMessage}
         placeholder=""
@@ -252,66 +339,44 @@
 
     <hr class="border-border" />
 
-    <!-- Playback mode -->
+    <!-- Device selector -->
     <section class="space-y-3">
-      <h2 class="text-base font-semibold text-foreground">Modo de reproducción</h2>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-semibold text-foreground">Dispositivo de reproducción</h2>
+          <p class="text-xs text-muted-foreground mt-0.5">Selecciona el dispositivo donde quieres reproducir música</p>
+        </div>
         <button
-          onclick={() => (playbackMode = 'sdk')}
-          class="rounded-lg border-2 p-4 text-left transition-colors
-            {playbackMode === 'sdk' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}"
+          onclick={loadDevices}
+          disabled={loadingDevices}
+          class="text-xs text-muted-foreground hover:text-foreground underline"
         >
-          <p class="font-medium text-sm text-foreground">Este navegador</p>
-          <p class="text-xs text-muted-foreground mt-1">Web Playback SDK — requiere Spotify Premium</p>
-        </button>
-        <button
-          onclick={() => (playbackMode = 'connect')}
-          class="rounded-lg border-2 p-4 text-left transition-colors
-            {playbackMode === 'connect' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}"
-        >
-          <p class="font-medium text-sm text-foreground">Dispositivo externo</p>
-          <p class="text-xs text-muted-foreground mt-1">Spotify Connect — cualquier dispositivo activo</p>
+          {loadingDevices ? 'Cargando…' : 'Actualizar'}
         </button>
       </div>
-
-      <!-- Device selector (connect mode) -->
-      {#if playbackMode === 'connect'}
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-medium text-foreground">Dispositivo activo</p>
-            <button
-              onclick={loadDevices}
-              disabled={loadingDevices}
-              class="text-xs text-muted-foreground hover:text-foreground underline"
-            >
-              {loadingDevices ? 'Cargando…' : 'Actualizar'}
-            </button>
-          </div>
-          {#if devices.length === 0 && !loadingDevices}
-            <p class="text-sm text-muted-foreground">No hay dispositivos activos. Abre Spotify en algún dispositivo.</p>
-          {:else}
-            <ul class="space-y-1">
-              {#each devices as device (device.id)}
-                <li>
-                  <button
-                    onclick={() => selectDevice(device.id)}
-                    class="w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left
-                      {selectedDeviceId === device.id ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted'}"
-                  >
-                    <span class="text-lg">{device.type === 'Computer' ? '💻' : device.type === 'Smartphone' ? '📱' : '🔊'}</span>
-                    <div>
-                      <p class="text-sm font-medium text-foreground">{device.name}</p>
-                      <p class="text-xs text-muted-foreground">{device.type}{device.isActive ? ' · activo' : ''}</p>
-                    </div>
-                    {#if selectedDeviceId === device.id}
-                      <span class="ml-auto text-primary text-sm">✓</span>
-                    {/if}
-                  </button>
-                </li>
-              {/each}
-            </ul>
-          {/if}
-        </div>
+      {#if devices.length === 0 && !loadingDevices}
+        <p class="text-sm text-muted-foreground">No hay dispositivos activos. Abre Spotify en algún dispositivo.</p>
+      {:else}
+        <ul class="space-y-1">
+          {#each devices as device (device.id)}
+            <li>
+              <button
+                onclick={() => selectDevice(device.id)}
+                class="w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left
+                  {selectedDeviceId === device.id ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted'}"
+              >
+                <span class="text-lg">{device.type === 'Computer' ? '💻' : device.type === 'Smartphone' ? '📱' : '🔊'}</span>
+                <div>
+                  <p class="text-sm font-medium text-foreground">{device.name}</p>
+                  <p class="text-xs text-muted-foreground">{device.type}{device.isActive ? ' · activo' : ''}</p>
+                </div>
+                {#if selectedDeviceId === device.id}
+                  <span class="ml-auto text-primary text-sm">✓</span>
+                {/if}
+              </button>
+            </li>
+          {/each}
+        </ul>
       {/if}
     </section>
 
@@ -361,20 +426,12 @@
           ></span>
         </button>
       </div>
-
       {#if creditsEnabled}
         <div class="space-y-1">
           <label class="text-sm font-medium text-foreground" for="credits-per-hour">
             Créditos por hora: <strong>{creditsPerHour}</strong>
           </label>
-          <input
-            id="credits-per-hour"
-            type="range"
-            min="1"
-            max="20"
-            bind:value={creditsPerHour}
-            class="w-full accent-primary"
-          />
+          <input id="credits-per-hour" type="range" min="1" max="20" bind:value={creditsPerHour} class="w-full accent-primary" />
         </div>
       {/if}
     </section>
@@ -389,15 +446,7 @@
         <label class="text-sm font-medium text-foreground" for="skip-threshold">
           Umbral: <strong>{skipThreshold}%</strong>
         </label>
-        <input
-          id="skip-threshold"
-          type="range"
-          min="10"
-          max="100"
-          step="5"
-          bind:value={skipThreshold}
-          class="w-full accent-primary"
-        />
+        <input id="skip-threshold" type="range" min="10" max="100" step="5" bind:value={skipThreshold} class="w-full accent-primary" />
       </div>
     </section>
 
@@ -406,7 +455,7 @@
     <!-- Genre filter -->
     <section class="space-y-3">
       <h2 class="text-base font-semibold text-foreground">Filtro de géneros</h2>
-      <p class="text-xs text-muted-foreground">Géneros separados por coma que se bloquearán (ej: reggaeton, trap)</p>
+      <p class="text-xs text-muted-foreground">Géneros separados por coma que se bloquearán</p>
       <input
         bind:value={genreFilter}
         placeholder=""
@@ -502,21 +551,24 @@
       {/if}
     </section>
 
-    <!-- Save settings -->
-    <div class="flex items-center justify-between pt-2 pb-8">
-      {#if savedMsg}
-        <p class="text-sm text-primary font-medium">{savedMsg}</p>
-      {:else}
-        <div></div>
-      {/if}
-      <button
-        onclick={saveSettings}
-        disabled={saving}
-        class="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
-      >
-        {saving ? 'Guardando…' : 'Guardar cambios'}
-      </button>
-    </div>
+    <hr class="border-border" />
+
+    <!-- Danger zone -->
+    <section class="space-y-3 pb-8">
+      <h2 class="text-base font-semibold text-red-500">Zona de peligro</h2>
+      <div class="rounded-lg border border-red-500/20 bg-red-500/5 p-4 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-foreground">Borrar sala</p>
+          <p class="text-xs text-muted-foreground mt-0.5">Elimina la sala, cola e historial permanentemente</p>
+        </div>
+        <button
+          onclick={() => showDeleteConfirm = true}
+          class="rounded-md border border-red-500/50 text-red-500 px-4 py-2 text-sm font-medium hover:bg-red-500/10 transition-colors"
+        >
+          Borrar sala
+        </button>
+      </div>
+    </section>
 
   </div>
 </div>

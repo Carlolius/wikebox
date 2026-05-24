@@ -1,12 +1,11 @@
 import { db } from './db';
 import { rooms, songs, nowPlaying, songHistory, skipVotes, votes } from './db/schema';
-import { eq, desc, sql } from 'drizzle-orm';
+import { eq, desc, sql, and } from 'drizzle-orm';
 import { getSpotifyToken, getCurrentlyPlaying, addToQueue, skipToNext } from './spotify/client';
 import { broadcast, activeConnections } from './sse';
 import { nanoid } from 'nanoid';
 
 let started = false;
-const lastQueuedUri: Record<string, string | null> = {};
 
 export function startWorker() {
   if (started) return;
@@ -38,31 +37,33 @@ async function processRoom(room: typeof rooms.$inferSelect) {
 
   const prev = await db.query.nowPlaying.findFirst({ where: eq(nowPlaying.roomId, room.id) });
 
-  // Song changed: archive old top-of-queue to history
+  // Song changed: archive the song that was queued to Spotify (if it matches prev)
   if (prev && prev.spotifyUri !== current.item.uri) {
-    const top = await getTopSong(room.id);
-    if (top && top.spotifyUri === prev.spotifyUri) {
+    const queuedSong = await db.query.songs.findFirst({
+      where: and(eq(songs.roomId, room.id), eq(songs.status, 'queued'))
+    });
+
+    if (queuedSong && queuedSong.spotifyUri === prev.spotifyUri) {
       const voteResult = db
         .select({ total: sql<number>`coalesce(sum(${votes.value}), 0)` })
         .from(votes)
-        .where(eq(votes.songId, top.id))
+        .where(eq(votes.songId, queuedSong.id))
         .get();
 
       await db.insert(songHistory).values({
         id: nanoid(),
         roomId: room.id,
-        spotifyUri: top.spotifyUri,
-        title: top.title,
-        artists: top.artists,
-        albumArt: top.albumArt,
-        durationMs: top.durationMs,
+        spotifyUri: queuedSong.spotifyUri,
+        title: queuedSong.title,
+        artists: queuedSong.artists,
+        albumArt: queuedSong.albumArt,
+        durationMs: queuedSong.durationMs,
         totalVotes: voteResult?.total ?? 0,
-        addedBy: top.addedBy,
-        addedByName: top.addedByName
+        addedBy: queuedSong.addedBy,
+        addedByName: queuedSong.addedByName
       });
-      await db.delete(songs).where(eq(songs.id, top.id));
+      await db.delete(songs).where(eq(songs.id, queuedSong.id));
       await db.delete(skipVotes).where(eq(skipVotes.roomId, room.id));
-      lastQueuedUri[room.id] = null;
 
       broadcast(room.id, 'queue-update', { type: 'song-changed' });
     }
@@ -88,21 +89,27 @@ async function processRoom(room: typeof rooms.$inferSelect) {
 
   broadcast(room.id, 'now-playing', np);
 
-  // Check skip vote threshold
   if (!room.djMode) {
     await checkSkipThreshold(room, token);
   }
 
-  // Auto-queue next song ~30s before end
+  // Auto-queue next pending song ~45s before current song ends
   if (!room.djMode) {
     const remaining = current.item.duration_ms - current.progress_ms;
-    if (remaining < 30000) {
-      const next = await getTopSong(room.id);
-      if (next && lastQueuedUri[room.id] !== next.spotifyUri) {
-        const ok = await addToQueue(next.spotifyUri, token, room.activeDeviceId ?? undefined);
-        if (ok) {
-          lastQueuedUri[room.id] = next.spotifyUri;
-          broadcast(room.id, 'queue-update', { type: 'next-queued', uri: next.spotifyUri });
+    if (remaining < 45000) {
+      // Check if a song is already queued to Spotify
+      const alreadyQueued = await db.query.songs.findFirst({
+        where: and(eq(songs.roomId, room.id), eq(songs.status, 'queued'))
+      });
+
+      if (!alreadyQueued) {
+        const next = await getTopPendingSong(room.id);
+        if (next) {
+          const ok = await addToQueue(next.spotifyUri, token, room.activeDeviceId ?? undefined);
+          if (ok) {
+            await db.update(songs).set({ status: 'queued' }).where(eq(songs.id, next.id));
+            broadcast(room.id, 'queue-update', { type: 'next-queued', uri: next.spotifyUri });
+          }
         }
       }
     }
@@ -125,12 +132,11 @@ async function checkSkipThreshold(room: typeof rooms.$inferSelect, token: string
   if (count >= required) {
     await skipToNext(token, room.activeDeviceId ?? undefined);
     await db.delete(skipVotes).where(eq(skipVotes.roomId, room.id));
-    lastQueuedUri[room.id] = null;
     broadcast(room.id, 'queue-update', { type: 'skip' });
   }
 }
 
-async function getTopSong(roomId: string) {
+async function getTopPendingSong(roomId: string) {
   const results = await db
     .select({
       song: songs,
@@ -138,7 +144,7 @@ async function getTopSong(roomId: string) {
     })
     .from(songs)
     .leftJoin(votes, eq(votes.songId, songs.id))
-    .where(eq(songs.roomId, roomId))
+    .where(and(eq(songs.roomId, roomId), eq(songs.status, 'pending')))
     .groupBy(songs.id)
     .orderBy(desc(sql`vote_score`), songs.createdAt)
     .limit(1);

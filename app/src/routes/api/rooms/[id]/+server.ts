@@ -30,7 +30,6 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   if (room.adminId !== session.user.id) throw error(403, 'Not room admin');
 
   const body = await request.json() as {
-    playbackMode?: 'sdk' | 'connect';
     djMode?: boolean;
     creditsEnabled?: boolean;
     creditsPerHour?: number;
@@ -42,7 +41,6 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
 
   await db.update(rooms)
     .set({
-      ...(body.playbackMode !== undefined ? { playbackMode: body.playbackMode } : {}),
       ...(body.djMode !== undefined ? { djMode: body.djMode } : {}),
       ...(body.creditsEnabled !== undefined ? { creditsEnabled: body.creditsEnabled } : {}),
       ...(body.creditsPerHour !== undefined ? { creditsPerHour: body.creditsPerHour } : {}),

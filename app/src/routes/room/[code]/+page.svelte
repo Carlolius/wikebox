@@ -10,6 +10,7 @@
     albumArt: string | null;
     durationMs: number;
     addedByName: string | null;
+    status: 'pending' | 'queued';
     createdAt: Date | null;
     voteScore: number;
     myVote: number | null;
@@ -36,7 +37,7 @@
 
   let { data } = $props();
 
-  const lang = getContext<Writable<'es' | 'en'>>('lang');
+  const lang = getContext<Writable<'es' | 'gl' | 'en'>>('lang');
 
   let queue = $state<QueueEntry[]>(data.queue as QueueEntry[]);
   let nowPlaying = $state<NowPlaying | null>(data.nowPlaying as NowPlaying | null);
@@ -53,55 +54,49 @@
   let skipCount = $state(0);
   let skipRequired = $state(0);
   let mySkipVote = $state(false);
-  let sdkReady = $state(false);
-  let sdkPlayer: any = null;
 
-  const queueUris = $derived(new Set(queue.map(s => s.spotifyUri)));
+  const pendingQueue = $derived(queue.filter(s => s.status === 'pending'));
+  const queuedSong = $derived(queue.find(s => s.status === 'queued') ?? null);
+  const allUris = $derived(new Set(queue.map(s => s.spotifyUri)));
 
   const t = $derived({
-    nowPlaying: $lang === 'es' ? 'Ahora suena' : 'Now playing',
-    nothingPlaying: $lang === 'es' ? 'Nada sonando ahora' : 'Nothing playing',
-    search: $lang === 'es' ? 'Buscar canción' : 'Search song',
-    searchPlaceholder: $lang === 'es' ? 'Buscar en Spotify…' : 'Search Spotify…',
-    noResults: $lang === 'es' ? 'Sin resultados' : 'No results',
-    inQueue: $lang === 'es' ? 'En cola' : 'In queue',
-    queue: $lang === 'es' ? 'Cola' : 'Queue',
-    song: $lang === 'es' ? 'canción' : 'song',
-    songs: $lang === 'es' ? 'canciones' : 'songs',
-    emptyQueue: $lang === 'es' ? 'La cola está vacía' : 'Queue is empty',
-    emptyQueueSub: $lang === 'es' ? 'Busca una canción y añádela' : 'Search for a song and add it',
-    addedBy: $lang === 'es' ? 'añadida por' : 'added by',
-    screen: $lang === 'es' ? 'Pantalla' : 'Screen',
-    admin: $lang === 'es' ? 'Admin' : 'Admin',
-    namePromptTitle: $lang === 'es' ? '¿Cómo te llamas?' : 'What\'s your name?',
-    namePromptSub: $lang === 'es' ? 'Tu nombre aparecerá junto a las canciones que añadas.' : 'Your name will appear next to the songs you add.',
-    namePlaceholder: $lang === 'es' ? 'Tu nombre (opcional)' : 'Your name (optional)',
-    cancel: $lang === 'es' ? 'Cancelar' : 'Cancel',
-    addSong: $lang === 'es' ? 'Añadir canción' : 'Add song',
-    code: $lang === 'es' ? 'Código' : 'Code',
-    sdkActive: $lang === 'es' ? 'SDK activo' : 'SDK active',
-    sdkConnecting: $lang === 'es' ? 'SDK conectando…' : 'SDK connecting…',
+    nowPlaying: $lang === 'en' ? 'Now playing' : $lang === 'gl' ? 'Agora soa' : 'Ahora suena',
+    nothingPlaying: $lang === 'en' ? 'Nothing playing' : $lang === 'gl' ? 'Nada soando' : 'Nada sonando ahora',
+    search: $lang === 'en' ? 'Search song' : $lang === 'gl' ? 'Buscar canción' : 'Buscar canción',
+    searchPlaceholder: $lang === 'en' ? 'Search Spotify…' : 'Buscar en Spotify…',
+    noResults: $lang === 'en' ? 'No results' : 'Sin resultados',
+    inQueue: $lang === 'en' ? 'In queue' : 'En cola',
+    queue: $lang === 'en' ? 'Queue' : 'Cola',
+    nextUp: $lang === 'en' ? 'Next · Queued to Spotify' : $lang === 'gl' ? 'Seguinte · En cola de Spotify' : 'Siguiente · En cola de Spotify',
+    locked: $lang === 'en' ? 'Queued' : 'Encolada',
+    song: $lang === 'en' ? 'song' : 'canción',
+    songs: $lang === 'en' ? 'songs' : 'canciones',
+    emptyQueue: $lang === 'en' ? 'Queue is empty' : $lang === 'gl' ? 'A cola está baleira' : 'La cola está vacía',
+    emptyQueueSub: $lang === 'en' ? 'Search for a song and add it' : 'Busca una canción y añádela',
+    addedBy: $lang === 'en' ? 'added by' : 'añadida por',
+    screen: $lang === 'en' ? 'Screen' : 'Pantalla',
+    admin: 'Admin',
+    namePromptTitle: $lang === 'en' ? "What's your name?" : $lang === 'gl' ? 'Como te chamas?' : '¿Cómo te llamas?',
+    namePromptSub: $lang === 'en' ? 'Your name will appear next to the songs you add.' : 'Tu nombre aparecerá junto a las canciones que añadas.',
+    namePlaceholder: $lang === 'en' ? 'Your name (optional)' : 'Tu nombre (opcional)',
+    cancel: $lang === 'en' ? 'Cancel' : 'Cancelar',
+    addSong: $lang === 'en' ? 'Add song' : 'Añadir canción',
+    code: $lang === 'en' ? 'Code' : 'Código',
   });
 
-  // Format milliseconds as mm:ss
   function formatDuration(ms: number): string {
     const s = Math.floor(ms / 1000);
     return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
   }
 
-  // Progress as percentage
   const progressPct = $derived(
     nowPlaying ? Math.min(100, (progressMs / nowPlaying.durationMs) * 100) : 0
   );
 
-  // Debounce search
   let searchTimer: ReturnType<typeof setTimeout> | null = null;
   function onSearchInput() {
     if (searchTimer) clearTimeout(searchTimer);
-    if (!searchQuery.trim()) {
-      searchResults = [];
-      return;
-    }
+    if (!searchQuery.trim()) { searchResults = []; return; }
     searchTimer = setTimeout(() => doSearch(searchQuery), 400);
   }
 
@@ -119,16 +114,13 @@
   }
 
   async function addSong(track: SearchResult) {
-    if (queueUris.has(track.uri)) return;
-
-    // Ask for name if not set yet
+    if (allUris.has(track.uri)) return;
     const name = guestName.trim() || localStorage.getItem('wike_guest_name') || '';
     if (!name) {
       pendingTrack = track;
       showNamePrompt = true;
       return;
     }
-
     await doAddSong(track, name);
   }
 
@@ -159,19 +151,18 @@
         })
       });
       if (res.status === 409) {
-        errorMsg = $lang === 'es' ? 'Esta canción ya está en la cola' : 'This song is already in the queue';
+        errorMsg = $lang === 'en' ? 'This song is already in the queue' : 'Esta canción ya está en la cola';
         return;
       }
       if (res.status === 403) {
-        errorMsg = $lang === 'es' ? 'Esta canción está bloqueada en esta sala' : 'This song is blocked in this room';
+        errorMsg = $lang === 'en' ? 'This song is blocked in this room' : 'Esta canción está bloqueada en esta sala';
         return;
       }
       if (!res.ok) throw new Error('Failed to add song');
-      // Queue will update via SSE
       searchQuery = '';
       searchResults = [];
     } catch (e) {
-      errorMsg = e instanceof Error ? e.message : ($lang === 'es' ? 'Error añadiendo canción' : 'Error adding song');
+      errorMsg = e instanceof Error ? e.message : ($lang === 'en' ? 'Error adding song' : 'Error añadiendo canción');
     } finally {
       addingUri = null;
     }
@@ -184,10 +175,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ songId, value })
       });
-      // Queue will update via SSE
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }
 
   async function voteSkip() {
@@ -221,50 +209,13 @@
     try {
       const res = await fetch(`/api/queue?room=${data.room.id}`);
       if (res.ok) queue = await res.json() as QueueEntry[];
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }
 
-  async function initSDK() {
-    const res = await fetch(`/api/spotify/token?room=${data.room.id}`);
-    if (!res.ok) return;
-    const { token: initialToken } = await res.json() as { token: string };
-
-    (window as any).onSpotifyWebPlaybackSDKReady = () => {
-      const player = new (window as any).Spotify.Player({
-        name: `Wikebox · ${data.room.name}`,
-        getOAuthToken: async (cb: (t: string) => void) => {
-          const r = await fetch(`/api/spotify/token?room=${data.room.id}`);
-          if (r.ok) { const d = await r.json() as { token: string }; cb(d.token); }
-          else cb(initialToken);
-        },
-        volume: 0.8
-      });
-      player.addListener('ready', async ({ device_id }: { device_id: string }) => {
-        sdkReady = true;
-        await fetch(`/api/rooms/${data.room.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ activeDeviceId: device_id })
-        });
-      });
-      player.addListener('not_ready', () => { sdkReady = false; });
-      player.connect();
-      sdkPlayer = player;
-    };
-    const script = document.createElement('script');
-    script.src = 'https://sdk.scdn.co/spotify-player.js';
-    document.body.appendChild(script);
-  }
-
-  // SSE connection
   onMount(() => {
-    // Load saved guest name
     const saved = localStorage.getItem('wike_guest_name');
     if (saved) guestName = saved;
 
-    // Start progress ticker
     progressMs = nowPlaying?.progressMs ?? 0;
     progressInterval = setInterval(() => {
       if (nowPlaying?.isPlaying) {
@@ -291,10 +242,6 @@
       refreshSkipStatus();
     });
 
-    if (data.room.playbackMode === 'sdk' && data.isAdmin) {
-      initSDK();
-    }
-
     return () => {
       es.close();
       if (progressInterval) clearInterval(progressInterval);
@@ -310,15 +257,6 @@
       <p class="text-xs text-muted-foreground">{t.code}: <span class="font-mono font-semibold">{data.room.id}</span></p>
     </div>
     <div class="flex items-center gap-2">
-      {#if data.room.playbackMode === 'sdk' && data.isAdmin}
-        <div
-          class="flex items-center gap-1.5 text-xs text-muted-foreground"
-          title={sdkReady ? t.sdkActive : t.sdkConnecting}
-        >
-          <div class="w-2 h-2 rounded-full {sdkReady ? 'bg-green-500' : 'bg-orange-400 animate-pulse'}"></div>
-          <span class="hidden sm:inline">SDK</span>
-        </div>
-      {/if}
       {#if data.isAdmin}
         <a
           href="/room/{data.room.id}/admin"
@@ -380,13 +318,12 @@
                 {mySkipVote
                   ? 'border-orange-500/50 bg-orange-500/10 text-orange-400'
                   : 'border-border bg-muted/50 text-muted-foreground hover:border-primary/50 hover:text-foreground'}"
-              title={mySkipVote ? ($lang === 'es' ? 'Retirar voto' : 'Remove vote') : ($lang === 'es' ? 'Votar para saltar' : 'Vote to skip')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18L14.5 12 6 6v12zM16 6v12h2V6h-2z"/></svg>
               {#if skipRequired > 0}
                 <span class="tabular-nums">{skipCount}/{skipRequired}</span>
               {:else}
-                <span>{mySkipVote ? ($lang === 'es' ? 'Retirar' : 'Remove') : 'Skip'}</span>
+                <span>{mySkipVote ? ($lang === 'en' ? 'Remove' : 'Retirar') : 'Skip'}</span>
               {/if}
             </button>
           </div>
@@ -417,7 +354,6 @@
           <p class="mt-2 text-xs text-red-500">{errorMsg}</p>
         {/if}
 
-        <!-- Search results -->
         {#if searchResults.length > 0}
           <ul class="mt-3 space-y-1">
             {#each searchResults as track (track.uri)}
@@ -433,13 +369,13 @@
                 </div>
                 <button
                   onclick={() => addSong(track)}
-                  disabled={queueUris.has(track.uri) || addingUri === track.uri}
+                  disabled={allUris.has(track.uri) || addingUri === track.uri}
                   class="flex-shrink-0 rounded-md px-2 py-1 text-xs font-medium
-                    {queueUris.has(track.uri)
+                    {allUris.has(track.uri)
                       ? 'bg-muted text-muted-foreground cursor-not-allowed'
                       : 'bg-primary text-primary-foreground hover:opacity-90'}"
                 >
-                  {queueUris.has(track.uri) ? t.inQueue : addingUri === track.uri ? '…' : '+'}
+                  {allUris.has(track.uri) ? t.inQueue : addingUri === track.uri ? '…' : '+'}
                 </button>
               </li>
             {/each}
@@ -452,30 +388,54 @@
 
     <!-- Right: Queue -->
     <div class="flex-1 overflow-y-auto p-4">
+
+      <!-- Queued to Spotify (locked) -->
+      {#if queuedSong}
+        <div class="mb-4">
+          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{t.nextUp}</p>
+          <div class="flex items-center gap-3 p-3 rounded-lg border border-primary/30 bg-primary/5">
+            {#if queuedSong.albumArt}
+              <img src={queuedSong.albumArt} alt={queuedSong.title} class="w-12 h-12 rounded object-cover flex-shrink-0" />
+            {:else}
+              <div class="w-12 h-12 rounded bg-muted flex-shrink-0"></div>
+            {/if}
+            <div class="min-w-0 flex-1">
+              <p class="font-medium text-sm truncate text-foreground">{queuedSong.title}</p>
+              <p class="text-xs text-muted-foreground truncate">{queuedSong.artists}</p>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                {formatDuration(queuedSong.durationMs)} · {t.addedBy} {queuedSong.addedByName ?? 'Guest'}
+              </p>
+            </div>
+            <span class="flex-shrink-0 text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium border border-primary/20">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 inline mr-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              {t.locked}
+            </span>
+          </div>
+        </div>
+      {/if}
+
+      <!-- Pending voting queue -->
       <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
-        {t.queue} · {queue.length} {queue.length === 1 ? t.song : t.songs}
+        {t.queue} · {pendingQueue.length} {pendingQueue.length === 1 ? t.song : t.songs}
       </p>
 
-      {#if queue.length === 0}
+      {#if pendingQueue.length === 0 && !queuedSong}
         <div class="text-center py-12 text-muted-foreground">
           <p class="text-lg">{t.emptyQueue}</p>
           <p class="text-sm mt-1">{t.emptyQueueSub}</p>
         </div>
+      {:else if pendingQueue.length === 0}
+        <p class="text-sm text-muted-foreground py-4 text-center">{$lang === 'en' ? 'No more songs to vote on' : 'No hay más canciones para votar'}</p>
       {:else}
         <ul class="space-y-2">
-          {#each queue as song, i (song.id)}
+          {#each pendingQueue as song, i (song.id)}
             <li class="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:bg-muted/50 transition-colors">
-              <!-- Position -->
               <span class="text-xs text-muted-foreground w-5 text-center flex-shrink-0">{i + 1}</span>
-
-              <!-- Album art -->
               {#if song.albumArt}
                 <img src={song.albumArt} alt={song.title} class="w-12 h-12 rounded object-cover flex-shrink-0" />
               {:else}
                 <div class="w-12 h-12 rounded bg-muted flex-shrink-0"></div>
               {/if}
-
-              <!-- Song info -->
               <div class="min-w-0 flex-1">
                 <p class="font-medium text-sm truncate text-foreground">{song.title}</p>
                 <p class="text-xs text-muted-foreground truncate">{song.artists}</p>
@@ -483,8 +443,6 @@
                   {formatDuration(song.durationMs)} · {t.addedBy} {song.addedByName ?? 'Guest'}
                 </p>
               </div>
-
-              <!-- Vote controls -->
               <div class="flex items-center gap-1 flex-shrink-0">
                 <button
                   onclick={() => vote(song.id, 1)}
@@ -492,10 +450,7 @@
                     {song.myVote === 1
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground hover:bg-primary/20 hover:text-primary'}"
-                  title="Voto positivo"
-                >
-                  ▲
-                </button>
+                >▲</button>
                 <span class="text-sm font-semibold w-6 text-center text-foreground">
                   {song.voteScore > 0 ? '+' : ''}{song.voteScore}
                 </span>
@@ -505,10 +460,7 @@
                     {song.myVote === -1
                       ? 'bg-red-500 text-white'
                       : 'bg-muted text-muted-foreground hover:bg-red-500/20 hover:text-red-500'}"
-                  title="Voto negativo"
-                >
-                  ▼
-                </button>
+                >▼</button>
               </div>
             </li>
           {/each}

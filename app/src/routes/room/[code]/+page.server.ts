@@ -28,6 +28,7 @@ export const load: PageServerLoad = async ({ params, cookies, request }) => {
       albumArt: songs.albumArt,
       durationMs: songs.durationMs,
       addedByName: songs.addedByName,
+      status: songs.status,
       createdAt: songs.createdAt,
       voteScore: sql<number>`coalesce(sum(${votes.value}), 0)`.as('vote_score'),
       myVote: sql<number | null>`max(case when ${votes.voterId} = ${voterId} then ${votes.value} end)`.as('my_vote')
@@ -44,7 +45,6 @@ export const load: PageServerLoad = async ({ params, cookies, request }) => {
     room: {
       id: room.id,
       name: room.name,
-      playbackMode: room.playbackMode,
       djMode: room.djMode,
       welcomeMessage: room.welcomeMessage ?? null
     },

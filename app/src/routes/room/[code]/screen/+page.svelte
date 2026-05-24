@@ -24,13 +24,14 @@
     voteScore: number;
   }
 
-  interface RecentlyAdded {
+  interface HistoryEntry {
     id: string;
     title: string;
     artists: string;
     albumArt: string | null;
     addedByName: string | null;
-    addedAt: number; // timestamp ms
+    totalVotes: number;
+    playedAt: number;
   }
 
   const roomCode = data.room.id;
@@ -40,7 +41,7 @@
   let roomName = $state(data.room.name);
   let nowPlaying = $state<NowPlaying | null>(null);
   let upNext = $state<QueueEntry[]>([]);
-  let recentlyAdded = $state<RecentlyAdded[]>([]);
+  let history = $state<HistoryEntry[]>(data.initialHistory as HistoryEntry[]);
   let progressMs = $state(0);
   let progressInterval: ReturnType<typeof setInterval> | null = null;
   let clockStr = $state('');
@@ -57,7 +58,7 @@
 
   function updateClock() {
     const now = new Date();
-    clockStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    clockStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
 
   async function fetchQueue() {
@@ -65,35 +66,22 @@
       const res = await fetch(`/api/queue?room=${roomCode}`);
       if (res.ok) {
         const queue = await res.json() as QueueEntry[];
-        upNext = queue.slice(0, 3);
-
-        // Track recently added: keep last 5, in order added
-        const newEntries = queue.slice(0, 10).map(q => ({
-          id: q.id,
-          title: q.title,
-          artists: q.artists,
-          albumArt: q.albumArt,
-          addedByName: q.addedByName,
-          addedAt: Date.now()
-        }));
-
-        // Merge: add entries not already known
-        const knownIds = new Set(recentlyAdded.map(r => r.id));
-        const fresh = newEntries.filter(e => !knownIds.has(e.id));
-        if (fresh.length > 0) {
-          recentlyAdded = [...fresh, ...recentlyAdded].slice(0, 5);
-        }
+        upNext = queue.filter((s: any) => s.status === 'pending').slice(0, 3);
       }
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
+  }
+
+  async function fetchHistory() {
+    try {
+      const res = await fetch(`/api/rooms/${roomCode}/history`);
+      if (res.ok) history = await res.json() as HistoryEntry[];
+    } catch { /* ignore */ }
   }
 
   onMount(() => {
     fetchQueue();
     updateClock();
 
-    // Update clock every second for accuracy
     clockInterval = setInterval(updateClock, 1000);
 
     progressInterval = setInterval(() => {
@@ -110,8 +98,10 @@
       progressMs = np.progressMs;
     });
 
-    es.addEventListener('queue-update', () => {
+    es.addEventListener('queue-update', (e) => {
       fetchQueue();
+      const d = JSON.parse(e.data) as { type: string };
+      if (d.type === 'song-changed') fetchHistory();
     });
 
     return () => {
@@ -141,7 +131,7 @@
     <div class="flex items-center gap-4">
       <span class="text-2xl font-black tracking-tight text-white opacity-60">WIKEBOX</span>
       {#if roomName}
-        <span class="text-muted-foreground opacity-40 text-xl">·</span>
+        <span class="text-white/40 text-xl">·</span>
         <span class="text-xl font-semibold text-white opacity-80">{roomName}</span>
       {/if}
     </div>
@@ -152,10 +142,9 @@
 
   <div class="flex flex-1 gap-0 px-10 py-8 overflow-hidden relative z-10">
 
-    <!-- Left column: Now Playing (big) -->
+    <!-- Left column: Now Playing -->
     <div class="flex-1 flex flex-col justify-center pr-10">
       {#if nowPlaying}
-        <!-- Album art -->
         <div class="mb-8">
           {#if nowPlaying.albumArt}
             <img
@@ -171,7 +160,6 @@
           {/if}
         </div>
 
-        <!-- Song info -->
         <div class="space-y-2 mb-8">
           <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase">Ahora suena</p>
           <h1
@@ -185,7 +173,6 @@
           </p>
         </div>
 
-        <!-- Progress bar -->
         <div class="space-y-2">
           <div class="h-2 bg-white/10 rounded-full overflow-hidden">
             <div
@@ -200,7 +187,6 @@
         </div>
 
       {:else}
-        <!-- Nothing playing -->
         <div class="space-y-4">
           <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase">Ahora suena</p>
           <div class="w-96 h-96 rounded-2xl bg-white/5 flex items-center justify-center">
@@ -211,7 +197,7 @@
       {/if}
     </div>
 
-    <!-- Right column: Up next + Recently added -->
+    <!-- Right column: Up next + History -->
     <div class="w-[460px] flex flex-col gap-8 overflow-hidden">
 
       <!-- Up next -->
@@ -251,33 +237,36 @@
         {/if}
       </div>
 
-      <!-- Divider -->
       <div class="h-px bg-white/5"></div>
 
-      <!-- Recently added -->
+      <!-- History -->
       <div class="flex-shrink-0">
-        <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase mb-5">Recién añadidas</p>
-        {#if recentlyAdded.length === 0}
-          <p class="text-white/20 text-sm font-light">Nadie ha añadido canciones aún</p>
+        <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase mb-5">Ya sonaron</p>
+        {#if history.length === 0}
+          <p class="text-white/20 text-sm font-light">Aún no ha sonado ninguna canción</p>
         {:else}
           <ul class="space-y-3">
-            {#each recentlyAdded as entry (entry.id)}
+            {#each history as entry (entry.id)}
               <li class="flex items-center gap-3">
                 {#if entry.albumArt}
                   <img
                     src={entry.albumArt}
                     alt={entry.title}
-                    class="w-10 h-10 rounded object-cover flex-shrink-0 opacity-70"
+                    class="w-10 h-10 rounded object-cover flex-shrink-0 opacity-60"
                   />
                 {:else}
                   <div class="w-10 h-10 rounded bg-white/5 flex-shrink-0"></div>
                 {/if}
                 <div class="min-w-0 flex-1">
-                  <p class="text-white/70 text-sm font-medium truncate">{entry.title}</p>
+                  <p class="text-white/60 text-sm font-medium truncate">{entry.title}</p>
                   <p class="text-white/30 text-xs truncate">{entry.artists}</p>
                 </div>
                 <div class="flex-shrink-0 text-right">
-                  <p class="text-white/25 text-xs">{entry.addedByName ?? 'Guest'}</p>
+                  {#if entry.totalVotes !== 0}
+                    <span class="text-xs tabular-nums {entry.totalVotes > 0 ? 'text-[#1DB954]/60' : 'text-red-400/60'}">
+                      {entry.totalVotes > 0 ? '+' : ''}{entry.totalVotes}
+                    </span>
+                  {/if}
                 </div>
               </li>
             {/each}
@@ -295,9 +284,7 @@
       <span class="text-white/60 text-sm font-mono font-semibold">{displayUrl}</span>
       <span class="text-white/20 text-sm">·</span>
       <span class="text-white/20 text-sm">Código</span>
-      <span
-        class="text-3xl font-black font-mono tracking-[0.25em] text-white/80 bg-white/5 px-4 py-1 rounded-xl"
-      >
+      <span class="text-3xl font-black font-mono tracking-[0.25em] text-white/80 bg-white/5 px-4 py-1 rounded-xl">
         {roomCode}
       </span>
     </div>
