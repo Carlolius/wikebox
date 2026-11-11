@@ -1,0 +1,40 @@
+name: Bug report
+description: Something doesn't work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste your `.env`, Spotify keys or tokens.**
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what happened instead.
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Who hit it
+      options: [Host, Guest, Big screen view]
+    validations:
+      required: true
+  - type: dropdown
+    id: playback
+    attributes:
+      label: Playback
+      options: [In the browser, On a Spotify Connect device, Not related to playback]
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Firefox 140 on Android
+  - type: textarea
+    id: error
+    attributes:
+      label: Error messages
+      description: From the browser console or the server log.
+      render: text

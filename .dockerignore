@@ -1,0 +1,7 @@
+app/node_modules
+app/.svelte-kit
+app/build
+app/*.db*
+app/.env
+.env
+.git

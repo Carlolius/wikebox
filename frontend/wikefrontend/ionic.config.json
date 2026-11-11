@@ -1,7 +1,0 @@
-{
-  "name": "wikefrontend",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}

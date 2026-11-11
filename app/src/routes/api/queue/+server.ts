@@ -4,7 +4,8 @@ import { songs, votes, rooms, blacklist } from '$lib/db/schema';
 import { eq, sql, desc, and } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { broadcast } from '$lib/sse';
-import type { RequestHandler, Cookies } from './$types';
+import type { Cookies } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 function getVoterId(request: Request, cookies: Cookies): string {
   let id = cookies.get('wike_visitor');

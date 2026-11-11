@@ -31,7 +31,7 @@
     albumArt: string | null;
     addedByName: string | null;
     totalVotes: number;
-    playedAt: number;
+    playedAt: number | Date;
   }
 
   const roomCode = data.room.id;
