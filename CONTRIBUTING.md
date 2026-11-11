@@ -16,7 +16,7 @@ For anything beyond a small fix, open an issue first so we can agree on the appr
 ```bash
 cd app
 npm install --legacy-peer-deps
-npx svelte-check --threshold error
+npx svelte-kit sync && npx svelte-check --threshold error
 npm run build
 ```
 
