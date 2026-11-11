@@ -18,8 +18,8 @@ export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173',
   socialProviders: {
     spotify: {
-      clientId: env.SPOTIFY_CLIENT_ID,
-      clientSecret: env.SPOTIFY_CLIENT_SECRET,
+      clientId: env.SPOTIFY_CLIENT_ID ?? '',
+      clientSecret: env.SPOTIFY_CLIENT_SECRET ?? '',
       scope: [
         'user-read-playback-state',
         'user-modify-playback-state',

@@ -26,8 +26,8 @@ export async function getSpotifyToken(adminId: string): Promise<string | null> {
     body: new URLSearchParams({
       grant_type: 'refresh_token',
       refresh_token: acc.refreshToken,
-      client_id: env.SPOTIFY_CLIENT_ID,
-      client_secret: env.SPOTIFY_CLIENT_SECRET
+      client_id: env.SPOTIFY_CLIENT_ID ?? '',
+      client_secret: env.SPOTIFY_CLIENT_SECRET ?? ''
     })
   });
 
