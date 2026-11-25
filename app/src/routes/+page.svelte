@@ -1,16 +1,18 @@
 <script lang="ts">
   import { authClient } from '$lib/auth-client';
-  import { goto } from '$app/navigation';
+  import { goto, replaceState, afterNavigate } from '$app/navigation';
   import { getContext } from 'svelte';
   import type { Writable } from 'svelte/store';
 
   const session = authClient.useSession();
-  const lang = getContext<Writable<'es' | 'en'>>('lang');
+  const lang = getContext<Writable<'es' | 'gl' | 'en'>>('lang');
 
   let roomName = $state('');
   let roomCode = $state('');
   let creating = $state(false);
   let errorMsg = $state('');
+  // Set when Spotify sends the user back with ?error=... after a failed login
+  let loginError = $state<string | null>(null);
 
   const t = $derived({
     joinTitle: $lang === 'es' ? 'Unirse a una sala' : 'Join a room',
@@ -23,6 +25,37 @@
     createBtn: $lang === 'es' ? 'Crear sala' : 'Create room',
     creating: $lang === 'es' ? 'Creando…' : 'Creating…',
     connectSpotify: $lang === 'es' ? 'Conectar con Spotify' : 'Connect with Spotify',
+    // Spotify apps in development mode only let in accounts the app owner has added
+    // (Developer Dashboard > User Management); everyone else fails when we read their profile.
+    notAllowed: $lang === 'en'
+      ? "This Wikebox is private: only Spotify accounts added by whoever runs it can create rooms. Ask them for access, or run your own Wikebox."
+      : $lang === 'gl'
+        ? 'Este Wikebox é privado: só poden crear salas as contas de Spotify que dese de alta quen o administra. Pídelle acceso ou monta o teu propio Wikebox.'
+        : 'Este Wikebox es privado: solo pueden crear salas las cuentas de Spotify que haya dado de alta quien lo administra. Pídele acceso o monta tu propio Wikebox.',
+    loginCancelled: $lang === 'en'
+      ? 'Spotify login was cancelled.'
+      : $lang === 'gl' ? 'Cancelouse o inicio de sesión en Spotify.' : 'Se ha cancelado el inicio de sesión en Spotify.',
+    loginFailed: $lang === 'en'
+      ? 'Could not log in with Spotify. Please try again.'
+      : $lang === 'gl' ? 'Non se puido iniciar sesión con Spotify. Téntao de novo.' : 'No se ha podido iniciar sesión con Spotify. Inténtalo de nuevo.',
+    selfHost: $lang === 'en' ? 'How to run your own' : $lang === 'gl' ? 'Como montar o teu' : 'Cómo montar el tuyo',
+  });
+
+  const loginErrorText = $derived(
+    loginError === 'unable_to_get_user_info' ? t.notAllowed
+      : loginError === 'access_denied' ? t.loginCancelled
+        : loginError ? t.loginFailed : ''
+  );
+
+  // afterNavigate (not onMount): replaceState needs the router to be ready
+  afterNavigate(({ to }) => {
+    const code = to?.url.searchParams.get('error');
+    if (!to || !code) return;
+    loginError = code;
+    const clean = new URL(to.url);
+    clean.searchParams.delete('error');
+    clean.searchParams.delete('error_description');
+    replaceState(clean, {});
   });
 
   async function createRoom() {
@@ -51,7 +84,8 @@
   }
 
   function loginWithSpotify() {
-    authClient.signIn.social({ provider: 'spotify', callbackURL: '/' });
+    loginError = null;
+    authClient.signIn.social({ provider: 'spotify', callbackURL: '/', errorCallbackURL: '/' });
   }
 </script>
 
@@ -110,6 +144,19 @@
         <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
         {t.connectSpotify}
       </button>
+      {#if loginErrorText}
+        <div class="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-600 dark:text-red-400" role="alert">
+          <p>{loginErrorText}</p>
+          {#if loginError === 'unable_to_get_user_info'}
+            <a
+              href="https://github.com/Carlolius/wikebox#readme"
+              target="_blank"
+              rel="noopener"
+              class="mt-1 inline-block underline"
+            >{t.selfHost} →</a>
+          {/if}
+        </div>
+      {/if}
     {/if}
   </div>
 </main>
