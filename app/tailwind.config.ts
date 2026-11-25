@@ -19,6 +19,11 @@ const config: Config = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
+        },
+        // The TV screen view has its own theme, chosen by the room admin
+        stage: {
+          bg: 'rgb(var(--stage-bg) / <alpha-value>)',
+          fg: 'rgb(var(--stage-fg) / <alpha-value>)'
         }
       },
       borderRadius: {

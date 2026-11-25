@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, unique } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, unique, primaryKey } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
 // better-auth required tables
@@ -61,6 +61,7 @@ export const rooms = sqliteTable('rooms', {
   genreFilter: text('genre_filter'), // JSON array or null
   activeDeviceId: text('active_device_id'),
   welcomeMessage: text('welcome_message'),
+  screenTheme: text('screen_theme', { enum: ['dark', 'light'] }).notNull().default('dark'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`)
 });
 
@@ -138,3 +139,14 @@ export const creditsLog = sqliteTable('credits_log', {
   userId: text('user_id').notNull(), // fingerprint or userId
   usedAt: integer('used_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`)
 });
+
+// Guests who have opened a room (identified by the wike_visitor cookie).
+// bannedAt set = the room admin kicked them: they can watch but not add, vote or skip.
+export const roomVisitors = sqliteTable('room_visitors', {
+  roomId: text('room_id').notNull().references(() => rooms.id, { onDelete: 'cascade' }),
+  visitorId: text('visitor_id').notNull(),
+  name: text('name'),
+  firstSeenAt: integer('first_seen_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  lastSeenAt: integer('last_seen_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  bannedAt: integer('banned_at', { mode: 'timestamp' })
+}, (t) => [primaryKey({ columns: [t.roomId, t.visitorId] })]);

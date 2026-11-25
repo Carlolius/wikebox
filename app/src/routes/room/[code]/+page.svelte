@@ -54,6 +54,7 @@
   let skipCount = $state(0);
   let skipRequired = $state(0);
   let mySkipVote = $state(false);
+  let banned = $state(data.banned as boolean);
 
   const pendingQueue = $derived(queue.filter(s => s.status === 'pending'));
   const queuedSong = $derived(queue.find(s => s.status === 'queued') ?? null);
@@ -82,6 +83,11 @@
     cancel: $lang === 'en' ? 'Cancel' : 'Cancelar',
     addSong: $lang === 'en' ? 'Add song' : 'Añadir canción',
     code: $lang === 'en' ? 'Code' : 'Código',
+    banned: $lang === 'en'
+      ? "The room admin has removed you. You can still see the queue, but you can't add songs or vote."
+      : $lang === 'gl'
+        ? 'O admin da sala expulsoute. Podes ver a cola, pero non engadir cancións nin votar.'
+        : 'El admin de la sala te ha expulsado. Puedes ver la cola, pero no añadir canciones ni votar.',
   });
 
   function formatDuration(ms: number): string {
@@ -114,7 +120,7 @@
   }
 
   async function addSong(track: SearchResult) {
-    if (allUris.has(track.uri)) return;
+    if (banned || allUris.has(track.uri)) return;
     const name = guestName.trim() || localStorage.getItem('wike_guest_name') || '';
     if (!name) {
       pendingTrack = track;
@@ -155,6 +161,8 @@
         return;
       }
       if (res.status === 403) {
+        const body = await res.json().catch(() => null) as { message?: string } | null;
+        if (body?.message === 'banned') { banned = true; return; }
         errorMsg = $lang === 'en' ? 'This song is blocked in this room' : 'Esta canción está bloqueada en esta sala';
         return;
       }
@@ -169,22 +177,26 @@
   }
 
   async function vote(songId: string, value: 1 | -1) {
+    if (banned) return;
     try {
-      await fetch('/api/votes', {
+      const res = await fetch('/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ songId, value })
       });
+      if (res.status === 403) banned = true;
     } catch { /* ignore */ }
   }
 
   async function voteSkip() {
+    if (banned) return;
     try {
       const res = await fetch('/api/skip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roomId: data.room.id })
       });
+      if (res.status === 403) { banned = true; return; }
       if (res.ok) {
         const d = await res.json() as { action: string; skipCount: number; required: number };
         skipCount = d.skipCount;
@@ -232,6 +244,13 @@
       progressMs = np.progressMs;
     });
 
+    es.addEventListener('banned', () => {
+      banned = true;
+      mySkipVote = false;
+      showNamePrompt = false;
+    });
+    es.addEventListener('unbanned', () => { banned = false; });
+
     es.addEventListener('queue-update', (e) => {
       refreshQueue();
       const d = JSON.parse(e.data) as { type: string };
@@ -275,6 +294,12 @@
     </div>
   </header>
 
+  {#if banned}
+    <div class="px-4 py-2.5 bg-red-500/10 border-b border-red-500/20 text-sm text-red-600 dark:text-red-400" role="alert">
+      {t.banned}
+    </div>
+  {/if}
+
   <!-- Welcome message banner -->
   {#if data.room.welcomeMessage}
     <div class="px-4 py-2.5 bg-primary/10 border-b border-primary/20 text-sm text-foreground">
@@ -314,7 +339,8 @@
           <div class="mt-3 flex items-center gap-2">
             <button
               onclick={voteSkip}
-              class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border transition-all
+              disabled={banned}
+              class="disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border transition-all
                 {mySkipVote
                   ? 'border-orange-500/50 bg-orange-500/10 text-orange-400'
                   : 'border-border bg-muted/50 text-muted-foreground hover:border-primary/50 hover:text-foreground'}"
@@ -336,6 +362,7 @@
       {/if}
 
       <!-- Search -->
+      {#if !banned}
       <div class="p-4 flex-1 overflow-y-auto">
         <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{t.search}</p>
         <div class="relative">
@@ -384,6 +411,7 @@
           <p class="mt-3 text-sm text-muted-foreground">{t.noResults}</p>
         {/if}
       </div>
+      {/if}
     </div>
 
     <!-- Right: Queue -->
@@ -446,7 +474,8 @@
               <div class="flex items-center gap-1 flex-shrink-0">
                 <button
                   onclick={() => vote(song.id, 1)}
-                  class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-bold transition-colors
+                  disabled={banned}
+                  class="disabled:opacity-40 disabled:pointer-events-none w-8 h-8 rounded-md flex items-center justify-center text-sm font-bold transition-colors
                     {song.myVote === 1
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground hover:bg-primary/20 hover:text-primary'}"
@@ -456,7 +485,8 @@
                 </span>
                 <button
                   onclick={() => vote(song.id, -1)}
-                  class="w-8 h-8 rounded-md flex items-center justify-center text-sm font-bold transition-colors
+                  disabled={banned}
+                  class="disabled:opacity-40 disabled:pointer-events-none w-8 h-8 rounded-md flex items-center justify-center text-sm font-bold transition-colors
                     {song.myVote === -1
                       ? 'bg-red-500 text-white'
                       : 'bg-muted text-muted-foreground hover:bg-red-500/20 hover:text-red-500'}"

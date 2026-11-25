@@ -39,6 +39,12 @@
   const displayUrl = appUrl.replace(/^https?:\/\//, '');
 
   let roomName = $state(data.room.name);
+  let theme = $state<'dark' | 'light'>(data.room.screenTheme);
+  const stageVars = $derived(
+    theme === 'light'
+      ? '--stage-bg: 250 250 250; --stage-fg: 10 10 10;'
+      : '--stage-bg: 10 10 10; --stage-fg: 255 255 255;'
+  );
   let nowPlaying = $state<NowPlaying | null>(null);
   let upNext = $state<QueueEntry[]>([]);
   let history = $state<HistoryEntry[]>(data.initialHistory as HistoryEntry[]);
@@ -90,7 +96,12 @@
       }
     }, 1000);
 
-    const es = new EventSource(`/api/sse/${roomCode}`);
+    const es = new EventSource(`/api/sse/${roomCode}?screen`);
+
+    es.addEventListener('room-update', (e) => {
+      const d = JSON.parse(e.data) as { screenTheme?: 'dark' | 'light' };
+      if (d.screenTheme) theme = d.screenTheme;
+    });
 
     es.addEventListener('now-playing', (e) => {
       const np = JSON.parse(e.data) as NowPlaying;
@@ -116,7 +127,7 @@
   <title>{roomName ? `${roomName} · Wikebox` : 'Wikebox'}</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#0a0a0a] text-white flex flex-col overflow-hidden" style="font-family: 'Inter', system-ui, sans-serif;">
+<div class="min-h-screen bg-stage-bg text-stage-fg flex flex-col overflow-hidden" style="{stageVars} font-family: 'Inter', system-ui, sans-serif;">
 
   <!-- Blurred album art backdrop -->
   {#if nowPlaying?.albumArt}
@@ -129,14 +140,14 @@
   <!-- Top bar: branding + clock -->
   <div class="flex items-center justify-between px-10 pt-8 pb-0 relative z-10">
     <div class="flex items-center gap-4">
-      <span class="text-2xl font-black tracking-tight text-white opacity-60">WIKEBOX</span>
+      <span class="text-2xl font-black tracking-tight text-stage-fg opacity-60">WIKEBOX</span>
       {#if roomName}
-        <span class="text-white/40 text-xl">·</span>
-        <span class="text-xl font-semibold text-white opacity-80">{roomName}</span>
+        <span class="text-stage-fg/40 text-xl">·</span>
+        <span class="text-xl font-semibold text-stage-fg opacity-80">{roomName}</span>
       {/if}
     </div>
     <div class="text-right">
-      <p class="text-5xl font-bold text-white/70 tabular-nums tracking-tight">{clockStr}</p>
+      <p class="text-5xl font-bold text-stage-fg/70 tabular-nums tracking-tight">{clockStr}</p>
     </div>
   </div>
 
@@ -151,36 +162,36 @@
               src={nowPlaying.albumArt}
               alt={nowPlaying.title}
               class="w-96 h-96 rounded-2xl shadow-2xl object-cover"
-              style="box-shadow: 0 0 120px rgba(255,255,255,0.05), 0 30px 80px rgba(0,0,0,0.8);"
+              style="box-shadow: {theme === 'light' ? '0 30px 80px rgba(0,0,0,0.25)' : '0 0 120px rgba(255,255,255,0.05), 0 30px 80px rgba(0,0,0,0.8)'};"
             />
           {:else}
-            <div class="w-96 h-96 rounded-2xl bg-white/5 flex items-center justify-center">
+            <div class="w-96 h-96 rounded-2xl bg-stage-fg/5 flex items-center justify-center">
               <span class="text-6xl opacity-20">♪</span>
             </div>
           {/if}
         </div>
 
         <div class="space-y-2 mb-8">
-          <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase">Ahora suena</p>
+          <p class="text-xs font-semibold tracking-[0.2em] text-stage-fg/40 uppercase">Ahora suena</p>
           <h1
-            class="font-black leading-none text-white"
+            class="font-black leading-none text-stage-fg"
             style="font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.05;"
           >
             {nowPlaying.title}
           </h1>
-          <p class="text-white/60 font-light" style="font-size: clamp(1.25rem, 2.5vw, 2rem);">
+          <p class="text-stage-fg/60 font-light" style="font-size: clamp(1.25rem, 2.5vw, 2rem);">
             {nowPlaying.artists}
           </p>
         </div>
 
         <div class="space-y-2">
-          <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div class="h-2 bg-stage-fg/10 rounded-full overflow-hidden">
             <div
               class="h-full bg-[#1DB954] rounded-full transition-all duration-1000"
               style="width: {progressPct}%"
             ></div>
           </div>
-          <div class="flex justify-between text-white/30 text-sm tabular-nums">
+          <div class="flex justify-between text-stage-fg/30 text-sm tabular-nums">
             <span>{formatDuration(progressMs)}</span>
             <span>{formatDuration(nowPlaying.durationMs)}</span>
           </div>
@@ -188,11 +199,11 @@
 
       {:else}
         <div class="space-y-4">
-          <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase">Ahora suena</p>
-          <div class="w-96 h-96 rounded-2xl bg-white/5 flex items-center justify-center">
+          <p class="text-xs font-semibold tracking-[0.2em] text-stage-fg/40 uppercase">Ahora suena</p>
+          <div class="w-96 h-96 rounded-2xl bg-stage-fg/5 flex items-center justify-center">
             <span class="text-7xl opacity-10">♪</span>
           </div>
-          <p class="text-white/30 text-2xl font-light">Nada sonando</p>
+          <p class="text-stage-fg/30 text-2xl font-light">Nada sonando</p>
         </div>
       {/if}
     </div>
@@ -202,14 +213,14 @@
 
       <!-- Up next -->
       <div class="flex-1 min-h-0">
-        <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase mb-5">A continuación</p>
+        <p class="text-xs font-semibold tracking-[0.2em] text-stage-fg/40 uppercase mb-5">A continuación</p>
         {#if upNext.length === 0}
-          <p class="text-white/20 text-lg font-light">Cola vacía</p>
+          <p class="text-stage-fg/20 text-lg font-light">Cola vacía</p>
         {:else}
           <ul class="space-y-4">
             {#each upNext as song, i (song.id)}
               <li class="flex items-center gap-4">
-                <span class="text-3xl font-black text-white/10 w-8 text-right flex-shrink-0">{i + 1}</span>
+                <span class="text-3xl font-black text-stage-fg/10 w-8 text-right flex-shrink-0">{i + 1}</span>
                 {#if song.albumArt}
                   <img
                     src={song.albumArt}
@@ -217,16 +228,16 @@
                     class="w-14 h-14 rounded-lg object-cover flex-shrink-0 opacity-90"
                   />
                 {:else}
-                  <div class="w-14 h-14 rounded-lg bg-white/5 flex-shrink-0"></div>
+                  <div class="w-14 h-14 rounded-lg bg-stage-fg/5 flex-shrink-0"></div>
                 {/if}
                 <div class="min-w-0 flex-1">
-                  <p class="font-semibold text-white text-lg leading-tight truncate">{song.title}</p>
-                  <p class="text-white/50 text-sm truncate">{song.artists}</p>
+                  <p class="font-semibold text-stage-fg text-lg leading-tight truncate">{song.title}</p>
+                  <p class="text-stage-fg/50 text-sm truncate">{song.artists}</p>
                 </div>
                 <div class="flex-shrink-0 text-right">
                   <span
                     class="text-sm font-bold tabular-nums px-2 py-0.5 rounded-full
-                      {song.voteScore > 0 ? 'bg-[#1DB954]/20 text-[#1DB954]' : song.voteScore < 0 ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-white/30'}"
+                      {song.voteScore > 0 ? 'bg-[#1DB954]/20 text-[#1DB954]' : song.voteScore < 0 ? 'bg-red-500/20 text-red-500' : 'bg-stage-fg/5 text-stage-fg/30'}"
                   >
                     {song.voteScore > 0 ? '+' : ''}{song.voteScore}
                   </span>
@@ -237,13 +248,13 @@
         {/if}
       </div>
 
-      <div class="h-px bg-white/5"></div>
+      <div class="h-px bg-stage-fg/5"></div>
 
       <!-- History -->
       <div class="flex-shrink-0">
-        <p class="text-xs font-semibold tracking-[0.2em] text-white/40 uppercase mb-5">Ya sonaron</p>
+        <p class="text-xs font-semibold tracking-[0.2em] text-stage-fg/40 uppercase mb-5">Ya sonaron</p>
         {#if history.length === 0}
-          <p class="text-white/20 text-sm font-light">Aún no ha sonado ninguna canción</p>
+          <p class="text-stage-fg/20 text-sm font-light">Aún no ha sonado ninguna canción</p>
         {:else}
           <ul class="space-y-3">
             {#each history as entry (entry.id)}
@@ -255,15 +266,15 @@
                     class="w-10 h-10 rounded object-cover flex-shrink-0 opacity-60"
                   />
                 {:else}
-                  <div class="w-10 h-10 rounded bg-white/5 flex-shrink-0"></div>
+                  <div class="w-10 h-10 rounded bg-stage-fg/5 flex-shrink-0"></div>
                 {/if}
                 <div class="min-w-0 flex-1">
-                  <p class="text-white/60 text-sm font-medium truncate">{entry.title}</p>
-                  <p class="text-white/30 text-xs truncate">{entry.artists}</p>
+                  <p class="text-stage-fg/60 text-sm font-medium truncate">{entry.title}</p>
+                  <p class="text-stage-fg/30 text-xs truncate">{entry.artists}</p>
                 </div>
                 <div class="flex-shrink-0 text-right">
                   {#if entry.totalVotes !== 0}
-                    <span class="text-xs tabular-nums {entry.totalVotes > 0 ? 'text-[#1DB954]/60' : 'text-red-400/60'}">
+                    <span class="text-xs tabular-nums {entry.totalVotes > 0 ? 'text-[#1DB954]/60' : 'text-red-500/60'}">
                       {entry.totalVotes > 0 ? '+' : ''}{entry.totalVotes}
                     </span>
                   {/if}
@@ -280,17 +291,17 @@
   <!-- Bottom bar: room code -->
   <div class="px-10 pb-8 flex items-center justify-between relative z-10">
     <div class="flex items-center gap-3">
-      <span class="text-white/20 text-sm">Únete en</span>
-      <span class="text-white/60 text-sm font-mono font-semibold">{displayUrl}</span>
-      <span class="text-white/20 text-sm">·</span>
-      <span class="text-white/20 text-sm">Código</span>
-      <span class="text-3xl font-black font-mono tracking-[0.25em] text-white/80 bg-white/5 px-4 py-1 rounded-xl">
+      <span class="text-stage-fg/20 text-sm">Únete en</span>
+      <span class="text-stage-fg/60 text-sm font-mono font-semibold">{displayUrl}</span>
+      <span class="text-stage-fg/20 text-sm">·</span>
+      <span class="text-stage-fg/20 text-sm">Código</span>
+      <span class="text-3xl font-black font-mono tracking-[0.25em] text-stage-fg/80 bg-stage-fg/5 px-4 py-1 rounded-xl">
         {roomCode}
       </span>
     </div>
     <div class="flex items-center gap-2">
       <div class="w-2 h-2 rounded-full bg-[#1DB954] animate-pulse"></div>
-      <span class="text-white/20 text-sm">En directo</span>
+      <span class="text-stage-fg/20 text-sm">En directo</span>
     </div>
   </div>
 

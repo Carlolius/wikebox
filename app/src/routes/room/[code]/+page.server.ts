@@ -4,6 +4,7 @@ import { eq, sql, desc } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { auth } from '$lib/auth';
+import { isBanned } from '$lib/visitors';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, cookies, request }) => {
@@ -51,6 +52,7 @@ export const load: PageServerLoad = async ({ params, cookies, request }) => {
     queue,
     nowPlaying: np ?? null,
     voterId,
-    isAdmin
+    isAdmin,
+    banned: isBanned(params.code, voterId)
   };
 };

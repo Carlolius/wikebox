@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
     .limit(8);
 
   return {
-    room: { id: room.id, name: room.name },
+    room: { id: room.id, name: room.name, screenTheme: room.screenTheme },
     initialHistory: history,
     appUrl: url.origin
   };

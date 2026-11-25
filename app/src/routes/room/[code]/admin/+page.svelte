@@ -1,5 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import type { Participant } from '$lib/participants';
 
   interface Device {
     id: string;
@@ -19,6 +21,7 @@
     genreFilter: string | null;
     activeDeviceId: string | null;
     welcomeMessage: string | null;
+    screenTheme: 'dark' | 'light';
   }
 
   let { data } = $props();
@@ -40,6 +43,16 @@
   let genreFilter = $state(room.genreFilter ?? '');
   let selectedDeviceId = $state(room.activeDeviceId ?? '');
   let welcomeMessage = $state(room.welcomeMessage ?? '');
+  let screenTheme = $state<'dark' | 'light'>(room.screenTheme);
+
+  // Participants
+  let participants = $state<Participant[]>([]);
+  let participantsLoaded = $state(false);
+  let confirmBanId = $state<string | null>(null);
+  let banBusyId = $state<string | null>(null);
+  const onlineCount = $derived(participants.filter(p => p.online && !p.bannedAt).length);
+  const activeParticipants = $derived(participants.filter(p => !p.bannedAt));
+  const bannedParticipants = $derived(participants.filter(p => p.bannedAt));
 
   // Blacklist
   let blacklistSearch = $state('');
@@ -59,7 +72,7 @@
 
   $effect(() => {
     // Read all tracked settings to create dependencies
-    void [djMode, creditsEnabled, creditsPerHour, skipThreshold, genreFilter, welcomeMessage];
+    void [djMode, creditsEnabled, creditsPerHour, skipThreshold, genreFilter, welcomeMessage, screenTheme];
     if (firstRun) { firstRun = false; return; }
     if (saveTimer) clearTimeout(saveTimer);
     saveStatus = 'idle';
@@ -101,7 +114,8 @@
           creditsPerHour,
           skipThreshold,
           genreFilter: genreFilter.trim() || null,
-          welcomeMessage: welcomeMessage.trim() || null
+          welcomeMessage: welcomeMessage.trim() || null,
+          screenTheme
         })
       });
       saveStatus = 'saved';
@@ -190,6 +204,52 @@
       exportingPlaylist = false;
     }
   }
+
+  async function loadParticipants() {
+    try {
+      const res = await fetch(`/api/rooms/${room.id}/participants`);
+      if (res.ok) participants = await res.json() as Participant[];
+    } catch { /* keep the last list */ }
+    participantsLoaded = true;
+  }
+
+  async function setBanned(p: Participant, ban: boolean) {
+    banBusyId = p.visitorId;
+    try {
+      const res = await fetch(`/api/rooms/${room.id}/bans`, {
+        method: ban ? 'POST' : 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitorId: p.visitorId })
+      });
+      if (res.ok) await loadParticipants();
+    } finally {
+      banBusyId = null;
+      confirmBanId = null;
+    }
+  }
+
+  function displayName(p: Participant): string {
+    return p.name ?? `Invitado ${p.visitorId.slice(0, 4)}`;
+  }
+
+  function lastSeen(p: Participant): string {
+    if (p.online) return 'conectado';
+    if (!p.lastSeenAt) return 'sin datos de conexión';
+    const mins = Math.round((Date.now() - p.lastSeenAt) / 60000);
+    if (mins < 1) return 'visto hace un momento';
+    if (mins < 60) return `visto hace ${mins} min`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `visto hace ${hours} h`;
+    return `visto el ${new Date(p.lastSeenAt).toLocaleDateString('es-ES')}`;
+  }
+
+  onMount(() => {
+    loadParticipants();
+    const timer = setInterval(() => {
+      if (document.visibilityState === 'visible') loadParticipants();
+    }, 10000);
+    return () => clearInterval(timer);
+  });
 
   function copyShareLink() {
     navigator.clipboard.writeText(shareUrl);
@@ -320,6 +380,116 @@
               QR pantalla completa →
             </a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="border-border" />
+
+    <!-- Participants -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-semibold text-foreground">Participantes</h2>
+          <p class="text-xs text-muted-foreground mt-0.5">
+            {onlineCount} {onlineCount === 1 ? 'conectado' : 'conectados'} ahora · {activeParticipants.length} en total
+          </p>
+        </div>
+        <button onclick={loadParticipants} class="text-xs text-muted-foreground hover:text-foreground underline">
+          Actualizar
+        </button>
+      </div>
+
+      {#if !participantsLoaded}
+        <p class="text-sm text-muted-foreground">Cargando…</p>
+      {:else if activeParticipants.length === 0}
+        <p class="text-sm text-muted-foreground">Todavía no ha entrado nadie. Comparte el enlace o el QR.</p>
+      {:else}
+        <ul class="divide-y divide-border rounded-lg border border-border">
+          {#each activeParticipants as p (p.visitorId)}
+            <li class="flex items-center gap-3 px-3 py-2.5">
+              <span
+                class="h-2 w-2 rounded-full flex-shrink-0 {p.online ? 'bg-primary' : 'bg-muted-foreground/30'}"
+                title={p.online ? 'Conectado' : 'Desconectado'}
+              ></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-medium text-foreground truncate">
+                  {displayName(p)}
+                  {#if p.isYou}<span class="ml-1 text-xs font-normal text-muted-foreground">(tú)</span>{/if}
+                </p>
+                <p class="text-xs text-muted-foreground">
+                  {p.songsAdded} {p.songsAdded === 1 ? 'canción' : 'canciones'} · {p.votesCast} {p.votesCast === 1 ? 'voto' : 'votos'} · {lastSeen(p)}
+                </p>
+              </div>
+              {#if !p.isYou}
+                {#if confirmBanId === p.visitorId}
+                  <div class="flex gap-1 flex-shrink-0">
+                    <button
+                      onclick={() => (confirmBanId = null)}
+                      class="text-xs px-2 py-1 rounded border border-border hover:bg-muted"
+                    >No</button>
+                    <button
+                      onclick={() => setBanned(p, true)}
+                      disabled={banBusyId === p.visitorId}
+                      class="text-xs px-2 py-1 rounded bg-red-600 text-white font-medium disabled:opacity-50"
+                    >Sí, expulsar</button>
+                  </div>
+                {:else}
+                  <button
+                    onclick={() => (confirmBanId = p.visitorId)}
+                    class="flex-shrink-0 text-xs px-2 py-1 rounded bg-red-500/10 text-red-500 hover:bg-red-500/20"
+                  >Expulsar</button>
+                {/if}
+              {/if}
+            </li>
+          {/each}
+        </ul>
+        <p class="text-xs text-muted-foreground">
+          Al expulsar a alguien se borran sus canciones pendientes y sus votos. Podrá seguir viendo la sala, pero no añadir ni votar.
+          Los invitados se reconocen por una cookie, así que quien la borre puede volver a entrar.
+        </p>
+      {/if}
+
+      {#if bannedParticipants.length > 0}
+        <div class="space-y-1 pt-1">
+          <p class="text-sm font-medium text-foreground">Expulsados</p>
+          <ul class="divide-y divide-border rounded-lg border border-border">
+            {#each bannedParticipants as p (p.visitorId)}
+              <li class="flex items-center gap-3 px-3 py-2">
+                <p class="flex-1 min-w-0 text-sm text-muted-foreground truncate">{displayName(p)}</p>
+                <button
+                  onclick={() => setBanned(p, false)}
+                  disabled={banBusyId === p.visitorId}
+                  class="flex-shrink-0 text-xs px-2 py-1 rounded border border-border hover:bg-muted disabled:opacity-50"
+                >Readmitir</button>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/if}
+    </section>
+
+    <hr class="border-border" />
+
+    <!-- Screen -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-base font-semibold text-foreground">Pantalla</h2>
+          <p class="text-xs text-muted-foreground mt-0.5">
+            Tema de la <a href="/room/{room.id}/screen" target="_blank" class="underline hover:text-foreground">vista de pantalla</a>. Se aplica al momento en las pantallas abiertas.
+          </p>
+        </div>
+        <div class="flex rounded-md border border-border overflow-hidden flex-shrink-0" role="radiogroup" aria-label="Tema de la pantalla">
+          {#each [['dark', 'Oscuro'], ['light', 'Claro']] as [value, label] (value)}
+            <button
+              role="radio"
+              aria-checked={screenTheme === value}
+              onclick={() => (screenTheme = value as 'dark' | 'light')}
+              class="px-3 py-1.5 text-sm transition-colors
+                {screenTheme === value ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'}"
+            >{label}</button>
+          {/each}
         </div>
       </div>
     </section>

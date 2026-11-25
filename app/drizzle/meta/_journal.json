@@ -8,19 +8,26 @@
       "when": 1779538342448,
       "tag": "0000_spicy_gamma_corps",
       "breakpoints": true
-    }
-    ,{
+    },
+    {
       "idx": 1,
       "version": "6",
       "when": 1748135000000,
       "tag": "0001_add_welcome_message",
       "breakpoints": true
-    }
-    ,{
+    },
+    {
       "idx": 2,
       "version": "6",
       "when": 1748220000000,
       "tag": "0002_songs_status",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1795612221354,
+      "tag": "0003_room_visitors_screen_theme",
       "breakpoints": true
     }
   ]

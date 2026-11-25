@@ -4,6 +4,7 @@ import { songs, votes, rooms, blacklist } from '$lib/db/schema';
 import { eq, sql, desc, and } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { broadcast } from '$lib/sse';
+import { isBanned, touchVisitor } from '$lib/visitors';
 import type { Cookies } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -60,6 +61,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   const room = await db.query.rooms.findFirst({ where: eq(rooms.id, body.roomId) });
   if (!room) throw error(404, 'Room not found');
+  if (isBanned(body.roomId, voterId)) throw error(403, 'banned');
 
   // Duplicate check
   const exists = await db.query.songs.findFirst({
@@ -86,6 +88,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     addedByName: body.addedByName ?? 'Guest'
   });
 
+  touchVisitor(body.roomId, voterId, body.addedByName);
   broadcast(body.roomId, 'queue-update', { type: 'song-added', songId: id });
   return json({ id }, { status: 201 });
 };

@@ -4,6 +4,7 @@ import { skipVotes, rooms, nowPlaying } from '$lib/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { activeConnections } from '$lib/sse';
+import { isBanned } from '$lib/visitors';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
@@ -14,6 +15,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   const room = await db.query.rooms.findFirst({ where: eq(rooms.id, roomId) });
   if (!room) throw error(404, 'Room not found');
+  if (isBanned(roomId, voterId)) throw error(403, 'banned');
 
   const np = await db.query.nowPlaying.findFirst({ where: eq(nowPlaying.roomId, roomId) });
   if (!np) throw error(400, 'Nothing playing');

@@ -3,6 +3,7 @@ import { db } from '$lib/db';
 import { rooms } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '$lib/auth';
+import { broadcast } from '$lib/sse';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -37,7 +38,11 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     genreFilter?: string | null;
     welcomeMessage?: string | null;
     activeDeviceId?: string | null;
+    screenTheme?: 'dark' | 'light';
   };
+  if (body.screenTheme !== undefined && body.screenTheme !== 'dark' && body.screenTheme !== 'light') {
+    throw error(400, 'screenTheme must be dark or light');
+  }
 
   await db.update(rooms)
     .set({
@@ -47,9 +52,14 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
       ...(body.skipThreshold !== undefined ? { skipThreshold: body.skipThreshold } : {}),
       ...(body.genreFilter !== undefined ? { genreFilter: body.genreFilter } : {}),
       ...(body.welcomeMessage !== undefined ? { welcomeMessage: body.welcomeMessage } : {}),
-      ...(body.activeDeviceId !== undefined ? { activeDeviceId: body.activeDeviceId } : {})
+      ...(body.activeDeviceId !== undefined ? { activeDeviceId: body.activeDeviceId } : {}),
+      ...(body.screenTheme !== undefined ? { screenTheme: body.screenTheme } : {})
     })
     .where(eq(rooms.id, params.id));
+
+  if (body.screenTheme !== undefined && body.screenTheme !== room.screenTheme) {
+    broadcast(params.id, 'room-update', { screenTheme: body.screenTheme });
+  }
 
   return json({ ok: true });
 };

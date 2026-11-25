@@ -2,11 +2,16 @@
   import '../app.css';
   import { onMount, setContext } from 'svelte';
   import { writable } from 'svelte/store';
+  import { page } from '$app/state';
 
   let dark = $state(true);
   let lang = writable<'es' | 'gl' | 'en'>('es');
 
   setContext('lang', lang);
+
+  // The TV screen and the full-screen QR are display-only: the room admin picks
+  // the screen theme from the admin panel, so no theme/language buttons there.
+  const displayOnly = $derived(/^\/room\/[^/]+\/(screen|qr)\/?$/.test(page.url.pathname));
 
   onMount(() => {
     dark = localStorage.getItem('wike_theme') !== 'light';
@@ -36,6 +41,7 @@
 
 <slot />
 
+{#if !displayOnly}
 <div class="fixed bottom-4 right-4 z-50 flex items-center gap-1">
   <button
     onclick={cycleLang}
@@ -56,3 +62,4 @@
     {/if}
   </button>
 </div>
+{/if}

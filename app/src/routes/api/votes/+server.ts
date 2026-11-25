@@ -4,6 +4,7 @@ import { votes, songs } from '$lib/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 import { broadcast } from '$lib/sse';
+import { isBanned } from '$lib/visitors';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
@@ -15,6 +16,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
   const song = await db.query.songs.findFirst({ where: eq(songs.id, songId) });
   if (!song) throw error(404, 'Song not found');
+  if (isBanned(song.roomId, voterId)) throw error(403, 'banned');
 
   const existing = await db.query.votes.findFirst({
     where: and(eq(votes.songId, songId), eq(votes.voterId, voterId))
