@@ -34,6 +34,10 @@ async function processRoom(room: typeof rooms.$inferSelect) {
     await db.delete(nowPlaying).where(eq(nowPlaying.roomId, room.id));
     return;
   }
+  // Spotify answers 200 with no item during ads, podcasts or private sessions.
+  // Skip this tick and keep the current state, so the queued song still gets
+  // archived once the music comes back.
+  if (!current.item) return;
 
   const prev = await db.query.nowPlaying.findFirst({ where: eq(nowPlaying.roomId, room.id) });
 

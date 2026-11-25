@@ -194,10 +194,11 @@ interface SpotifyRawPlaylist { id: string; name: string; images?: { url: string 
 interface SpotifyCurrentlyPlaying {
   is_playing: boolean;
   progress_ms: number;
-  item: SpotifyRawTrack & {
+  // null during ads, podcasts or private sessions
+  item: (SpotifyRawTrack & {
     duration_ms: number;
     album: { images: { url: string }[] };
-  };
+  }) | null;
 }
 
 function normalizeTrack(t: SpotifyRawTrack): SpotifyTrack {
